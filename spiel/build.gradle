@@ -9,7 +9,7 @@ buildscript {
     maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
   }
   dependencies {
-
+    classpath "com.android.tools.build:gradle:8.6.1"
 
   }
 }
@@ -27,7 +27,7 @@ allprojects {
   }
 }
 
-configure(subprojects) {
+configure(subprojects - project(':android')) {
   apply plugin: 'java-library'
   sourceCompatibility = 11
 
@@ -58,7 +58,7 @@ configure(subprojects) {
 
 subprojects {
   version = "$projectVersion"
-  ext.appName = 'FarmingSimulator'
+  ext.appName = 'spiel2'
   repositories {
     mavenCentral()
     maven { url 'https://s01.oss.sonatype.org' }
@@ -70,4 +70,4 @@ subprojects {
   }
 }
 
-eclipse.project.name = 'FarmingSimulator' + '-parent'
+eclipse.project.name = 'spiel2' + '-parent'
