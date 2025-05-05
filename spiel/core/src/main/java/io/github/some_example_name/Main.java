@@ -83,9 +83,9 @@ public class Main extends ApplicationAdapter{
 
         shapeRendererHUD.setProjectionMatrix(cameraHUD.combined);
         shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
-        //shapeRendererHUD.rect(rec.x, rec.y, rec.width,rec.height);
-        joystick.draw();
         joystick.moveJoystick(touchPos);
+        joystick.draw();
+
         cameraHUD.update();
 
 

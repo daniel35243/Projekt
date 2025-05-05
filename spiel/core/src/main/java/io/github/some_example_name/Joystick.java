@@ -45,13 +45,10 @@ public class Joystick{
                 smallCircleCords = touchPosition;
 
             }else{
-
                 float angle = MathUtils.atan2(touchPosition.y - bigCircleCords.y,touchPosition.x - bigCircleCords.x);
 
                 smallCircleCords.x = (float) (bigCircleCords.x + MathUtils.cos(angle) * radiusBigCircle);
                 smallCircleCords.y = (float) (bigCircleCords.y + MathUtils.sin(angle) * radiusBigCircle);
-
-
             }
         }else{
             smallCircleCords = bigCircleCords;
@@ -62,16 +59,9 @@ public class Joystick{
         shapeRendererJoystick.setColor(Color.BLACK);
         shapeRendererJoystick.circle(bigCircleCords.x, bigCircleCords.y, radiusBigCircle);
 
-
         shapeRendererJoystick.setColor(Color.WHITE);
         shapeRendererJoystick.circle(smallCircleCords.x,smallCircleCords.y,radiusSmallCircle);
         shapeRendererJoystick.end();
-
     }
-    public Vector2 getBigCircleCords(){
-        return bigCircleCords;
-    }
-
-
 
 }
