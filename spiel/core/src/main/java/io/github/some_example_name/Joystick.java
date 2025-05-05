@@ -2,6 +2,7 @@ package io.github.some_example_name;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -18,12 +19,15 @@ public class Joystick{
     private boolean inputJoystick;
     private Vector2 bigCircleCords;
     private Vector2 smallCircleCords;
-
     ShapeRenderer shapeRendererJoystick;
+    float horizontalMovement;
+    float verticalMovement;
     public Joystick(Vector2 cords){
-        radiusSmallCircle = 40;
-        radiusBigCircle = 100;
-        bigCircleCords = new Vector2(cords.x/4,cords.y/4);
+        horizontalMovement = 0;
+        verticalMovement = 0;
+        radiusSmallCircle = 60;
+        radiusBigCircle = 150;
+        bigCircleCords = new Vector2(cords.x/4.5f,cords.y/4.5f);
 
         smallCircleCords = bigCircleCords;
         inputJoystick = false;
@@ -32,6 +36,7 @@ public class Joystick{
     }
 
     public void moveJoystick(Vector2 touchPosition){
+
         inputJoystick = touchPosition.dst(bigCircleCords) <= radiusBigCircle;
         if(Gdx.input.justTouched() && inputJoystick) {
             isPressed = true;
@@ -53,10 +58,16 @@ public class Joystick{
         }else{
             smallCircleCords = bigCircleCords;
         }
+        draw();
     }
     public void draw(){
+
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+
         shapeRendererJoystick.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRendererJoystick.setColor(Color.BLACK);
+        shapeRendererJoystick.setColor(new Color(80/255f,80/255f,80/255f,0.8f));
         shapeRendererJoystick.circle(bigCircleCords.x, bigCircleCords.y, radiusBigCircle);
 
         shapeRendererJoystick.setColor(Color.WHITE);

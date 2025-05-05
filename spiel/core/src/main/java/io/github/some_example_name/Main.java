@@ -29,6 +29,8 @@ public class Main extends ApplicationAdapter{
     Vector2 touchPos;
     ShapeRenderer shapeRendererHUD;
 
+
+
     @Override
     public void create() {
         shapeRendererHUD = new ShapeRenderer();
@@ -84,7 +86,7 @@ public class Main extends ApplicationAdapter{
         shapeRendererHUD.setProjectionMatrix(cameraHUD.combined);
         shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
         joystick.moveJoystick(touchPos);
-        joystick.draw();
+
 
         cameraHUD.update();
 
