@@ -7,8 +7,8 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 public class Map {
-    TiledMap map;
-    TiledMapRenderer tiledMapRenderer;
+    private TiledMap map;
+    private TiledMapRenderer tiledMapRenderer;
     public Map(){
         map = new TmxMapLoader().load("map.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);

@@ -7,38 +7,90 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class Main extends ApplicationAdapter implements InputProcessor {
-
-    OrthographicCamera camera;
+public class Main extends ApplicationAdapter{
+    Rectangle rec;
+    OrthographicCamera cameraWelt;
+    OrthographicCamera cameraHUD;
     Map map;
+    float screenWidth;
+    float screenHeight;
+    Joystick joystick;
+    Vector2 touchPos;
+    ShapeRenderer shapeRendererHUD;
 
     @Override
     public void create() {
+        shapeRendererHUD = new ShapeRenderer();
+
+        touchPos = new Vector2(0,0);
+
         map = new Map();
-        float widthCamera = Gdx.graphics.getWidth();
-        float heightCamera = Gdx.graphics.getHeight();
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false,widthCamera,heightCamera);
-        camera.update();
-        Gdx.input.setInputProcessor(this);
-        camera.position.set(800,800,0);
-        camera.zoom = 0.2f;
+
+        joystick = new Joystick(new Vector2(Gdx.graphics.getWidth()/5*4,Gdx.graphics.getHeight()/5*4));
+
+        cameraHUD = new OrthographicCamera(100,100);
+        cameraHUD.position.set(Gdx.graphics.getWidth()/5,Gdx.graphics.getHeight()/5,0);
+        cameraHUD.zoom = 1f;
+        cameraHUD.update();
+
+        rec = new Rectangle(
+            cameraHUD.position.x - cameraHUD.viewportWidth * 0.5f * cameraHUD.zoom,
+            cameraHUD.position.y - cameraHUD.viewportHeight * 0.5f * cameraHUD.zoom,
+            cameraHUD.viewportWidth,
+            cameraHUD.viewportHeight
+        );
+
+
+
+        cameraWelt = new OrthographicCamera();
+        cameraWelt.setToOrtho(false,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        cameraWelt.update();
+        cameraWelt.position.set(800,800,0);
+        cameraWelt.zoom = 0.2f;
     }
 
     @Override
     public void render() {
+
+        cameraHUD.update();
+
         Gdx.gl.glClearColor(0.0f,149/255f,233/255f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        map.render(camera);
-        camera.update();
 
+        map.render(cameraWelt);
+        cameraWelt.update();
+
+
+        if(Gdx.input.isTouched()){
+            touchPos.x = Gdx.input.getX();
+            touchPos.y = Gdx.graphics.getHeight() - Gdx.input.getY();
+        }else{
+            touchPos.x = 0;
+            touchPos.y = 0;
+        }
+
+
+        shapeRendererHUD.setProjectionMatrix(cameraHUD.combined);
+        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
+        //shapeRendererHUD.rect(rec.x, rec.y, rec.width,rec.height);
+        joystick.draw();
+        joystick.moveJoystick(touchPos);
+        cameraHUD.update();
+
+
+
+        shapeRendererHUD.end();
 
     }
 
@@ -47,50 +99,4 @@ public class Main extends ApplicationAdapter implements InputProcessor {
 
     }
 
-
-
-    @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(float amountX, float amountY) {
-        return false;
-    }
 }
