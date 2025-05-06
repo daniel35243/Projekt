@@ -1,4 +1,4 @@
-package io.gihub.FarmLifeSplash;
+package io.github.FarmLifeMain;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -18,8 +18,8 @@ public class Splash implements Screen {
 
         Texture splashTexture = new Texture("FarmLifeLogo.png");
         splash = new Sprite(splashTexture);
-        splash.setSize(1000, 1000);
-        splash.setPosition(650, 0);
+        splash.setSize(1100, 1100);
+        splash.setPosition(Gdx.graphics.getWidth()/2f-500, Gdx.graphics.getHeight()/2f-600);
 
     }
 
