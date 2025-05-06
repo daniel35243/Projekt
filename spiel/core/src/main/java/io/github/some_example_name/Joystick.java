@@ -19,12 +19,11 @@ public class Joystick{
     private boolean inputJoystick;
     private Vector2 bigCircleCords;
     private Vector2 smallCircleCords;
-    ShapeRenderer shapeRendererJoystick;
-    float horizontalMovement;
-    float verticalMovement;
+    private ShapeRenderer shapeRendererJoystick;
+    private Vector2 cameraWeltPosition;
     public Joystick(Vector2 cords){
-        horizontalMovement = 0;
-        verticalMovement = 0;
+        cameraWeltPosition = new Vector2(800,800);
+
         radiusSmallCircle = 60;
         radiusBigCircle = 150;
         bigCircleCords = new Vector2(cords.x/4.5f,cords.y/4.5f);
@@ -52,12 +51,15 @@ public class Joystick{
             }else{
                 float angle = MathUtils.atan2(touchPosition.y - bigCircleCords.y,touchPosition.x - bigCircleCords.x);
 
-                smallCircleCords.x = (float) (bigCircleCords.x + MathUtils.cos(angle) * radiusBigCircle);
-                smallCircleCords.y = (float) (bigCircleCords.y + MathUtils.sin(angle) * radiusBigCircle);
+                smallCircleCords.x = bigCircleCords.x + MathUtils.cos(angle) * radiusBigCircle;
+                smallCircleCords.y = bigCircleCords.y + MathUtils.sin(angle) * radiusBigCircle;
             }
         }else{
             smallCircleCords = bigCircleCords;
         }
+
+        cameraWeltPosition.set((smallCircleCords.x - bigCircleCords.x)/radiusBigCircle,(smallCircleCords.y-bigCircleCords.y)/radiusBigCircle);
+
         draw();
     }
     public void draw(){
@@ -73,6 +75,10 @@ public class Joystick{
         shapeRendererJoystick.setColor(Color.WHITE);
         shapeRendererJoystick.circle(smallCircleCords.x,smallCircleCords.y,radiusSmallCircle);
         shapeRendererJoystick.end();
+    }
+
+    public Vector2 getCameraWeltPosition(){
+        return cameraWeltPosition;
     }
 
 }

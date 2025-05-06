@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -19,15 +20,15 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter{
-    Rectangle rec;
     OrthographicCamera cameraWelt;
     OrthographicCamera cameraHUD;
     Map map;
-    float screenWidth;
-    float screenHeight;
     Joystick joystick;
     Vector2 touchPos;
     ShapeRenderer shapeRendererHUD;
+    Vector2 cameraWeltPosition;
+    BitmapFont font;
+    SpriteBatch sp;
 
 
 
@@ -46,24 +47,22 @@ public class Main extends ApplicationAdapter{
         cameraHUD.zoom = 1f;
         cameraHUD.update();
 
-        rec = new Rectangle(
-            cameraHUD.position.x - cameraHUD.viewportWidth * 0.5f * cameraHUD.zoom,
-            cameraHUD.position.y - cameraHUD.viewportHeight * 0.5f * cameraHUD.zoom,
-            cameraHUD.viewportWidth,
-            cameraHUD.viewportHeight
-        );
 
-
-
+        cameraWeltPosition = new Vector2(800,800);
         cameraWelt = new OrthographicCamera();
         cameraWelt.setToOrtho(false,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         cameraWelt.update();
-        cameraWelt.position.set(800,800,0);
-        cameraWelt.zoom = 0.2f;
+
+        cameraWelt.zoom = 0.15f;
+
+        font = new BitmapFont();
+
+        sp = new SpriteBatch();
     }
 
     @Override
     public void render() {
+
 
         cameraHUD.update();
 
@@ -88,11 +87,23 @@ public class Main extends ApplicationAdapter{
         joystick.moveJoystick(touchPos);
 
 
+        if(joystick.getCameraWeltPosition().x != 0) {
+            cameraWeltPosition.x += joystick.getCameraWeltPosition().x * 1.55f;
+        }
+        if(joystick.getCameraWeltPosition().y != 0){
+            cameraWeltPosition.y += joystick.getCameraWeltPosition().y * 1.55f;
+        }
+
+        cameraWelt.position.set(cameraWeltPosition, 0);
+
         cameraHUD.update();
 
-
-
         shapeRendererHUD.end();
+
+        font.getData().setScale(3f);
+        sp.begin();
+        font.draw(sp, "Fps: " + (Gdx.graphics.getFramesPerSecond()), 20, Gdx.graphics.getHeight()-20);
+        sp.end();
 
     }
 
@@ -100,5 +111,7 @@ public class Main extends ApplicationAdapter{
     public void dispose() {
 
     }
+
+
 
 }
