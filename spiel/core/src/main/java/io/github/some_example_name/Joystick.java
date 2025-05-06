@@ -22,6 +22,9 @@ public class Joystick{
     private Vector2 smallCircleCords;
     private ShapeRenderer shapeRendererJoystick;
     private Vector2 cameraWeltPosition;
+    private Vector2 direction;
+    private char playerDirection;
+
     public Joystick(Vector2 cords){
         cameraWeltPosition = new Vector2(800,800);
 
@@ -33,11 +36,16 @@ public class Joystick{
         inputJoystick = false;
         isPressed = false;
         shapeRendererJoystick = new ShapeRenderer();
+        playerDirection = 'r';
+
     }
 
     public void moveJoystick(Vector2 touchPosition, Player player, SpriteBatch batch){
 
+        //Erkennt, wenn in Joystick getouched wird
         inputJoystick = touchPosition.dst(bigCircleCords) <= radiusBigCircle;
+
+        //Erkennt ob gerade Joystick getouched wird
         if(Gdx.input.justTouched() && inputJoystick) {
             isPressed = true;
 
@@ -45,42 +53,63 @@ public class Joystick{
             isPressed = false;
         }
 
+
+        //Joystick-Logik
         if(isPressed) {
+
+
+            //Wenn Joystick im großen Kreis gehalten wird
             if(inputJoystick){
                 smallCircleCords = touchPosition;
 
-
-                if(smallCircleCords.x > bigCircleCords.y){
-                    if(smallCircleCords.x > bigCircleCords.x){
-                        player.drawRIGHT(batch);
-                    }else if(smallCircleCords.x < bigCircleCords.x){
-                        player.drawLEFT(batch);
-                    }
-                }else if(smallCircleCords.x < bigCircleCords.y){
-                    if(smallCircleCords.y > bigCircleCords.y){
-                        player.drawUP(batch);
-                    }else if(smallCircleCords.y < bigCircleCords.y){
-                        player.drawDOWN(batch);
-                    }
-                }
-
-
-
-
+            //Wenn man außerhalb des Joysticks geht
             }else{
                 float angle = MathUtils.atan2(touchPosition.y - bigCircleCords.y,touchPosition.x - bigCircleCords.x);
 
                 smallCircleCords.x = bigCircleCords.x + MathUtils.cos(angle) * radiusBigCircle;
                 smallCircleCords.y = bigCircleCords.y + MathUtils.sin(angle) * radiusBigCircle;
             }
+
+            //Führt Animation aus je nach Direction
+            direction = new Vector2(smallCircleCords).sub(bigCircleCords);
+            if (Math.abs(direction.x) > Math.abs(direction.y)) {
+                if (direction.x > 0) {
+                    player.drawRIGHT(batch,false);
+                    playerDirection = 'r';
+                } else {
+                    player.drawLEFT(batch,false);
+                    playerDirection = 'l';
+                }
+            } else {
+                if (direction.y > 0) {
+                    player.drawUP(batch,false);
+                    playerDirection = 'u';
+                } else {
+                    player.drawDOWN(batch,false);
+                    playerDirection = 'd';
+                }
+            }
+
+        //Wenn Joystick nicht gehalten wird
         }else{
             smallCircleCords = bigCircleCords;
+            switch (playerDirection){
+                case 'r':
+                    player.drawRIGHT(batch,true);
+                case 'l':
+                    player.drawLEFT(batch,true);
+                case 'u':
+                    player.drawUP(batch,true);
+                case 'd':
+                    player.drawDOWN(batch,true);
+            }
         }
 
 
-
+        //Bewegung
         cameraWeltPosition.set((smallCircleCords.x - bigCircleCords.x)/radiusBigCircle,(smallCircleCords.y-bigCircleCords.y)/radiusBigCircle);
 
+        //Malt Joystick
         draw();
     }
     public void draw(){
@@ -88,11 +117,12 @@ public class Joystick{
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-
+        //Großer Kreis
         shapeRendererJoystick.begin(ShapeRenderer.ShapeType.Filled);
         shapeRendererJoystick.setColor(new Color(80/255f,80/255f,80/255f,0.8f));
         shapeRendererJoystick.circle(bigCircleCords.x, bigCircleCords.y, radiusBigCircle);
 
+        //Kleiner Kreis
         shapeRendererJoystick.setColor(Color.WHITE);
         shapeRendererJoystick.circle(smallCircleCords.x,smallCircleCords.y,radiusSmallCircle);
         shapeRendererJoystick.end();

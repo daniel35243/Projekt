@@ -28,8 +28,8 @@ public class Main extends ApplicationAdapter{
     Vector2 touchPos;
     ShapeRenderer shapeRendererHUD;
     Vector2 cameraWeltPosition;
-    BitmapFont font;
-    SpriteBatch sp;
+    BitmapFont fpsFont;
+    SpriteBatch fps;
     float delta;
     Player player;
     SpriteBatch playerSpriteBatch;
@@ -60,9 +60,8 @@ public class Main extends ApplicationAdapter{
 
         cameraWelt.zoom = 0.15f;
 
-        font = new BitmapFont();
-
-        sp = new SpriteBatch();
+        fpsFont = new BitmapFont();
+        fps = new SpriteBatch();
     }
 
     @Override
@@ -93,16 +92,10 @@ public class Main extends ApplicationAdapter{
         joystick.moveJoystick(touchPos,player,playerSpriteBatch);
         shapeRendererHUD.end();
 
-
-        //Player Animation
-//        player.drawUP(playerSpriteBatch);
-
-
-
         //Player HITBOX
         shapeRendererHUD.begin(ShapeRenderer.ShapeType.Line);
         shapeRendererHUD.setColor(Color.RED);
-        shapeRendererHUD.rect(Gdx.graphics.getWidth()/3f,Gdx.graphics.getHeight()/3f,32,32);
+        shapeRendererHUD.rect(Gdx.graphics.getWidth() / 20 - 160f,Gdx.graphics.getHeight() / 14 - 170f,110,160);
         shapeRendererHUD.end();
 
 
@@ -119,14 +112,10 @@ public class Main extends ApplicationAdapter{
 
 
         //FPS
-        font.getData().setScale(3f);
-        sp.begin();
-        font.draw(sp, "Fps: " + (Gdx.graphics.getFramesPerSecond()), 20, Gdx.graphics.getHeight()-20);
-        sp.end();
-
-
-        System.out.println("KAMERA X CORDS: "+cameraWeltPosition.x);
-        System.out.println("KAMERA Y CORDS: "+cameraWeltPosition.y);
+        fpsFont.getData().setScale(3f);
+        fps.begin();
+        fpsFont.draw(fps, "Fps: " + (Gdx.graphics.getFramesPerSecond()), 20, Gdx.graphics.getHeight()-20);
+        fps.end();
     }
 
     @Override
