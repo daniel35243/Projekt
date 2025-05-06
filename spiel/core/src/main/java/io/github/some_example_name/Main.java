@@ -3,6 +3,7 @@ package io.github.some_example_name;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -46,8 +47,8 @@ public class Main extends ApplicationAdapter{
 
         joystick = new Joystick(new Vector2(Gdx.graphics.getWidth()/5*4,Gdx.graphics.getHeight()/5*4));
 
-        cameraHUD = new OrthographicCamera(100,100);
-        cameraHUD.position.set(Gdx.graphics.getWidth()/5,Gdx.graphics.getHeight()/5,0);
+        cameraHUD = new OrthographicCamera(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        cameraHUD.position.set(0,0,0);
         cameraHUD.zoom = 1f;
         cameraHUD.update();
 
@@ -66,13 +67,20 @@ public class Main extends ApplicationAdapter{
 
     @Override
     public void render() {
-
+        //Einstellungen
+        delta = Gdx.graphics.getDeltaTime();
         Gdx.gl.glClearColor(0.0f,149/255f,233/255f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        shapeRendererHUD.setProjectionMatrix(cameraHUD.combined);
+        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
+        playerSpriteBatch.setProjectionMatrix(cameraHUD.combined);
 
+        //Map
         map.render(cameraWelt);
         cameraWelt.update();
 
+
+        //Erkennt wenn Bildschirm TOUCHED
         if(Gdx.input.isTouched()){
             touchPos.x = Gdx.input.getX();
             touchPos.y = Gdx.graphics.getHeight() - Gdx.input.getY();
@@ -81,20 +89,26 @@ public class Main extends ApplicationAdapter{
             touchPos.y = 0;
         }
 
-
-        shapeRendererHUD.setProjectionMatrix(cameraHUD.combined);
-        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
-        playerSpriteBatch.setProjectionMatrix(cameraHUD.combined);
+        //Joystick
         joystick.moveJoystick(touchPos);
+        shapeRendererHUD.end();
 
-        delta = Gdx.graphics.getDeltaTime();
 
-        player.updateUP(delta);
+        //Player Animation
+//        player.updateUP(delta);
         player.drawUP(playerSpriteBatch,shapeRendererHUD);
 
 
 
+        //TEST
+//        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
+//        shapeRendererHUD.rect(100,100,100,100);
+//        shapeRendererHUD.setColor(Color.RED);
+//        shapeRendererHUD.end();
 
+
+
+        //MOVEMENT
         if(joystick.getCameraWeltPosition().x != 0) {
             cameraWeltPosition.x += joystick.getCameraWeltPosition().x * 1.55f;
         }
@@ -102,10 +116,10 @@ public class Main extends ApplicationAdapter{
             cameraWeltPosition.y += joystick.getCameraWeltPosition().y * 1.55f;
         }
         cameraWelt.position.set(cameraWeltPosition, 0);
-
         cameraHUD.update();
-        shapeRendererHUD.end();
 
+
+        //FPS
         font.getData().setScale(3f);
         sp.begin();
         font.draw(sp, "Fps: " + (Gdx.graphics.getFramesPerSecond()), 20, Gdx.graphics.getHeight()-20);

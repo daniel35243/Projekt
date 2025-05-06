@@ -1,6 +1,8 @@
 package io.github.some_example_name;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,7 +19,7 @@ public class Player {
     private Animation<TextureRegion> walkUpAnimation;
     private float stateTime;
     public Player(){
-        playerSpriteSheet = new Texture("PixelMapPNGs/Player/Player.png");
+        playerSpriteSheet = new Texture(Gdx.files.internal("PixelMapPNGs/Player/Player.png"));
         playerFrames = TextureRegion.split(playerSpriteSheet,32,32);
         walkUp = new TextureRegion[6];
         stateTime = 0;
@@ -27,19 +29,28 @@ public class Player {
         for(int i = 0; i < 6; i++){
             walkUp[i] = playerFrames[5][i];
         }
-        walkUpAnimation = new Animation<>(0.1f,walkUp);
+        walkUpAnimation = new Animation<>(10f,walkUp);
         walkUpAnimation.setPlayMode(Animation.PlayMode.LOOP);
     }
 
     public void drawUP(SpriteBatch batch, ShapeRenderer shapeRenderer){
+        stateTime += Gdx.graphics.getDeltaTime();
+
+
         TextureRegion frame = walkUpAnimation.getKeyFrame(stateTime,true);
         batch.begin();
         batch.draw(frame, Gdx.graphics.getWidth()/2f,Gdx.graphics.getHeight()/2f);
-
-
-        shapeRenderer.rect(Gdx.graphics.getWidth()/2f,Gdx.graphics.getHeight()/2f,32,32);
-        shapeRenderer.end();
         batch.end();
+
+
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(Color.RED);
+        shapeRenderer.rect(Gdx.graphics.getWidth()/2f,Gdx.graphics.getHeight()/2f,20,20);
+
+
+        shapeRenderer.end();
+
     }
 
     public void updateUP(float delta){
