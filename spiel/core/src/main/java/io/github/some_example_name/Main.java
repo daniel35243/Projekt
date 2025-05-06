@@ -29,11 +29,15 @@ public class Main extends ApplicationAdapter{
     Vector2 cameraWeltPosition;
     BitmapFont font;
     SpriteBatch sp;
-
-
+    float delta;
+    Player player;
+    SpriteBatch playerSpriteBatch;
 
     @Override
     public void create() {
+        player = new Player();
+        playerSpriteBatch = new SpriteBatch();
+
         shapeRendererHUD = new ShapeRenderer();
 
         touchPos = new Vector2(0,0);
@@ -63,15 +67,8 @@ public class Main extends ApplicationAdapter{
     @Override
     public void render() {
 
-
-        cameraHUD.update();
-
         Gdx.gl.glClearColor(0.0f,149/255f,233/255f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        map.render(cameraWelt);
-        cameraWelt.update();
-
 
         if(Gdx.input.isTouched()){
             touchPos.x = Gdx.input.getX();
@@ -84,7 +81,16 @@ public class Main extends ApplicationAdapter{
 
         shapeRendererHUD.setProjectionMatrix(cameraHUD.combined);
         shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
+        playerSpriteBatch.setProjectionMatrix(cameraHUD.combined);
         joystick.moveJoystick(touchPos);
+
+        delta = Gdx.graphics.getDeltaTime();
+
+        player.updateUP(delta);
+        player.drawUP(playerSpriteBatch,shapeRendererHUD);
+
+        map.render(cameraWelt);
+        cameraWelt.update();
 
 
         if(joystick.getCameraWeltPosition().x != 0) {
@@ -93,11 +99,9 @@ public class Main extends ApplicationAdapter{
         if(joystick.getCameraWeltPosition().y != 0){
             cameraWeltPosition.y += joystick.getCameraWeltPosition().y * 1.55f;
         }
-
         cameraWelt.position.set(cameraWeltPosition, 0);
 
         cameraHUD.update();
-
         shapeRendererHUD.end();
 
         font.getData().setScale(3f);
