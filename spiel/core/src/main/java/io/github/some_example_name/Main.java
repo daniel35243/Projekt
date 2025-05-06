@@ -96,15 +96,15 @@ public class Main extends ApplicationAdapter{
 
         //Player Animation
 //        player.updateUP(delta);
-        player.drawUP(playerSpriteBatch,shapeRendererHUD);
+        player.drawUP(playerSpriteBatch);
 
 
 
-        //TEST
-//        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
-//        shapeRendererHUD.rect(100,100,100,100);
-//        shapeRendererHUD.setColor(Color.RED);
-//        shapeRendererHUD.end();
+        //Player HITBOX
+        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Line);
+        shapeRendererHUD.setColor(Color.RED);
+        shapeRendererHUD.rect(Gdx.graphics.getWidth()/3f,Gdx.graphics.getHeight()/3f,32,32);
+        shapeRendererHUD.end();
 
 
 

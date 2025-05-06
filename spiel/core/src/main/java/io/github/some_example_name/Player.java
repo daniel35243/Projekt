@@ -20,7 +20,7 @@ public class Player {
     private float stateTime;
     public Player(){
         playerSpriteSheet = new Texture(Gdx.files.internal("PixelMapPNGs/Player/Player.png"));
-        playerFrames = TextureRegion.split(playerSpriteSheet,32,32);
+        playerFrames = TextureRegion.split(playerSpriteSheet,213,213);
         walkUp = new TextureRegion[6];
         stateTime = 0;
         Up();
@@ -29,27 +29,22 @@ public class Player {
         for(int i = 0; i < 6; i++){
             walkUp[i] = playerFrames[5][i];
         }
-        walkUpAnimation = new Animation<>(10f,walkUp);
+        walkUpAnimation = new Animation<>(0.1f,walkUp);
         walkUpAnimation.setPlayMode(Animation.PlayMode.LOOP);
     }
 
-    public void drawUP(SpriteBatch batch, ShapeRenderer shapeRenderer){
+    public void drawUP(SpriteBatch batch){
         stateTime += Gdx.graphics.getDeltaTime();
 
 
         TextureRegion frame = walkUpAnimation.getKeyFrame(stateTime,true);
         batch.begin();
-        batch.draw(frame, Gdx.graphics.getWidth()/2f,Gdx.graphics.getHeight()/2f);
+        batch.draw(frame, Gdx.graphics.getWidth()/20-213f,Gdx.graphics.getHeight()/14-213f);
         batch.end();
 
 
 
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(Gdx.graphics.getWidth()/2f,Gdx.graphics.getHeight()/2f,20,20);
 
-
-        shapeRenderer.end();
 
     }
 
