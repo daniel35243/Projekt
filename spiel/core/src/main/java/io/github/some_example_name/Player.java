@@ -35,7 +35,7 @@ public class Player {
     }
     public void Up(){
         for(int i = 0; i < 6; i++){
-            walkDown[i] = playerFrames[5][i];
+            walkUp[i] = playerFrames[5][i];
         }
         walkUpAnimation = new Animation<>(0.1f,walkDown);
         walkUpAnimation.setPlayMode(Animation.PlayMode.LOOP);
