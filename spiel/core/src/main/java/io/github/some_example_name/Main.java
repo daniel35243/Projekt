@@ -90,13 +90,12 @@ public class Main extends ApplicationAdapter{
         }
 
         //Joystick
-        joystick.moveJoystick(touchPos);
+        joystick.moveJoystick(touchPos,player,playerSpriteBatch);
         shapeRendererHUD.end();
 
 
         //Player Animation
-//        player.updateUP(delta);
-        player.drawUP(playerSpriteBatch);
+//        player.drawUP(playerSpriteBatch);
 
 
 
@@ -125,6 +124,9 @@ public class Main extends ApplicationAdapter{
         font.draw(sp, "Fps: " + (Gdx.graphics.getFramesPerSecond()), 20, Gdx.graphics.getHeight()-20);
         sp.end();
 
+
+        System.out.println("KAMERA X CORDS: "+cameraWeltPosition.x);
+        System.out.println("KAMERA Y CORDS: "+cameraWeltPosition.y);
     }
 
     @Override

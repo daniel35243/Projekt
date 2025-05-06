@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -34,7 +35,7 @@ public class Joystick{
         shapeRendererJoystick = new ShapeRenderer();
     }
 
-    public void moveJoystick(Vector2 touchPosition){
+    public void moveJoystick(Vector2 touchPosition, Player player, SpriteBatch batch){
 
         inputJoystick = touchPosition.dst(bigCircleCords) <= radiusBigCircle;
         if(Gdx.input.justTouched() && inputJoystick) {
@@ -48,6 +49,24 @@ public class Joystick{
             if(inputJoystick){
                 smallCircleCords = touchPosition;
 
+
+                if(smallCircleCords.x > bigCircleCords.y){
+                    if(smallCircleCords.x > bigCircleCords.x){
+                        player.drawRIGHT(batch);
+                    }else if(smallCircleCords.x < bigCircleCords.x){
+                        player.drawLEFT(batch);
+                    }
+                }else if(smallCircleCords.x < bigCircleCords.y){
+                    if(smallCircleCords.y > bigCircleCords.y){
+                        player.drawUP(batch);
+                    }else if(smallCircleCords.y < bigCircleCords.y){
+                        player.drawDOWN(batch);
+                    }
+                }
+
+
+
+
             }else{
                 float angle = MathUtils.atan2(touchPosition.y - bigCircleCords.y,touchPosition.x - bigCircleCords.x);
 
@@ -57,6 +76,8 @@ public class Joystick{
         }else{
             smallCircleCords = bigCircleCords;
         }
+
+
 
         cameraWeltPosition.set((smallCircleCords.x - bigCircleCords.x)/radiusBigCircle,(smallCircleCords.y-bigCircleCords.y)/radiusBigCircle);
 
