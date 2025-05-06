@@ -70,6 +70,9 @@ public class Main extends ApplicationAdapter{
         Gdx.gl.glClearColor(0.0f,149/255f,233/255f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        map.render(cameraWelt);
+        cameraWelt.update();
+
         if(Gdx.input.isTouched()){
             touchPos.x = Gdx.input.getX();
             touchPos.y = Gdx.graphics.getHeight() - Gdx.input.getY();
@@ -89,8 +92,7 @@ public class Main extends ApplicationAdapter{
         player.updateUP(delta);
         player.drawUP(playerSpriteBatch,shapeRendererHUD);
 
-        map.render(cameraWelt);
-        cameraWelt.update();
+
 
 
         if(joystick.getCameraWeltPosition().x != 0) {

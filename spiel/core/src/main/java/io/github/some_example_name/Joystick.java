@@ -26,7 +26,7 @@ public class Joystick{
 
         radiusSmallCircle = 60;
         radiusBigCircle = 150;
-        bigCircleCords = new Vector2(cords.x/4.5f,cords.y/4.5f);
+        bigCircleCords = new Vector2(cords.x/20*3f,cords.y/10*3f);
 
         smallCircleCords = bigCircleCords;
         inputJoystick = false;
