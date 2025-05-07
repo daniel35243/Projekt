@@ -65,6 +65,7 @@ public class GameScreen extends ApplicationAdapter implements Screen {
 
         fpsFont = new BitmapFont();
         fps = new SpriteBatch();
+        //TEST
     }
 
     @Override
