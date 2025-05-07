@@ -96,12 +96,16 @@ public class Joystick{
             switch (playerDirection){
                 case 'r':
                     player.drawRIGHT(batch,true);
+                    break;
                 case 'l':
                     player.drawLEFT(batch,true);
+                    break;
                 case 'u':
                     player.drawUP(batch,true);
+                    break;
                 case 'd':
                     player.drawDOWN(batch,true);
+                    break;
             }
         }
 

@@ -13,18 +13,20 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 public class Player {
     private Texture playerSpriteSheet;
     private TextureRegion[][] playerFrames;
-    private TextureRegion[] stillUp;
-    private TextureRegion[] stillLeft;
-    private TextureRegion[] stillDown;
-    private TextureRegion[] stillRight;
     private TextureRegion[] walkUp;
     private TextureRegion[] walkLeft;
     private TextureRegion[] walkDown;
     private TextureRegion[] walkRight;
+    private TextureRegion[] stillRight;
+    private TextureRegion[] stillLeft;
     private Animation<TextureRegion> walkUpAnimation;
     private Animation<TextureRegion> walkDownAnimation;
     private Animation<TextureRegion> walkRightAnimation;
     private Animation<TextureRegion> walkLeftAnimation;
+    private Animation<TextureRegion> stillUpAnimation;
+    private Animation<TextureRegion> stillDownAnimation;
+    private Animation<TextureRegion> stillRightAnimation;
+    private Animation<TextureRegion> stillLeftAnimation;
     private float stateTime;
     private boolean flipped;
 
@@ -35,7 +37,14 @@ public class Player {
         walkDown = new TextureRegion[6];
         walkLeft = new TextureRegion[6];
         walkRight = new TextureRegion[6];
-
+        stillRight = new TextureRegion[1];
+        stillLeft = new TextureRegion[1];
+        stillRight[0] = playerFrames[1][1];
+        stillLeft[0] = playerFrames[1][1];
+        stillUpAnimation = new Animation<>(0.1f,playerFrames[2][1]);
+        stillDownAnimation = new Animation<>(0.1f,playerFrames[0][1]);
+        stillLeftAnimation = new Animation<>(0.1f,stillLeft);
+        stillRightAnimation = new Animation<>(0.1f,stillRight);
 
         stateTime = 0;
         Right();
@@ -43,6 +52,7 @@ public class Player {
         Left();
         Down();
         flipped = false;
+
     }
 
     public void Up(){
@@ -82,12 +92,12 @@ public class Player {
         if(!still) {
             batch.begin();
             TextureRegion frame = walkUpAnimation.getKeyFrame(stateTime, true);
-            batch.draw(frame, Gdx.graphics.getWidth() / 20 - 213f, Gdx.graphics.getHeight() / 14 - 213f);
+            batch.draw(frame, Gdx.graphics.getWidth() / 2- 106.5f, Gdx.graphics.getHeight() / 2 - 106.5f);
             batch.end();
         }else{
             batch.begin();
-            TextureRegion frame = walkUpAnimation.getKeyFrames()[1];
-            batch.draw(frame, Gdx.graphics.getWidth() / 20 - 213f, Gdx.graphics.getHeight() / 14 - 213f);
+            TextureRegion frame = stillUpAnimation.getKeyFrame(stateTime,true);
+            batch.draw(frame, Gdx.graphics.getWidth() / 2- 106.5f, Gdx.graphics.getHeight() / 2 - 106.5f);
             batch.end();
         }
 
@@ -101,12 +111,12 @@ public class Player {
         if(!still) {
             batch.begin();
             TextureRegion frame = walkDownAnimation.getKeyFrame(stateTime, true);
-            batch.draw(frame, Gdx.graphics.getWidth() / 20 - 213f, Gdx.graphics.getHeight() / 14 - 213f);
+            batch.draw(frame, Gdx.graphics.getWidth() / 2 - 106.5f, Gdx.graphics.getHeight() / 2- 106.5f);
             batch.end();
         }else{
             batch.begin();
-            TextureRegion frame = walkDownAnimation.getKeyFrames()[1];
-            batch.draw(frame, Gdx.graphics.getWidth() / 20 - 213f, Gdx.graphics.getHeight() / 14 - 213f);
+            TextureRegion frame = stillDownAnimation.getKeyFrame(stateTime,true);
+            batch.draw(frame, Gdx.graphics.getWidth() / 2 - 106.5f, Gdx.graphics.getHeight() / 2 - 106.5f);
             batch.end();
         }
 
@@ -119,14 +129,13 @@ public class Player {
         if(!still) {
             batch.begin();
             TextureRegion frame = walkRightAnimation.getKeyFrame(stateTime, true);
-            batch.draw(frame, Gdx.graphics.getWidth() / 20 - 213f, Gdx.graphics.getHeight() / 14 - 213f);
+            batch.draw(frame, Gdx.graphics.getWidth() / 2 - 106.5f, Gdx.graphics.getHeight() / 2 - 106.5f);
             batch.end();
         }else{
             batch.begin();
-            TextureRegion frame = walkRightAnimation.getKeyFrames()[1];
-            batch.draw(frame, Gdx.graphics.getWidth() / 20 - 213f, Gdx.graphics.getHeight() / 14 - 213f);
+            TextureRegion frame = stillRightAnimation.getKeyFrame(stateTime,true);
+            batch.draw(frame, Gdx.graphics.getWidth() / 2 - 106.5f, Gdx.graphics.getHeight() / 2 - 106.5f);
             batch.end();
-            System.out.println("TEST");
         }
 
 
@@ -140,21 +149,23 @@ public class Player {
         for (int i = 0; i < 6; i++) {
             walkLeft[i].flip(true, false);
         }
+        stillLeft[0].flip(true,false);
         if(!still) {
             batch.begin();
             TextureRegion frame = walkLeftAnimation.getKeyFrame(stateTime, true);
-            batch.draw(frame, Gdx.graphics.getWidth() / 20 - 213f, Gdx.graphics.getHeight() / 14 - 213f);
+            batch.draw(frame, Gdx.graphics.getWidth() / 2 - 106.5f, Gdx.graphics.getHeight() / 2- 106.5f);
             batch.end();
 
         }else{
             batch.begin();
-            TextureRegion frame = walkLeftAnimation.getKeyFrames()[1];
-            batch.draw(frame, Gdx.graphics.getWidth() / 20 - 213f, Gdx.graphics.getHeight() / 14 - 213f);
+            TextureRegion frame = stillLeftAnimation.getKeyFrame(stateTime,true);
+            batch.draw(frame, Gdx.graphics.getWidth() / 2- 106.5f, Gdx.graphics.getHeight() / 2- 106.5f);
             batch.end();
         }
         for (int i = 0; i < 6; i++) {
             walkLeft[i].flip(true, false);
         }
+        stillLeft[0].flip(true,false);
 
     }
 

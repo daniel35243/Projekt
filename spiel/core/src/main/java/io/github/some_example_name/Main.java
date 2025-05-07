@@ -51,7 +51,7 @@ public class Main extends ApplicationAdapter{
         joystick = new Joystick(new Vector2(Gdx.graphics.getWidth()/5*4,Gdx.graphics.getHeight()/5*4));
 
         cameraHUD = new OrthographicCamera(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
-        cameraHUD.position.set(0,0,0);
+        cameraHUD.position.set(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2,0);
         cameraHUD.update();
         hudViewport = new ScreenViewport(cameraHUD);
 
@@ -96,13 +96,13 @@ public class Main extends ApplicationAdapter{
         //Player HITBOX
         shapeRendererHUD.begin(ShapeRenderer.ShapeType.Line);
         shapeRendererHUD.setColor(Color.RED);
-        shapeRendererHUD.rect(Gdx.graphics.getWidth() / 20 - 160f,Gdx.graphics.getHeight() / 14 - 170f,110,160);
+        shapeRendererHUD.rect(Gdx.graphics.getWidth() / 2 - 60,Gdx.graphics.getHeight() / 2 - 60,110,160);
         shapeRendererHUD.end();
 
         //Joystick HITBOX
         shapeRendererHUD.begin(ShapeRenderer.ShapeType.Line);
         shapeRendererHUD.setColor(Color.BLUE);
-        shapeRendererHUD.rect(0,0,100,50);
+        shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth() / 2,Gdx.graphics.getHeight());
         shapeRendererHUD.end();
 
 
