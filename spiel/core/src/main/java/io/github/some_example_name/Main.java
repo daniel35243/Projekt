@@ -18,6 +18,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter{
@@ -33,6 +35,7 @@ public class Main extends ApplicationAdapter{
     float delta;
     Player player;
     SpriteBatch playerSpriteBatch;
+    Viewport hudViewport;
 
     @Override
     public void create() {
@@ -49,9 +52,8 @@ public class Main extends ApplicationAdapter{
 
         cameraHUD = new OrthographicCamera(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         cameraHUD.position.set(0,0,0);
-        cameraHUD.zoom = 1f;
         cameraHUD.update();
-
+        hudViewport = new ScreenViewport(cameraHUD);
 
         cameraWeltPosition = new Vector2(800,800);
         cameraWelt = new OrthographicCamera();
@@ -67,7 +69,6 @@ public class Main extends ApplicationAdapter{
     @Override
     public void render() {
         //Einstellungen
-        delta = Gdx.graphics.getDeltaTime();
         Gdx.gl.glClearColor(0.0f,149/255f,233/255f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         shapeRendererHUD.setProjectionMatrix(cameraHUD.combined);
@@ -96,6 +97,12 @@ public class Main extends ApplicationAdapter{
         shapeRendererHUD.begin(ShapeRenderer.ShapeType.Line);
         shapeRendererHUD.setColor(Color.RED);
         shapeRendererHUD.rect(Gdx.graphics.getWidth() / 20 - 160f,Gdx.graphics.getHeight() / 14 - 170f,110,160);
+        shapeRendererHUD.end();
+
+        //Joystick HITBOX
+        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Line);
+        shapeRendererHUD.setColor(Color.BLUE);
+        shapeRendererHUD.rect(0,0,100,50);
         shapeRendererHUD.end();
 
 
