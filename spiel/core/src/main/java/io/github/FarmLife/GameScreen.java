@@ -1,7 +1,8 @@
-package io.github.FarmLifeScreen;
+package io.github.FarmLife;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -13,7 +14,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class GameScreen extends ApplicationAdapter{
+public class GameScreen extends ApplicationAdapter implements Screen {
     OrthographicCamera cameraWelt;
     OrthographicCamera cameraHUD;
     Map map;
@@ -30,6 +31,15 @@ public class GameScreen extends ApplicationAdapter{
 
     @Override
     public void create() {
+    }
+
+    @Override
+    public void render() {
+
+    }
+
+    @Override
+    public void show() {
         player = new Player();
         playerSpriteBatch = new SpriteBatch();
 
@@ -58,7 +68,7 @@ public class GameScreen extends ApplicationAdapter{
     }
 
     @Override
-    public void render() {
+    public void render(float delta) {
         //Einstellungen
         Gdx.gl.glClearColor(0.0f,149/255f,233/255f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -114,6 +124,11 @@ public class GameScreen extends ApplicationAdapter{
         fps.begin();
         fpsFont.draw(fps, "Fps: " + (Gdx.graphics.getFramesPerSecond()), 20, Gdx.graphics.getHeight()-20);
         fps.end();
+    }
+
+    @Override
+    public void hide() {
+
     }
 
     @Override

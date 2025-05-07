@@ -1,4 +1,4 @@
-package io.github.FarmLifeScreen;
+package io.github.FarmLife;
 
 
 import com.badlogic.gdx.Gdx;
