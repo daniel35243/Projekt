@@ -20,6 +20,7 @@ public class Joystick{
     private Vector2 cameraWeltPosition;
     private Vector2 direction;
     private char playerDirection;
+    private boolean neuePositionJoystick;
 
     public Joystick(Vector2 cords){
         cameraWeltPosition = new Vector2(800,800);
@@ -33,10 +34,10 @@ public class Joystick{
         isPressed = false;
         shapeRendererJoystick = new ShapeRenderer();
         playerDirection = 'r';
-
+        neuePositionJoystick = false;
     }
 
-    public void moveJoystick(Vector2 touchPosition, Player player, SpriteBatch batch){
+    public void moveJoystick(Vector2 touchPosition, Player player, SpriteBatch batch,Vector2 cords){
 
         //Erkennt, wenn in Joystick getouched wird
         inputJoystick = touchPosition.dst(bigCircleCords) <= radiusBigCircle;
@@ -47,6 +48,11 @@ public class Joystick{
 
         }else if(!Gdx.input.isTouched()){
             isPressed = false;
+            bigCircleCords.set(new Vector2(cords.x/20*3f,cords.y/10*3f));
+            neuePositionJoystick = false;
+        }else if(Gdx.input.isTouched() && touchPosition.x <= Gdx.graphics.getWidth()/2 && !neuePositionJoystick){
+            bigCircleCords.set(touchPosition);
+            neuePositionJoystick = true;
         }
 
 

@@ -91,7 +91,7 @@ public class GameScreen extends ApplicationAdapter implements Screen {
         }
 
         //Joystick
-        joystick.moveJoystick(touchPos,player,playerSpriteBatch);
+        joystick.moveJoystick(touchPos,player,playerSpriteBatch,new Vector2(Gdx.graphics.getWidth()/5*4,Gdx.graphics.getHeight()/5*4));
         shapeRendererHUD.end();
 
         //Player HITBOX
