@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class Main extends ApplicationAdapter{
+public class GameScreen extends ApplicationAdapter{
     OrthographicCamera cameraWelt;
     OrthographicCamera cameraHUD;
     Map map;
