@@ -24,11 +24,12 @@ public class GameScreen extends ApplicationAdapter implements Screen {
     Vector2 cameraWeltPosition;
     BitmapFont fpsFont;
     SpriteBatch fps;
-    float delta;
     Player player;
     SpriteBatch playerSpriteBatch;
     Viewport hudViewport;
-
+    float nightFaktor;
+    boolean nightFaktorNull;
+    int framecounter;
     @Override
     public void create() {
     }
@@ -65,11 +66,15 @@ public class GameScreen extends ApplicationAdapter implements Screen {
 
         fpsFont = new BitmapFont();
         fps = new SpriteBatch();
-        //TEST
+
+        nightFaktor = 0.8f;
+        nightFaktorNull = false;
+        framecounter = 0;
     }
 
     @Override
     public void render(float delta) {
+        framecounter++;
         //Einstellungen
         Gdx.gl.glClearColor(0.0f,149/255f,233/255f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -107,6 +112,27 @@ public class GameScreen extends ApplicationAdapter implements Screen {
         shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth() / 2,Gdx.graphics.getHeight());
         shapeRendererHUD.end();
 
+        //TAG/NACHT
+        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRendererHUD.setColor(new Color(30/255f,30/255f,30/255f,nightFaktor));
+        shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth() ,Gdx.graphics.getHeight());
+        shapeRendererHUD.end();
+
+        if(framecounter == 30) {
+            if (nightFaktorNull) {
+                nightFaktor += 0.0133f;
+                if (nightFaktor >= 0.8) {
+                    nightFaktorNull = false;
+                }
+            } else {
+                nightFaktor -= 0.0133f;
+                if (nightFaktor <= 0) {
+                    nightFaktorNull = true;
+                }
+            }
+            System.out.println(nightFaktor);
+            framecounter = 0;
+        }
 
 
         //MOVEMENT
