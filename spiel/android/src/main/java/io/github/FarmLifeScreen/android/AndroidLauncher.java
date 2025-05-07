@@ -1,10 +1,11 @@
-package io.github.some_example_name.android;
+package io.github.FarmLifeScreen.android;
 
 import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import io.github.some_example_name.Main;
+
+import io.github.FarmLifeScreen.Main2;
 
 /** Launches the Android application. */
 public class AndroidLauncher extends AndroidApplication {
@@ -13,6 +14,6 @@ public class AndroidLauncher extends AndroidApplication {
         super.onCreate(savedInstanceState);
         AndroidApplicationConfiguration configuration = new AndroidApplicationConfiguration();
         configuration.useImmersiveMode = true; // Recommended, but not required.
-        initialize(new Main(), configuration);
+        initialize(new Main2(), configuration);
     }
 }
