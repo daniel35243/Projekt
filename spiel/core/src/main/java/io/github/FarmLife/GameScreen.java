@@ -82,6 +82,7 @@ public class GameScreen implements Screen {
         //cameraWeltPosition.set(cameraWeltPosition.x + zwischenspeicherCameraWeltPosition.x,cameraWeltPosition.y + zwischenspeicherCameraWeltPosition.y) ;
         cameraWeltPosition.set(map.mapBorder(joystick,cameraWeltPosition));
         map.render(cameraWelt);
+        cameraWelt.position.set(cameraWeltPosition, 0);
         cameraWelt.update();
 
 
@@ -135,14 +136,14 @@ public class GameScreen implements Screen {
 
 
         //MOVEMENT
-        if(joystick.getCameraWeltPosition().x != 0) {
-            cameraWeltPosition.x += joystick.getCameraWeltPosition().x * 1.55f;
-        }
-        if(joystick.getCameraWeltPosition().y != 0){
-            cameraWeltPosition.y += joystick.getCameraWeltPosition().y * 1.55f;
-        }
-        cameraWelt.position.set(cameraWeltPosition, 0);
-        cameraHUD.update();
+//        if(joystick.getCameraWeltPosition().x != 0) {
+//            cameraWeltPosition.x += joystick.getCameraWeltPosition().x * 1.55f;
+//        }
+//        if(joystick.getCameraWeltPosition().y != 0){
+//            cameraWeltPosition.y += joystick.getCameraWeltPosition().y * 1.55f;
+//        }
+
+
 
 
 

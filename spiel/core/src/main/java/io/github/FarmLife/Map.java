@@ -26,7 +26,7 @@ public class Map {
     public Map(){
         map = new TmxMapLoader().load("map.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
-        mapBorderObject = map.getLayers().get("Map Border").getObjects();
+        mapBorderObject = map.getLayers().get("MapBorder").getObjects();
         mapBorder = (PolygonMapObject) mapBorderObject.get(0);
     }
 
