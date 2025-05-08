@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class GameScreen extends ApplicationAdapter implements Screen {
+public class GameScreen implements Screen {
     OrthographicCamera cameraWelt;
     OrthographicCamera cameraHUD;
     Map map;
@@ -30,14 +30,8 @@ public class GameScreen extends ApplicationAdapter implements Screen {
     float nightFaktor;
     boolean nightFaktorNull;
     int framecounter;
-    @Override
-    public void create() {
-    }
+    Vector2 zwischenspeicherCameraWeltPosition;
 
-    @Override
-    public void render() {
-
-    }
 
     @Override
     public void show() {
@@ -70,6 +64,7 @@ public class GameScreen extends ApplicationAdapter implements Screen {
         nightFaktor = 0.8f;
         nightFaktorNull = false;
         framecounter = 0;
+        zwischenspeicherCameraWeltPosition = new Vector2();
     }
 
     @Override
@@ -83,7 +78,9 @@ public class GameScreen extends ApplicationAdapter implements Screen {
         playerSpriteBatch.setProjectionMatrix(cameraHUD.combined);
 
         //Map
-        cameraWeltPosition = map.mapBorder(joystick,cameraWeltPosition);
+        zwischenspeicherCameraWeltPosition.set(map.mapBorder(joystick,cameraWeltPosition));
+        //cameraWeltPosition.set(cameraWeltPosition.x + zwischenspeicherCameraWeltPosition.x,cameraWeltPosition.y + zwischenspeicherCameraWeltPosition.y) ;
+        cameraWeltPosition.set(map.mapBorder(joystick,cameraWeltPosition));
         map.render(cameraWelt);
         cameraWelt.update();
 
@@ -133,7 +130,6 @@ public class GameScreen extends ApplicationAdapter implements Screen {
                     nightFaktorNull = true;
                 }
             }
-            System.out.println(nightFaktor);
             framecounter = 0;
         }
 
@@ -155,6 +151,21 @@ public class GameScreen extends ApplicationAdapter implements Screen {
         fps.begin();
         fpsFont.draw(fps, "Fps: " + (Gdx.graphics.getFramesPerSecond()), 20, Gdx.graphics.getHeight()-20);
         fps.end();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
     }
 
     @Override

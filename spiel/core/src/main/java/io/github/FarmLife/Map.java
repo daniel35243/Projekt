@@ -36,24 +36,25 @@ public class Map {
     }
 
     public Vector2 mapBorder(Joystick joystick, Vector2 camerWeltPosition){
+        Vector2 newPosition = new Vector2(camerWeltPosition);
+        newPosition.x += joystick.getCameraWeltPosition().x*1.55f;
+        newPosition.y += joystick.getCameraWeltPosition().y*1.55f;
 
         playerHitboxCords = new float[]{
-            camerWeltPosition.x - 60,camerWeltPosition.y - 60,
-            camerWeltPosition.x + 50,camerWeltPosition.y - 60,
-            camerWeltPosition.x - 60,camerWeltPosition.y + 50,
-            camerWeltPosition.x + 50,camerWeltPosition.y + 50,
+            newPosition.x - 60,newPosition.y - 60,
+            newPosition.x + 50,newPosition.y - 60,
+            newPosition.x - 60,newPosition.y + 50,
+            newPosition.x + 50,newPosition.y + 50,
         };
         playerHitbox = new Polygon(playerHitboxCords);
         mapBorderPolygon = mapBorder.getPolygon();
 
         if(!Intersector.overlapConvexPolygons(mapBorderPolygon,playerHitbox)){
-            camerWeltPosition.y -= joystick.getCameraWeltPosition().y * 1.55f;
-            camerWeltPosition.x -= joystick.getCameraWeltPosition().x * 1.55f;
-            System.out.println("TOBIAS");
+            return camerWeltPosition;
+
         }else{
-            camerWeltPosition.y = joystick.getCameraWeltPosition().y;
-            camerWeltPosition.x = joystick.getCameraWeltPosition().x;
+            return newPosition;
         }
-        return camerWeltPosition;
+
     }
 }
