@@ -1,4 +1,4 @@
-package io.github.FarmLifeMain;
+package io.github.FarmLife;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -32,7 +32,7 @@ public class MainMenuScreen implements Screen {
 
         //Größere Schrift
         BitmapFont bigFont = new BitmapFont();
-        bigFont.getData().setScale(3f);
+        bigFont.getData().setScale(8f);
 
         //Button Style
         TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
@@ -50,7 +50,6 @@ public class MainMenuScreen implements Screen {
         stage.addActor(table);
 
         Label title = new Label("Hauptmenü", titleStyle);
-        title.setSize(100,100);
         TextButton startButton = new TextButton("Spiel starten", skin);
         TextButton exitButton = new TextButton("Beenden", skin);
 
@@ -58,7 +57,7 @@ public class MainMenuScreen implements Screen {
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new GameScreen());
+                game.setScreen((new GameScreen()));
                 System.out.println("App Spiel Starten Button gedrückt");
             }
         });

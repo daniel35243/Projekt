@@ -1,4 +1,4 @@
-package io.github.FarmLifeMain;
+package io.github.FarmLife;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -7,14 +7,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Splash implements Screen {
+public class StartScreen implements Screen {
 
     private Game game;
     private SpriteBatch batch;
     private Texture logo;
     private float stateTime = 0f;
 
-    public Splash(Game game) {
+    public StartScreen(Game game) {
         this.game = game;
     }
 
