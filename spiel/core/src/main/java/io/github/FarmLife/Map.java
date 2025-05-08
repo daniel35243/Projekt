@@ -57,4 +57,7 @@ public class Map {
         }
 
     }
+    public Polygon getMapBorderPolygon(){
+        return mapBorderPolygon;
+    }
 }

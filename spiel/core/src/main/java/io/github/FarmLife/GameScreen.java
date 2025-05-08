@@ -31,13 +31,14 @@ public class GameScreen implements Screen {
     boolean nightFaktorNull;
     int framecounter;
     Vector2 zwischenspeicherCameraWeltPosition;
-
+    ShapeRenderer shapeRendererMap;
 
     @Override
     public void show() {
         player = new Player();
         playerSpriteBatch = new SpriteBatch();
 
+        shapeRendererMap = new ShapeRenderer();
         shapeRendererHUD = new ShapeRenderer();
 
         touchPos = new Vector2(0,0);
@@ -77,6 +78,7 @@ public class GameScreen implements Screen {
         shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
         playerSpriteBatch.setProjectionMatrix(cameraHUD.combined);
 
+        shapeRendererMap.setProjectionMatrix(cameraWelt.combined);
         //Map
         zwischenspeicherCameraWeltPosition.set(map.mapBorder(joystick,cameraWeltPosition));
         //cameraWeltPosition.set(cameraWeltPosition.x + zwischenspeicherCameraWeltPosition.x,cameraWeltPosition.y + zwischenspeicherCameraWeltPosition.y) ;
@@ -118,6 +120,11 @@ public class GameScreen implements Screen {
         shapeRendererHUD.setColor(new Color(30/255f,30/255f,30/255f,0));
         shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth() ,Gdx.graphics.getHeight());
         shapeRendererHUD.end();
+
+        shapeRendererMap.begin(ShapeRenderer.ShapeType.Line);
+        shapeRendererMap.setColor(Color.BLACK);
+        shapeRendererMap.polygon(map.getMapBorderPolygon().getTransformedVertices());
+        shapeRendererMap.end();
 
         if(framecounter == 30) {
             if (nightFaktorNull) {
