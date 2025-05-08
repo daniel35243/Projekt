@@ -83,6 +83,7 @@ public class GameScreen extends ApplicationAdapter implements Screen {
         playerSpriteBatch.setProjectionMatrix(cameraHUD.combined);
 
         //Map
+        cameraWeltPosition = map.mapBorder(joystick,cameraWeltPosition);
         map.render(cameraWelt);
         cameraWelt.update();
 
@@ -104,6 +105,8 @@ public class GameScreen extends ApplicationAdapter implements Screen {
         shapeRendererHUD.begin(ShapeRenderer.ShapeType.Line);
         shapeRendererHUD.setColor(Color.RED);
         shapeRendererHUD.rect(Gdx.graphics.getWidth() / 2 - 60,Gdx.graphics.getHeight() / 2 - 60,110,160);
+        shapeRendererHUD.setColor(Color.YELLOW);
+        shapeRendererHUD.rect(Gdx.graphics.getWidth() / 2 - 60,Gdx.graphics.getHeight() / 2 - 60,110,30);
         shapeRendererHUD.end();
 
         //Joystick HITBOX
@@ -114,7 +117,7 @@ public class GameScreen extends ApplicationAdapter implements Screen {
 
         //TAG/NACHT
         shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRendererHUD.setColor(new Color(30/255f,30/255f,30/255f,nightFaktor));
+        shapeRendererHUD.setColor(new Color(30/255f,30/255f,30/255f,0));
         shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth() ,Gdx.graphics.getHeight());
         shapeRendererHUD.end();
 
@@ -144,6 +147,7 @@ public class GameScreen extends ApplicationAdapter implements Screen {
         }
         cameraWelt.position.set(cameraWeltPosition, 0);
         cameraHUD.update();
+
 
 
         //FPS
