@@ -80,8 +80,6 @@ public class GameScreen implements Screen {
 
         shapeRendererMap.setProjectionMatrix(cameraWelt.combined);
         //Map
-        zwischenspeicherCameraWeltPosition.set(map.mapBorder(joystick,cameraWeltPosition));
-        //cameraWeltPosition.set(cameraWeltPosition.x + zwischenspeicherCameraWeltPosition.x,cameraWeltPosition.y + zwischenspeicherCameraWeltPosition.y) ;
         cameraWeltPosition.set(map.mapBorder(joystick,cameraWeltPosition));
         map.render(cameraWelt);
         cameraWelt.position.set(cameraWeltPosition, 0);
@@ -140,19 +138,6 @@ public class GameScreen implements Screen {
             }
             framecounter = 0;
         }
-
-
-        //MOVEMENT
-//        if(joystick.getCameraWeltPosition().x != 0) {
-//            cameraWeltPosition.x += joystick.getCameraWeltPosition().x * 1.55f;
-//        }
-//        if(joystick.getCameraWeltPosition().y != 0){
-//            cameraWeltPosition.y += joystick.getCameraWeltPosition().y * 1.55f;
-//        }
-
-
-
-
 
         //FPS
         fpsFont.getData().setScale(3f);

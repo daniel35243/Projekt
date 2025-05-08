@@ -1,7 +1,9 @@
 package io.github.FarmLife;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
@@ -35,28 +37,33 @@ public class Map {
         tiledMapRenderer.render();
     }
 
-    public Vector2 mapBorder(Joystick joystick, Vector2 camerWeltPosition){
-        Vector2 newPosition = new Vector2(camerWeltPosition);
+    public Vector2 mapBorder(Joystick joystick, Vector2 cameraWeltPosition){
+        Vector2 newPosition = new Vector2(cameraWeltPosition);
         newPosition.x += joystick.getCameraWeltPosition().x*1.55f;
         newPosition.y += joystick.getCameraWeltPosition().y*1.55f;
+
 
         playerHitboxCords = new float[]{
             newPosition.x - 60,newPosition.y - 60,
             newPosition.x + 50,newPosition.y - 60,
-            newPosition.x - 60,newPosition.y - 30,
             newPosition.x + 50,newPosition.y - 30,
+            newPosition.x - 60,newPosition.y - 30,
         };
+
 
 
         playerHitbox = new Polygon(playerHitboxCords);
         mapBorderPolygon = mapBorder.getPolygon();
 
-        if(!Intersector.overlapConvexPolygons(mapBorderPolygon,playerHitbox)){
-            System.out.println("TEST");
-            return camerWeltPosition;
-        }else{
-            return newPosition;
+        Vector2 testX = new Vector2(newPosition.x, cameraWeltPosition.y);
+        Vector2 testY = new Vector2(cameraWeltPosition.x, newPosition.y);
+        if (mapBorder.getPolygon().contains(testX.x, testX.y)) {
+            cameraWeltPosition.x = testX.x;
         }
+        if (mapBorder.getPolygon().contains(testY.x, testY.y)) {
+            cameraWeltPosition.y = testY.y;
+        }
+        return cameraWeltPosition;
 
     }
     public Polygon getMapBorderPolygon(){
