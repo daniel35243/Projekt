@@ -45,7 +45,6 @@ public class Joystick{
         //Erkennt ob gerade Joystick getouched wird
         if(Gdx.input.justTouched() && inputJoystick) {
             isPressed = true;
-
         }else if(!Gdx.input.isTouched()){
             isPressed = false;
             bigCircleCords.set(new Vector2(cords.x/20*3f,cords.y/10*3f));
