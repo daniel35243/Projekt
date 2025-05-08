@@ -43,15 +43,17 @@ public class Map {
         playerHitboxCords = new float[]{
             newPosition.x - 60,newPosition.y - 60,
             newPosition.x + 50,newPosition.y - 60,
-            newPosition.x - 60,newPosition.y + 50,
-            newPosition.x + 50,newPosition.y + 50,
+            newPosition.x - 60,newPosition.y - 30,
+            newPosition.x + 50,newPosition.y - 30,
         };
+
+
         playerHitbox = new Polygon(playerHitboxCords);
         mapBorderPolygon = mapBorder.getPolygon();
 
         if(!Intersector.overlapConvexPolygons(mapBorderPolygon,playerHitbox)){
+            System.out.println("TEST");
             return camerWeltPosition;
-
         }else{
             return newPosition;
         }
