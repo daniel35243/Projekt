@@ -28,15 +28,6 @@ public class Map {
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
         mapBorderObject = map.getLayers().get("Map Border").getObjects();
         mapBorder = (PolygonMapObject) mapBorderObject.get(0);
-        playerHitboxCords = new float[]{
-            Gdx.graphics.getWidth() / 2 - 60,Gdx.graphics.getHeight() / 2 - 60,
-            Gdx.graphics.getWidth() / 2 + 50,Gdx.graphics.getHeight() / 2 - 60,
-            Gdx.graphics.getWidth() / 2 + 50,Gdx.graphics.getHeight() / 2 + 50,
-            Gdx.graphics.getWidth() / 2 - 60,Gdx.graphics.getHeight() / 2 + 50,
-
-        };
-        playerHitbox = new Polygon(playerHitboxCords);
-        mapBorderPolygon = mapBorder.getPolygon();
     }
 
     public void render(OrthographicCamera camera){
@@ -45,9 +36,20 @@ public class Map {
     }
 
     public Vector2 mapBorder(Joystick joystick, Vector2 vector){
+
+        playerHitboxCords = new float[]{
+            joystick.getCameraWeltPosition().x - 60,joystick.getCameraWeltPosition().y - 60,
+            joystick.getCameraWeltPosition().x + 50,joystick.getCameraWeltPosition().y - 60,
+            joystick.getCameraWeltPosition().x - 60,joystick.getCameraWeltPosition().y + 50,
+            joystick.getCameraWeltPosition().x + 50,joystick.getCameraWeltPosition().y + 50,
+        };
+        playerHitbox = new Polygon(playerHitboxCords);
+        mapBorderPolygon = mapBorder.getPolygon();
+
         if(!Intersector.overlapConvexPolygons(mapBorderPolygon,playerHitbox)){
             vector.y -= joystick.getCameraWeltPosition().y * 1.55f;
             vector.x -= joystick.getCameraWeltPosition().x * 1.55f;
+            System.out.println("TOBIAS");
         }else{
             vector.y = joystick.getCameraWeltPosition().y;
             vector.x = joystick.getCameraWeltPosition().x;
