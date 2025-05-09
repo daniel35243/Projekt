@@ -55,13 +55,13 @@ public class Map {
         playerHitbox = new Polygon(playerHitboxCords);
         mapBorderPolygon = mapBorder.getPolygon();
 
-        Vector2 testX = new Vector2(newPosition.x, cameraWeltPosition.y);
-        Vector2 testY = new Vector2(cameraWeltPosition.x, newPosition.y);
-        if (mapBorder.getPolygon().contains(testX.x, testX.y)) {
-            cameraWeltPosition.x = testX.x;
+        Vector2 newXPosition = new Vector2(newPosition.x, cameraWeltPosition.y);
+        Vector2 newYPosition = new Vector2(cameraWeltPosition.x, newPosition.y);
+        if (mapBorderPolygon.contains(newXPosition.x, newXPosition.y)) {
+            cameraWeltPosition.x = newXPosition.x;
         }
-        if (mapBorder.getPolygon().contains(testY.x, testY.y)) {
-            cameraWeltPosition.y = testY.y;
+        if (mapBorderPolygon.contains(newYPosition.x, newYPosition.y)) {
+            cameraWeltPosition.y = newYPosition.y;
         }
         return cameraWeltPosition;
 
