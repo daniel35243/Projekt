@@ -75,7 +75,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0.0f,149/255f,233/255f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         shapeRendererHUD.setProjectionMatrix(cameraHUD.combined);
-        playerSpriteBatch.setProjectionMatrix(cameraHUD.combined);
+        playerSpriteBatch.setProjectionMatrix(cameraWelt.combined);
 
         shapeRendererMap.setProjectionMatrix(cameraWelt.combined);
         //Map
@@ -99,8 +99,7 @@ public class GameScreen implements Screen {
         joystick.moveJoystick(touchPos,player,playerSpriteBatch,new Vector2(Gdx.graphics.getWidth()/5*4,Gdx.graphics.getHeight()/5*4));
         cameraHUD.update();
 
-        map.renderObjects(cameraWelt);
-        cameraWelt.update();
+
 
         //Player HITBOX
         shapeRendererHUD.begin(ShapeRenderer.ShapeType.Line);
