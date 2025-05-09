@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class GameScreen extends ApplicationAdapter implements Screen {
+public class GameScreen implements Screen {
     OrthographicCamera cameraWelt;
     OrthographicCamera cameraHUD;
     Map map;
@@ -24,25 +24,21 @@ public class GameScreen extends ApplicationAdapter implements Screen {
     Vector2 cameraWeltPosition;
     BitmapFont fpsFont;
     SpriteBatch fps;
-    float delta;
     Player player;
     SpriteBatch playerSpriteBatch;
     Viewport hudViewport;
-
-    @Override
-    public void create() {
-    }
-
-    @Override
-    public void render() {
-
-    }
+    float nightFaktor;
+    boolean nightFaktorNull;
+    int framecounter;
+    Vector2 zwischenspeicherCameraWeltPosition;
+    ShapeRenderer shapeRendererMap;
 
     @Override
     public void show() {
         player = new Player();
         playerSpriteBatch = new SpriteBatch();
 
+        shapeRendererMap = new ShapeRenderer();
         shapeRendererHUD = new ShapeRenderer();
 
         touchPos = new Vector2(0,0);
@@ -65,11 +61,16 @@ public class GameScreen extends ApplicationAdapter implements Screen {
 
         fpsFont = new BitmapFont();
         fps = new SpriteBatch();
-        //TEST
+
+        nightFaktor = 0.8f;
+        nightFaktorNull = false;
+        framecounter = 0;
+        zwischenspeicherCameraWeltPosition = new Vector2();
     }
 
     @Override
     public void render(float delta) {
+        framecounter++;
         //Einstellungen
         Gdx.gl.glClearColor(0.0f,149/255f,233/255f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -77,8 +78,11 @@ public class GameScreen extends ApplicationAdapter implements Screen {
         shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
         playerSpriteBatch.setProjectionMatrix(cameraHUD.combined);
 
+        shapeRendererMap.setProjectionMatrix(cameraWelt.combined);
         //Map
+        cameraWeltPosition.set(map.mapBorder(joystick,cameraWeltPosition));
         map.render(cameraWelt);
+        cameraWelt.position.set(cameraWeltPosition, 0);
         cameraWelt.update();
 
 
@@ -99,6 +103,8 @@ public class GameScreen extends ApplicationAdapter implements Screen {
         shapeRendererHUD.begin(ShapeRenderer.ShapeType.Line);
         shapeRendererHUD.setColor(Color.RED);
         shapeRendererHUD.rect(Gdx.graphics.getWidth() / 2 - 60,Gdx.graphics.getHeight() / 2 - 60,110,160);
+        shapeRendererHUD.setColor(Color.YELLOW);
+        shapeRendererHUD.rect(Gdx.graphics.getWidth() / 2 - 60,Gdx.graphics.getHeight() / 2 - 60,110,30);
         shapeRendererHUD.end();
 
         //Joystick HITBOX
@@ -107,18 +113,31 @@ public class GameScreen extends ApplicationAdapter implements Screen {
         shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth() / 2,Gdx.graphics.getHeight());
         shapeRendererHUD.end();
 
+        //TAG/NACHT
+        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRendererHUD.setColor(new Color(30/255f,30/255f,30/255f,0));
+        shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth() ,Gdx.graphics.getHeight());
+        shapeRendererHUD.end();
 
+        shapeRendererMap.begin(ShapeRenderer.ShapeType.Line);
+        shapeRendererMap.setColor(Color.BLACK);
+        shapeRendererMap.polygon(map.getMapBorderPolygon().getTransformedVertices());
+        shapeRendererMap.end();
 
-        //MOVEMENT
-        if(joystick.getCameraWeltPosition().x != 0) {
-            cameraWeltPosition.x += joystick.getCameraWeltPosition().x * 1.55f;
+        if(framecounter == 30) {
+            if (nightFaktorNull) {
+                nightFaktor += 0.0133f;
+                if (nightFaktor >= 0.8) {
+                    nightFaktorNull = false;
+                }
+            } else {
+                nightFaktor -= 0.0133f;
+                if (nightFaktor <= 0) {
+                    nightFaktorNull = true;
+                }
+            }
+            framecounter = 0;
         }
-        if(joystick.getCameraWeltPosition().y != 0){
-            cameraWeltPosition.y += joystick.getCameraWeltPosition().y * 1.55f;
-        }
-        cameraWelt.position.set(cameraWeltPosition, 0);
-        cameraHUD.update();
-
 
         //FPS
         fpsFont.getData().setScale(3f);
@@ -128,13 +147,32 @@ public class GameScreen extends ApplicationAdapter implements Screen {
     }
 
     @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
     public void hide() {
 
     }
 
     @Override
     public void dispose() {
-
+        playerSpriteBatch.dispose();
+        shapeRendererHUD.dispose();
+        shapeRendererMap.dispose();
+        fps.dispose();
+        fpsFont.dispose();
     }
 
 
