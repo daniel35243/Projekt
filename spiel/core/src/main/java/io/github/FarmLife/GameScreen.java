@@ -75,7 +75,6 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0.0f,149/255f,233/255f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         shapeRendererHUD.setProjectionMatrix(cameraHUD.combined);
-        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
         playerSpriteBatch.setProjectionMatrix(cameraHUD.combined);
 
         shapeRendererMap.setProjectionMatrix(cameraWelt.combined);
@@ -97,7 +96,6 @@ public class GameScreen implements Screen {
 
         //Joystick
         joystick.moveJoystick(touchPos,player,playerSpriteBatch,new Vector2(Gdx.graphics.getWidth()/5*4,Gdx.graphics.getHeight()/5*4));
-        shapeRendererHUD.end();
 
         //Player HITBOX
         shapeRendererHUD.begin(ShapeRenderer.ShapeType.Line);
@@ -105,10 +103,9 @@ public class GameScreen implements Screen {
         shapeRendererHUD.rect(Gdx.graphics.getWidth() / 2 - 60,Gdx.graphics.getHeight() / 2 - 60,110,160);
         shapeRendererHUD.setColor(Color.YELLOW);
         shapeRendererHUD.rect(Gdx.graphics.getWidth() / 2 - 60,Gdx.graphics.getHeight() / 2 - 60,110,30);
-        shapeRendererHUD.end();
+
 
         //Joystick HITBOX
-        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Line);
         shapeRendererHUD.setColor(Color.BLUE);
         shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth() / 2,Gdx.graphics.getHeight());
         shapeRendererHUD.end();
@@ -119,10 +116,10 @@ public class GameScreen implements Screen {
         shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth() ,Gdx.graphics.getHeight());
         shapeRendererHUD.end();
 
-        shapeRendererMap.begin(ShapeRenderer.ShapeType.Line);
-        shapeRendererMap.setColor(Color.BLACK);
-        shapeRendererMap.polygon(map.getMapBorderPolygon().getTransformedVertices());
-        shapeRendererMap.end();
+//        shapeRendererMap.begin(ShapeRenderer.ShapeType.Line);
+//        shapeRendererMap.setColor(Color.BLACK);
+//        shapeRendererMap.polygon(map.getMapBorderPolygon().getTransformedVertices());
+//        shapeRendererMap.end();
 
         if(framecounter == 30) {
             if (nightFaktorNull) {
@@ -168,7 +165,20 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        playerSpriteBatch.dispose();
+        fpsFont.dispose();
+        fps.dispose();
+        shapeRendererHUD.dispose();
+        shapeRendererMap.dispose();
+        fps.dispose();
+        fpsFont.dispose();
+        shapeRendererHUD.dispose();
+        shapeRendererMap.dispose();
+        fps.dispose();
+        fpsFont.dispose();
+        shapeRendererHUD.dispose();
+        shapeRendererMap.dispose();
+        map.dispose();
     }
 
 

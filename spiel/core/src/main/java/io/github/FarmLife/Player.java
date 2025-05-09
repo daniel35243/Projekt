@@ -82,6 +82,8 @@ public class Player {
         walkRightAnimation = new Animation<>(0.1f,walkRight);
         walkRightAnimation.setPlayMode(Animation.PlayMode.LOOP);
     }
+
+
     public void drawUP(SpriteBatch batch,boolean still){
 
         stateTime += Gdx.graphics.getDeltaTime();

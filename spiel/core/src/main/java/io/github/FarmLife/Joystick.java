@@ -35,6 +35,7 @@ public class Joystick{
         shapeRendererJoystick = new ShapeRenderer();
         playerDirection = 'r';
         neuePositionJoystick = false;
+        direction  = new Vector2();
     }
 
     public void moveJoystick(Vector2 touchPosition, Player player, SpriteBatch batch,Vector2 cords){
@@ -72,7 +73,7 @@ public class Joystick{
             }
 
             //Führt Animation aus je nach Direction
-            direction = new Vector2(smallCircleCords).sub(bigCircleCords);
+            direction.set(smallCircleCords).sub(bigCircleCords);
             if (Math.abs(direction.x) > Math.abs(direction.y)) {
                 if (direction.x > 0) {
                     player.drawRIGHT(batch,false);

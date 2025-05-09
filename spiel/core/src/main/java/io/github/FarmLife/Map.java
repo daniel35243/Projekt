@@ -21,10 +21,10 @@ public class Map {
     private TiledMap map;
     private TiledMapRenderer tiledMapRenderer;
     private MapObjects mapBorderObject;
-    PolygonMapObject mapBorder;
-    Polygon mapBorderPolygon;
-    Polygon playerHitbox;
-    float[] playerHitboxCords;
+    private PolygonMapObject mapBorder;
+    private Polygon mapBorderPolygon;
+    private Polygon playerHitbox;
+    private float[] playerHitboxCords;
     public Map(){
         map = new TmxMapLoader().load("map.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
@@ -68,5 +68,8 @@ public class Map {
     }
     public Polygon getMapBorderPolygon(){
         return mapBorderPolygon;
+    }
+    public void dispose(){
+        map.dispose();
     }
 }
