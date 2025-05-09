@@ -25,6 +25,7 @@ public class GameScreen implements Screen {
     Vector2 cameraWeltPosition;
     BitmapFont fpsFont;
     SpriteBatch fps;
+    float delta;
     Player player;
     SpriteBatch playerSpriteBatch;
     Viewport hudViewport;
@@ -86,8 +87,6 @@ public class GameScreen implements Screen {
         cameraWelt.update();
 
 
-
-
         //Erkennt wenn Bildschirm TOUCHED
         if(Gdx.input.isTouched()){
             touchPos.x = Gdx.input.getX();
@@ -97,6 +96,9 @@ public class GameScreen implements Screen {
             touchPos.y = 0;
         }
 
+        //Joystick
+        joystick.moveJoystick(touchPos,player,playerSpriteBatch,new Vector2(Gdx.graphics.getWidth()/5*4,Gdx.graphics.getHeight()/5*4));
+        shapeRendererHUD.end();
 
         //Player HITBOX
         shapeRendererHUD.begin(ShapeRenderer.ShapeType.Line);
@@ -107,6 +109,7 @@ public class GameScreen implements Screen {
 
 
         //Joystick HITBOX
+        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Line);
         shapeRendererHUD.setColor(Color.BLUE);
         shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth() / 2,Gdx.graphics.getHeight());
         shapeRendererHUD.end();

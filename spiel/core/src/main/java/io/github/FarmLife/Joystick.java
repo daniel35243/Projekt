@@ -48,6 +48,7 @@ public class Joystick{
         //Erkennt ob gerade Joystick getouched wird
         if(Gdx.input.justTouched() && inputJoystick) {
             isPressed = true;
+
         }else if(!Gdx.input.isTouched()){
             isPressed = false;
             bigCircleCords.set(new Vector2(cords.x/20*3f,cords.y/10*3f));
@@ -89,14 +90,25 @@ public class Joystick{
                     playerDirection = 'd';
                 }
             }
-            stillAnimation = false;
 
         //Wenn Joystick nicht gehalten wird
         }else{
             smallCircleCords = bigCircleCords;
-            stillAnimation = true;
+            switch (playerDirection){
+                case 'r':
+                    player.drawRIGHT(batch,true);
+                    break;
+                case 'l':
+                    player.drawLEFT(batch,true);
+                    break;
+                case 'u':
+                    player.drawUP(batch,true);
+                    break;
+                case 'd':
+                    player.drawDOWN(batch,true);
+                    break;
+            }
         }
-
 
 
         //Bewegung
@@ -104,8 +116,6 @@ public class Joystick{
 
         //Malt Joystick
         draw();
-
-
     }
     public void draw(){
 

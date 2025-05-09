@@ -72,6 +72,7 @@ public class StartScreen implements Screen {
 
     @Override
     public void dispose() {
+        game.dispose();
         batch.dispose();
         logo.dispose();
     }
