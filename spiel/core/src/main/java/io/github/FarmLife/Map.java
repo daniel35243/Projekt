@@ -25,16 +25,23 @@ public class Map {
     private Polygon mapBorderPolygon;
     private Polygon playerHitbox;
     private float[] playerHitboxCords;
+    int[] startLayers;
+    int[] objectLayer;
     public Map(){
         map = new TmxMapLoader().load("map.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
         mapBorderObject = map.getLayers().get("MapBorder").getObjects();
         mapBorder = (PolygonMapObject) mapBorderObject.get(0);
+        startLayers = new int[]{0,1,2,3,4,5,6,7};
     }
 
-    public void render(OrthographicCamera camera){
+    public void renderStart(OrthographicCamera camera){
         tiledMapRenderer.setView(camera);
-        tiledMapRenderer.render();
+        tiledMapRenderer.render(startLayers);
+    }
+    public void renderObjects(OrthographicCamera camera){
+        tiledMapRenderer.setView(camera);
+        tiledMapRenderer.render(new int[]{8});
     }
 
     public Vector2 mapBorder(Joystick joystick, Vector2 cameraWeltPosition){

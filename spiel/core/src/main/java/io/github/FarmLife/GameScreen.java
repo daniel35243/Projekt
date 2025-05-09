@@ -80,7 +80,7 @@ public class GameScreen implements Screen {
         shapeRendererMap.setProjectionMatrix(cameraWelt.combined);
         //Map
         cameraWeltPosition.set(map.mapBorder(joystick,cameraWeltPosition));
-        map.render(cameraWelt);
+        map.renderStart(cameraWelt);
         cameraWelt.position.set(cameraWeltPosition, 0);
         cameraWelt.update();
 
@@ -94,8 +94,13 @@ public class GameScreen implements Screen {
             touchPos.y = 0;
         }
 
+
         //Joystick
         joystick.moveJoystick(touchPos,player,playerSpriteBatch,new Vector2(Gdx.graphics.getWidth()/5*4,Gdx.graphics.getHeight()/5*4));
+        cameraHUD.update();
+
+        map.renderObjects(cameraWelt);
+        cameraWelt.update();
 
         //Player HITBOX
         shapeRendererHUD.begin(ShapeRenderer.ShapeType.Line);
@@ -109,6 +114,9 @@ public class GameScreen implements Screen {
         shapeRendererHUD.setColor(Color.BLUE);
         shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth() / 2,Gdx.graphics.getHeight());
         shapeRendererHUD.end();
+
+//        map.renderObjects(cameraWelt);
+//        cameraWelt.update();
 
         //TAG/NACHT
         shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);

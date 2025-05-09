@@ -145,26 +145,29 @@ public class Player {
     public void drawLEFT(SpriteBatch batch,boolean still){
         stateTime += Gdx.graphics.getDeltaTime();
 
-        for (int i = 0; i < 6; i++) {
-            walkLeft[i].flip(true, false);
-        }
-        stillLeft[0].flip(true,false);
+
+
         if(!still) {
+            for (int i = 0; i < 6; i++) {
+                walkLeft[i].flip(true, false);
+            }
             batch.begin();
             TextureRegion frame = walkLeftAnimation.getKeyFrame(stateTime, true);
             batch.draw(frame, Gdx.graphics.getWidth() / 2 - 106.5f, Gdx.graphics.getHeight() / 2- 106.5f);
             batch.end();
-
+            for (int i = 0; i < 6; i++) {
+                walkLeft[i].flip(true, false);
+            }
         }else{
+            stillLeft[0].flip(true,false);
             batch.begin();
             TextureRegion frame = stillLeftAnimation.getKeyFrame(stateTime,true);
             batch.draw(frame, Gdx.graphics.getWidth() / 2- 106.5f, Gdx.graphics.getHeight() / 2- 106.5f);
             batch.end();
+            stillLeft[0].flip(true,false);
         }
-        for (int i = 0; i < 6; i++) {
-            walkLeft[i].flip(true, false);
-        }
-        stillLeft[0].flip(true,false);
+
+
 
     }
 
