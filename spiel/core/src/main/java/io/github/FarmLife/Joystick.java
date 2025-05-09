@@ -21,6 +21,7 @@ public class Joystick{
     private Vector2 direction;
     private char playerDirection;
     private boolean neuePositionJoystick;
+    private boolean stillAnimation;
 
     public Joystick(Vector2 cords){
         cameraWeltPosition = new Vector2(800,800);
@@ -36,6 +37,7 @@ public class Joystick{
         playerDirection = 'r';
         neuePositionJoystick = false;
         direction  = new Vector2();
+        stillAnimation = true;
     }
 
     public void moveJoystick(Vector2 touchPosition, Player player, SpriteBatch batch,Vector2 cords){
@@ -76,40 +78,25 @@ public class Joystick{
             direction.set(smallCircleCords).sub(bigCircleCords);
             if (Math.abs(direction.x) > Math.abs(direction.y)) {
                 if (direction.x > 0) {
-                    player.drawRIGHT(batch,false);
                     playerDirection = 'r';
                 } else {
-                    player.drawLEFT(batch,false);
                     playerDirection = 'l';
                 }
             } else {
                 if (direction.y > 0) {
-                    player.drawUP(batch,false);
                     playerDirection = 'u';
                 } else {
-                    player.drawDOWN(batch,false);
                     playerDirection = 'd';
                 }
             }
+            stillAnimation = false;
 
         //Wenn Joystick nicht gehalten wird
         }else{
             smallCircleCords = bigCircleCords;
-            switch (playerDirection){
-                case 'r':
-                    player.drawRIGHT(batch,true);
-                    break;
-                case 'l':
-                    player.drawLEFT(batch,true);
-                    break;
-                case 'u':
-                    player.drawUP(batch,true);
-                    break;
-                case 'd':
-                    player.drawDOWN(batch,true);
-                    break;
-            }
+            stillAnimation = true;
         }
+
 
 
         //Bewegung
@@ -117,6 +104,8 @@ public class Joystick{
 
         //Malt Joystick
         draw();
+
+
     }
     public void draw(){
 
@@ -137,5 +126,13 @@ public class Joystick{
     public Vector2 getCameraWeltPosition(){
         return cameraWeltPosition;
     }
+
+    public char getPlayerDirection(){
+        return playerDirection;
+    }
+    public boolean getStillAnimation(){
+        return stillAnimation;
+    }
+
 
 }

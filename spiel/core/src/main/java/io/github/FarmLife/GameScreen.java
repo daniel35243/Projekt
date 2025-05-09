@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -80,9 +81,11 @@ public class GameScreen implements Screen {
         shapeRendererMap.setProjectionMatrix(cameraWelt.combined);
         //Map
         cameraWeltPosition.set(map.mapBorder(joystick,cameraWeltPosition));
-        map.renderStart(cameraWelt);
+        map.render(cameraWelt,player,playerSpriteBatch,joystick,cameraWeltPosition);
         cameraWelt.position.set(cameraWeltPosition, 0);
         cameraWelt.update();
+
+
 
 
         //Erkennt wenn Bildschirm TOUCHED
@@ -93,12 +96,6 @@ public class GameScreen implements Screen {
             touchPos.x = 0;
             touchPos.y = 0;
         }
-
-
-        //Joystick
-        joystick.moveJoystick(touchPos,player,playerSpriteBatch,new Vector2(Gdx.graphics.getWidth()/5*4,Gdx.graphics.getHeight()/5*4));
-        cameraHUD.update();
-
 
 
         //Player HITBOX
@@ -114,8 +111,10 @@ public class GameScreen implements Screen {
         shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth() / 2,Gdx.graphics.getHeight());
         shapeRendererHUD.end();
 
-//        map.renderObjects(cameraWelt);
-//        cameraWelt.update();
+
+        //Joystick
+        joystick.moveJoystick(touchPos,player,playerSpriteBatch,new Vector2(Gdx.graphics.getWidth()/5*4,Gdx.graphics.getHeight()/5*4));
+        cameraHUD.update();
 
         //TAG/NACHT
         shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
@@ -123,10 +122,14 @@ public class GameScreen implements Screen {
         shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth() ,Gdx.graphics.getHeight());
         shapeRendererHUD.end();
 
-//        shapeRendererMap.begin(ShapeRenderer.ShapeType.Line);
-//        shapeRendererMap.setColor(Color.BLACK);
-//        shapeRendererMap.polygon(map.getMapBorderPolygon().getTransformedVertices());
-//        shapeRendererMap.end();
+        //Map Border
+        shapeRendererMap.begin(ShapeRenderer.ShapeType.Line);
+        shapeRendererMap.setColor(Color.BLACK);
+        shapeRendererMap.polygon(map.getMapBorderPolygon().getTransformedVertices());
+        for(RectangleMapObject object : map.getObjectBorderLayer().getByType(RectangleMapObject.class)) {
+            shapeRendererMap.rect(object.getRectangle().x, object.getRectangle().y, object.getRectangle().width, object.getRectangle().height);
+        }
+        shapeRendererMap.end();
 
         if(framecounter == 30) {
             if (nightFaktorNull) {
