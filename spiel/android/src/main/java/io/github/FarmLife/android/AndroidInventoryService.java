@@ -50,10 +50,6 @@ public class AndroidInventoryService implements inventarLogik {
         db.deleteInventorySlot(slot);
     }
 
-    @Override
-    public Cursor getAllInventory() {
-        return db.getAllInventory();
-    }
 
     // ✅ Items
     @Override
@@ -71,10 +67,7 @@ public class AndroidInventoryService implements inventarLogik {
         db.deleteItem(itemID);
     }
 
-    @Override
-    public Cursor getAllItems() {
-        return db.getAllItems();
-    }
+
 
     // ✅ Game
     @Override
@@ -92,10 +85,6 @@ public class AndroidInventoryService implements inventarLogik {
         db.deleteGame();
     }
 
-    @Override
-    public Cursor getGame() {
-        return db.getGame();
-    }
 
     // ✅ Shop
     @Override
@@ -113,10 +102,6 @@ public class AndroidInventoryService implements inventarLogik {
         db.deleteShop(itemID);
     }
 
-    @Override
-    public Cursor getAllShop() {
-        return db.getAllShop();
-    }
 
     // ✅ Seller
     @Override
@@ -134,10 +119,6 @@ public class AndroidInventoryService implements inventarLogik {
         db.deleteSeller(itemID);
     }
 
-    @Override
-    public Cursor getAllSeller() {
-        return db.getAllSeller();
-    }
 
     // ✅ Chest
     @Override
@@ -155,10 +136,6 @@ public class AndroidInventoryService implements inventarLogik {
         db.deleteChest(slot);
     }
 
-    @Override
-    public Cursor getAllChest() {
-        return db.getAllChest();
-    }
 
     // ✅ Felder
     @Override
@@ -176,10 +153,6 @@ public class AndroidInventoryService implements inventarLogik {
         db.deleteFeld(feldID);
     }
 
-    @Override
-    public Cursor getAllFelder() {
-        return db.getAllFelder();
-    }
 
     // ✅ Feld_Location
     @Override
@@ -197,8 +170,4 @@ public class AndroidInventoryService implements inventarLogik {
         db.deleteFeldLocation(feldID);
     }
 
-    @Override
-    public Cursor getAllFeldLocation() {
-        return db.getAllFeldLocation();
-    }
 }
