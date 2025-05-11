@@ -85,6 +85,12 @@ public class GameScreen implements Screen {
         cameraWelt.position.set(cameraWeltPosition, 0);
         cameraWelt.update();
 
+        //Player Fußpunkt
+        shapeRendererMap.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRendererMap.setColor(Color.WHITE);
+        shapeRendererMap.circle(cameraWeltPosition.x, cameraWeltPosition.y-8, 1);
+        shapeRendererMap.end();
+
 
 
 

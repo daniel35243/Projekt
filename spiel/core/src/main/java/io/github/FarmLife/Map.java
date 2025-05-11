@@ -25,10 +25,11 @@ public class Map {
     private MapObjects mapBorderObject;
     private PolygonMapObject mapBorder;
     private Polygon mapBorderPolygon;
-    private float[] playerHitboxCords;
     private int[] startLayers;
     private MapObjects objectBorderLayer;
     private RectangleMapObject objectBorder;
+    boolean isCollidingX;
+    boolean isCollidingY;
     public Map(){
         map = new TmxMapLoader().load("map.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
@@ -38,7 +39,8 @@ public class Map {
         startLayers = new int[]{0,1,2,3,4,5,6,7};
 
         objectBorderLayer = map.getLayers().get("Objekte").getObjects();
-//        objectBorder = (RectangleMapObject) objectBorderLayer.get(0);
+        isCollidingX = false;
+        isCollidingY = false;
     }
 
 
@@ -46,53 +48,46 @@ public class Map {
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render(startLayers);
         playerSpriteBatch.begin();
-        player.draw(playerSpriteBatch, joystick.getStillAnimation(), joystick.getPlayerDirection(),cameraWeltPosition);
+        player.draw(playerSpriteBatch, joystick.getStillAnimation(), joystick.getPlayerDirection(), cameraWeltPosition);
         playerSpriteBatch.end();
-        tiledMapRenderer.render(new int[]{8});
+        tiledMapRenderer.render(new int[]{9});
     }
 
-    public Vector2 objectBorders(Joystick joystick, Vector2 cameraWeltPosition){
-        Vector2 newPosition = new Vector2(cameraWeltPosition);
-        newPosition.x += joystick.getCameraWeltPosition().x*1.55f;
-        newPosition.y += joystick.getCameraWeltPosition().y*1.55f;
 
-        Vector2 newXPosition = new Vector2(newPosition.x, cameraWeltPosition.y);
-        Vector2 newYPosition = new Vector2(cameraWeltPosition.x, newPosition.y);
-
-        for(RectangleMapObject object : objectBorderLayer.getByType(RectangleMapObject.class)) {
-            Rectangle rectangle = object.getRectangle();
-            if (rectangle.contains(newXPosition.x, newXPosition.y)) {
-                cameraWeltPosition.x = newXPosition.x;
-            }
-            if (rectangle.contains(newYPosition.x, newYPosition.y)) {
-                cameraWeltPosition.y = newYPosition.y;
-            }
-
-        }
-        return cameraWeltPosition;
-    }
     public Vector2 mapBorder(Joystick joystick, Vector2 cameraWeltPosition){
-        Vector2 newPosition = new Vector2(cameraWeltPosition);
-        newPosition.x += joystick.getCameraWeltPosition().x*1.55f;
-        newPosition.y += joystick.getCameraWeltPosition().y*1.55f;
+        Vector2 newPosition = new Vector2(cameraWeltPosition.x ,  cameraWeltPosition.y);
+        newPosition.x += joystick.getCameraWeltPosition().x * 1.55f;
+        newPosition.y += joystick.getCameraWeltPosition().y * 1.55f;
 
-        Vector2 newXPosition = new Vector2(newPosition.x, cameraWeltPosition.y);
+        Vector2 newXPosition = new Vector2(newPosition.x, cameraWeltPosition.y );
         Vector2 newYPosition = new Vector2(cameraWeltPosition.x, newPosition.y);
 
         mapBorderPolygon = mapBorder.getPolygon();
-        for(RectangleMapObject object : objectBorderLayer.getByType(RectangleMapObject.class)) {
 
+        for(RectangleMapObject object : objectBorderLayer.getByType(RectangleMapObject.class)) {
             Rectangle rectangle = object.getRectangle();
-            if (mapBorderPolygon.contains(newXPosition.x, newXPosition.y) && !Intersector.overlaps(rectangle, new Rectangle(newPosition.x,newPosition.y,110,30))) {
-                cameraWeltPosition.x = newXPosition.x;
+
+            if (rectangle.contains(newXPosition.x, newXPosition.y)) {
+                isCollidingX = true;
             }
-            if (mapBorderPolygon.contains(newYPosition.x, newYPosition.y) && !Intersector.overlaps(rectangle, new Rectangle(newPosition.x,newPosition.y,110,30))) {
-                cameraWeltPosition.y = newYPosition.y;
+            if(rectangle.contains(newYPosition.x, newYPosition.y - 8)){
+                isCollidingY = true;
+            }else {
+                isCollidingX = false;
+                isCollidingY = false;
             }
         }
-        return cameraWeltPosition;
 
+        if (!isCollidingX && mapBorderPolygon.contains(newXPosition.x, newXPosition.y)) {
+            cameraWeltPosition.x = newXPosition.x;
+        }
+        if (mapBorderPolygon.contains(newYPosition.x, newYPosition.y) && !isCollidingY) {
+            cameraWeltPosition.y = newYPosition.y ;
+        }
+        return cameraWeltPosition;
     }
+
+
 
 
     public Polygon getMapBorderPolygon(){
