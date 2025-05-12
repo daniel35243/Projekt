@@ -36,7 +36,6 @@ public class Map {
 
         mapBorderObject = map.getLayers().get("Map - Border").getObjects();
         mapBorder = (PolygonMapObject) mapBorderObject.get(0);
-
         startLayers = new int[]{0,1,2,3,4,5,6,7};
         objectBorderLayer = map.getLayers().get("Objekte - Border").getObjects();
         isCollidingX = false;
@@ -66,15 +65,22 @@ public class Map {
         isCollidingX = false;
         isCollidingY = false;
 
-        for(int i = 0; i < objectBorderLayer.getCount(); i++) {
-            Polygon objectBorderPolygon = ((PolygonMapObject) objectBorderLayer.get(i)).getPolygon();
+        for(PolygonMapObject object : objectBorderLayer.getByType(PolygonMapObject.class)) {
+            Polygon objectBorder = object.getPolygon();
 
-            if (mapBorderPolygon.contains(newXPosition.x, newXPosition.y) && !objectBorderPolygon.contains(newXPosition.x, newXPosition.y)) {
-                cameraWeltPosition.x = newXPosition.x;
+            if (objectBorder.contains(newXPosition.x, newXPosition.y)) {
+                isCollidingX = true;
             }
-            if (mapBorderPolygon.contains(newYPosition.x, newYPosition.y) && !objectBorderPolygon.contains(newYPosition.x, newYPosition.y)) {
-                cameraWeltPosition.y = newYPosition.y;
+            if(objectBorder.contains(newYPosition.x, newYPosition.y - 8)){
+                isCollidingY = true;
             }
+        }
+
+        if (!isCollidingX && mapBorderPolygon.contains(newXPosition.x, newXPosition.y)) {
+            cameraWeltPosition.x = newXPosition.x;
+        }
+        if (mapBorderPolygon.contains(newYPosition.x, newYPosition.y) && !isCollidingY) {
+            cameraWeltPosition.y = newYPosition.y ;
         }
         return cameraWeltPosition;
     }
