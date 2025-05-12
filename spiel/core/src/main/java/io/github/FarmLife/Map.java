@@ -27,6 +27,8 @@ public class Map {
     private Polygon mapBorderPolygon;
     private int[] startLayers;
     private MapObjects objectBorderLayer;
+    private boolean isCollidingX;
+    private boolean isCollidingY;
 
     public Map(){
         map = new TmxMapLoader().load("map.tmx");
@@ -37,6 +39,8 @@ public class Map {
 
         startLayers = new int[]{0,1,2,3,4,5,6,7};
         objectBorderLayer = map.getLayers().get("Objekte - Border").getObjects();
+        isCollidingX = false;
+        isCollidingY = false;
     }
 
 
