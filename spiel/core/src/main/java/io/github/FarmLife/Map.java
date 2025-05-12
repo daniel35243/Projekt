@@ -63,6 +63,8 @@ public class Map {
         Vector2 newYPosition = new Vector2(cameraWeltPosition.x, newPosition.y);
 
         mapBorderPolygon = mapBorder.getPolygon();
+        isCollidingX = false;
+        isCollidingY = false;
 
         for(RectangleMapObject object : objectBorderLayer.getByType(RectangleMapObject.class)) {
             Rectangle rectangle = object.getRectangle();
@@ -72,9 +74,6 @@ public class Map {
             }
             if(rectangle.contains(newYPosition.x, newYPosition.y - 8)){
                 isCollidingY = true;
-            }else {
-                isCollidingX = false;
-                isCollidingY = false;
             }
         }
 

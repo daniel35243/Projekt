@@ -14,7 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
+
 public class GameScreen implements Screen {
     OrthographicCamera cameraWelt;
     OrthographicCamera cameraHUD;
@@ -33,11 +33,14 @@ public class GameScreen implements Screen {
     int framecounter;
     Vector2 zwischenspeicherCameraWeltPosition;
     ShapeRenderer shapeRendererMap;
+    InventorySlot[] inventory = new InventorySlot[5];
+    SpriteBatch inventorySpriteBatch;
 
     @Override
     public void show() {
         player = new Player();
         playerSpriteBatch = new SpriteBatch();
+        inventorySpriteBatch = new SpriteBatch();
 
         shapeRendererMap = new ShapeRenderer();
         shapeRendererHUD = new ShapeRenderer();
@@ -67,6 +70,12 @@ public class GameScreen implements Screen {
         nightFaktorNull = false;
         framecounter = 0;
         zwischenspeicherCameraWeltPosition = new Vector2();
+
+        int counterInventorySlots = 0;
+        for(int j = 50; j < 250; j += 50) {
+            inventory[counterInventorySlots] = new InventorySlot(500 - j);
+            counterInventorySlots++;
+        }
     }
 
     @Override
@@ -77,8 +86,10 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         shapeRendererHUD.setProjectionMatrix(cameraHUD.combined);
         playerSpriteBatch.setProjectionMatrix(cameraWelt.combined);
-
+        inventorySpriteBatch.setProjectionMatrix(cameraHUD.combined);
         shapeRendererMap.setProjectionMatrix(cameraWelt.combined);
+
+
         //Map
         cameraWeltPosition.set(map.mapBorder(joystick,cameraWeltPosition));
         map.render(cameraWelt,player,playerSpriteBatch,joystick,cameraWeltPosition);
@@ -119,8 +130,13 @@ public class GameScreen implements Screen {
 
 
         //Joystick
-        joystick.moveJoystick(touchPos,player,playerSpriteBatch,new Vector2(Gdx.graphics.getWidth()/5*4,Gdx.graphics.getHeight()/5*4));
+        joystick.moveJoystick(touchPos,new Vector2(Gdx.graphics.getWidth()/5*4,Gdx.graphics.getHeight()/5*4));
         cameraHUD.update();
+
+        //Inventory
+        for (InventorySlot invSlot:inventory) {
+            invSlot.drawSlot(inventorySpriteBatch);
+        }
 
         //TAG/NACHT
         shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);

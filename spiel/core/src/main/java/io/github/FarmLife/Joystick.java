@@ -40,7 +40,7 @@ public class Joystick{
         stillAnimation = true;
     }
 
-    public void moveJoystick(Vector2 touchPosition, Player player, SpriteBatch batch,Vector2 cords){
+    public void moveJoystick(Vector2 touchPosition, Vector2 cords){
 
         //Erkennt, wenn in Joystick getouched wird
         inputJoystick = touchPosition.dst(bigCircleCords) <= radiusBigCircle;
