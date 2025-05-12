@@ -61,7 +61,6 @@ public class Joystick{
         //Joystick-Logik
         if(isPressed) {
 
-
             //Wenn Joystick im großen Kreis gehalten wird
             if(inputJoystick){
                 smallCircleCords = touchPosition;

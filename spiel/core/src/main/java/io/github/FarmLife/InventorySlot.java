@@ -9,20 +9,28 @@ public class InventorySlot {
     private Vector2 cords;
     private boolean isUsed;
     //private Item item;
-    private Texture slotTexture;
-
+    private Texture[] slotTexture = new Texture[2];
+    private boolean inventorySlotClicked;
 
     public InventorySlot(float x){
-        cords = new Vector2(x, Gdx.graphics.getHeight()-50);
+        cords = new Vector2(x, Gdx.graphics.getHeight()-180);
         isUsed = false;
-        slotTexture = new Texture("InventorySlot.png");
+        slotTexture[0] = new Texture("InventorySlot.png");
+        slotTexture[1] = new Texture("UsedInventorySlot.png");
+        inventorySlotClicked = false;
     }
-    public void drawSlot(SpriteBatch batch){
+    public void drawSlot(SpriteBatch batch, int numb){
         batch.begin();
-        batch.draw(slotTexture,cords.x,cords.y);
+        batch.draw(slotTexture[numb],cords.x,cords.y);
         batch.end();
     }
     public Vector2 getCords(){
         return cords;
+    }
+    public void setInventorySlotClicked(boolean inventorySlotClicked) {
+        this.inventorySlotClicked = inventorySlotClicked;
+    }
+    public boolean getInventorySlotClicked() {
+        return inventorySlotClicked;
     }
 }

@@ -9,7 +9,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -35,6 +37,7 @@ public class GameScreen implements Screen {
     ShapeRenderer shapeRendererMap;
     InventorySlot[] inventory = new InventorySlot[5];
     SpriteBatch inventorySpriteBatch;
+
 
     @Override
     public void show() {
@@ -72,10 +75,11 @@ public class GameScreen implements Screen {
         zwischenspeicherCameraWeltPosition = new Vector2();
 
         int counterInventorySlots = 0;
-        for(int j = 50; j < 250; j += 50) {
-            inventory[counterInventorySlots] = new InventorySlot(500 - j);
+        for(int j = 180; j <= 900; j += 180) {
+            inventory[counterInventorySlots] = new InventorySlot(Gdx.graphics.getWidth() - j);
             counterInventorySlots++;
         }
+
     }
 
     @Override
@@ -89,6 +93,11 @@ public class GameScreen implements Screen {
         inventorySpriteBatch.setProjectionMatrix(cameraHUD.combined);
         shapeRendererMap.setProjectionMatrix(cameraWelt.combined);
 
+        //TAG/NACHT
+        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRendererHUD.setColor(new Color(30/255f,30/255f,30/255f,0));
+        shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth() ,Gdx.graphics.getHeight());
+        shapeRendererHUD.end();
 
         //Map
         cameraWeltPosition.set(map.mapBorder(joystick,cameraWeltPosition));
@@ -104,7 +113,6 @@ public class GameScreen implements Screen {
 
 
 
-
         //Erkennt wenn Bildschirm TOUCHED
         if(Gdx.input.isTouched()){
             touchPos.x = Gdx.input.getX();
@@ -113,6 +121,8 @@ public class GameScreen implements Screen {
             touchPos.x = 0;
             touchPos.y = 0;
         }
+
+
 
 
         //Player HITBOX
@@ -133,25 +143,34 @@ public class GameScreen implements Screen {
         joystick.moveJoystick(touchPos,new Vector2(Gdx.graphics.getWidth()/5*4,Gdx.graphics.getHeight()/5*4));
         cameraHUD.update();
 
-        //Inventory
-        for (InventorySlot invSlot:inventory) {
-            invSlot.drawSlot(inventorySpriteBatch);
-        }
 
-        //TAG/NACHT
-        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRendererHUD.setColor(new Color(30/255f,30/255f,30/255f,0));
-        shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth() ,Gdx.graphics.getHeight());
-        shapeRendererHUD.end();
+
+
 
         //Map Border
         shapeRendererMap.begin(ShapeRenderer.ShapeType.Line);
         shapeRendererMap.setColor(Color.BLACK);
         shapeRendererMap.polygon(map.getMapBorderPolygon().getTransformedVertices());
-        for(RectangleMapObject object : map.getObjectBorderLayer().getByType(RectangleMapObject.class)) {
-            shapeRendererMap.rect(object.getRectangle().x, object.getRectangle().y, object.getRectangle().width, object.getRectangle().height);
+        for(PolygonMapObject object : map.getObjectBorderLayer().getByType(PolygonMapObject.class)) {
+            shapeRendererMap.polygon(object.getPolygon().getTransformedVertices());
         }
         shapeRendererMap.end();
+
+
+        //Inventory
+        for (InventorySlot invSlot:inventory) {
+            if(new Rectangle(invSlot.getCords().x,invSlot.getCords().y, 170,170).contains(touchPos) || invSlot.getInventorySlotClicked()) {
+                invSlot.drawSlot(inventorySpriteBatch, 1);
+                invSlot.setInventorySlotClicked(true);
+                if(touchPos.x == 0 && touchPos.y == 0){
+                    invSlot.setInventorySlotClicked(false);
+                }
+            }else {
+                invSlot.drawSlot(inventorySpriteBatch, 0);
+                invSlot.setInventorySlotClicked(false);
+            }
+        }
+
 
         if(framecounter == 30) {
             if (nightFaktorNull) {
