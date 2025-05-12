@@ -63,6 +63,8 @@ public class Map {
         Vector2 newYPosition = new Vector2(cameraWeltPosition.x, newPosition.y);
 
         mapBorderPolygon = mapBorder.getPolygon();
+        isCollidingX = false;
+        isCollidingY = false;
 
         for(int i = 0; i < objectBorderLayer.getCount(); i++) {
             Polygon objectBorderPolygon = ((PolygonMapObject) objectBorderLayer.get(i)).getPolygon();
