@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 
 import io.github.FarmLife.InventorySlot;
 
@@ -13,7 +14,7 @@ public class Item {
     private int itemCounter = 0;
     private Animation<TextureRegion> itemAnimation;
     private float stateTime = 0;
-
+    private Vector2 cords = new Vector2();
     public Item() {
 
     }
@@ -27,16 +28,7 @@ public class Item {
     }
 
 
-    public void draw(SpriteBatch batch, InventorySlot[] inventory){
-        stateTime += Gdx.graphics.getDeltaTime();
-        for (InventorySlot invSlot : inventory) {
-            if(!invSlot.getIsUsed()){
-                invSlot.addItem(this);
-                batch.draw(itemAnimation.getKeyFrame(stateTime,false),invSlot.getCords().x+20,invSlot.getCords().y+20);
-                break;
-            }
-        }
-    }
+    public void draw(SpriteBatch batch, InventorySlot[] inventory, Vector2 touchPosition){}
 
 
 }

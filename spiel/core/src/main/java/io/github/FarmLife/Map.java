@@ -58,17 +58,20 @@ public class Map {
 
 
     public Vector2 mapBorder(Joystick joystick, Vector2 cameraWeltPosition){
+        //BERECHNET ZUKÜNFTIGE POSITION
         newPosition.set(cameraWeltPosition.x ,  cameraWeltPosition.y);
         newPosition.x += joystick.getCameraWeltPosition().x * 40f * Gdx.graphics.getDeltaTime();
         newPosition.y += joystick.getCameraWeltPosition().y * 40f * Gdx.graphics.getDeltaTime();
-
         newXPosition.set(newPosition.x, cameraWeltPosition.y );
         newYPosition.set(cameraWeltPosition.x, newPosition.y);
+
+
 
         mapBorderPolygon = mapBorder.getPolygon();
         isCollidingX = false;
         isCollidingY = false;
 
+        //GUCKT IN LISTE MIT OBJEKTEN
         for(PolygonMapObject object : objectBorderLayer.getByType(PolygonMapObject.class)) {
             Polygon objectBorder = object.getPolygon();
 
@@ -80,6 +83,7 @@ public class Map {
             }
         }
 
+        //PRÜFT OB JEMAND GEGEN OBJEKTE IN DER LISTE LÄUFT ODER DIE MAP BORDER VERLÄSST
         if (!isCollidingX && mapBorderPolygon.contains(newXPosition.x, newXPosition.y)) {
             cameraWeltPosition.x = newXPosition.x;
         }

@@ -177,11 +177,11 @@ public class GameScreen implements Screen {
             }
         }
 
-        karottenSeed.draw(inventorySpriteBatch,inventory);
+        karottenSeed.draw(inventorySpriteBatch,inventory,touchPos);
 
-        weizenSeed.draw(inventorySpriteBatch,inventory);
-        weizen.draw(inventorySpriteBatch,inventory);
-        karotte.draw(inventorySpriteBatch,inventory);
+        weizenSeed.draw(inventorySpriteBatch,inventory,touchPos);
+        weizen.draw(inventorySpriteBatch,inventory,touchPos);
+        karotte.draw(inventorySpriteBatch,inventory,touchPos);
         inventorySpriteBatch.end();
 
         if(framecounter == 30) {
