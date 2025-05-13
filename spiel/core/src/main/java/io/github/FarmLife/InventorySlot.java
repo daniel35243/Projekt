@@ -5,10 +5,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
+import Items.Item;
+
 public class InventorySlot {
     private Vector2 cords;
     private boolean isUsed;
-    //private Item item;
+    private Item item;
     private Texture[] slotTexture = new Texture[2];
     private boolean inventorySlotClicked;
 
@@ -20,17 +22,45 @@ public class InventorySlot {
         inventorySlotClicked = false;
     }
     public void drawSlot(SpriteBatch batch, int numb){
-        batch.begin();
         batch.draw(slotTexture[numb],cords.x,cords.y);
-        batch.end();
     }
     public Vector2 getCords(){
         return cords;
     }
-    public void setInventorySlotClicked(boolean inventorySlotClicked) {
-        this.inventorySlotClicked = inventorySlotClicked;
+    public void setInventorySlotClickedTrue(InventorySlot[] inventory) {
+        int counterFalse = 0;
+        for (InventorySlot invSlot : inventory) {
+            if (!invSlot.getInventorySlotClicked()) {
+                counterFalse++;
+            }
+        }
+        if (counterFalse == 5) {
+            this.inventorySlotClicked = true;
+        }else {
+            this.inventorySlotClicked = false;
+        }
+    }
+    public void setInventorySlotClickedFalse() {
+        this.inventorySlotClicked = false;
     }
     public boolean getInventorySlotClicked() {
         return inventorySlotClicked;
+    }
+
+    public void addItem(Item item){
+        this.item = item;
+        isUsed = true;
+    }
+
+    public void removeItem(){
+        this.item = null;
+        isUsed = false;
+    }
+
+    public Item getItem(){
+        return item;
+    }
+    public boolean getIsUsed(){
+        return isUsed;
     }
 }

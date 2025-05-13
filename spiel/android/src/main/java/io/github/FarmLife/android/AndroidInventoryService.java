@@ -7,7 +7,7 @@ import com.mygdx.game.InventoryDbHelper;
 
 import Database.FeldByCord;
 import Database.GameByID;
-import Database.InventorySlot;
+import Database.InventorySlotDB;
 import Database.SellerByItem;
 import Database.ShopByItem;
 import Database.inventarLogik;
@@ -31,14 +31,14 @@ public class AndroidInventoryService implements inventarLogik {
     }
 
     @Override
-    public InventorySlot getInventorySlot(int slot) {
+    public InventorySlotDB getInventorySlot(int slot) {
         Cursor cursor = db.getInventorySlot(slot);
-        InventorySlot result = null;
+        InventorySlotDB result = null;
 
         if (cursor != null && cursor.moveToFirst()) {
             String item = cursor.getString(cursor.getColumnIndexOrThrow("item"));
             int anzahl = cursor.getInt(cursor.getColumnIndexOrThrow("Anzahl"));
-            result = new InventorySlot(slot, item, anzahl);
+            result = new InventorySlotDB(slot, item, anzahl);
             cursor.close();
         }
 

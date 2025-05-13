@@ -7,7 +7,7 @@ public interface inventarLogik {
 
     // Inventory
     void updateInventoryItem(int slot, String itemID, int anzahl);
-    InventorySlot getInventorySlot(int slot);
+    InventorySlotDB getInventorySlot(int slot);
 
 
 

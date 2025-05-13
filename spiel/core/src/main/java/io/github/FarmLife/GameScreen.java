@@ -16,6 +16,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import Items.KarottenSeed;
+import Items.WeizenSeed;
+
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class GameScreen implements Screen {
     OrthographicCamera cameraWelt;
@@ -63,7 +66,6 @@ public class GameScreen implements Screen {
         cameraWelt = new OrthographicCamera();
         cameraWelt.setToOrtho(false,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         cameraWelt.update();
-
         cameraWelt.zoom = 0.15f;
 
         fpsFont = new BitmapFont();
@@ -84,8 +86,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        framecounter++;
+        delta = Gdx.graphics.getDeltaTime();
         //Einstellungen
+        framecounter++;
         Gdx.gl.glClearColor(0.0f,149/255f,233/255f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         shapeRendererHUD.setProjectionMatrix(cameraHUD.combined);
@@ -143,8 +146,6 @@ public class GameScreen implements Screen {
 
 
 
-
-
         //Map Border
         shapeRendererMap.begin(ShapeRenderer.ShapeType.Line);
         shapeRendererMap.setColor(Color.BLACK);
@@ -154,21 +155,26 @@ public class GameScreen implements Screen {
         }
         shapeRendererMap.end();
 
-
+        inventorySpriteBatch.begin();
         //Inventory
         for (InventorySlot invSlot:inventory) {
             if(new Rectangle(invSlot.getCords().x,invSlot.getCords().y, 170,170).contains(touchPos) || invSlot.getInventorySlotClicked()) {
                 invSlot.drawSlot(inventorySpriteBatch, 1);
-                invSlot.setInventorySlotClicked(true);
+                invSlot.setInventorySlotClickedTrue(inventory);
                 if(touchPos.x == 0 && touchPos.y == 0){
-                    invSlot.setInventorySlotClicked(false);
+                    invSlot.setInventorySlotClickedFalse();
                 }
             }else {
                 invSlot.drawSlot(inventorySpriteBatch, 0);
-                invSlot.setInventorySlotClicked(false);
+                invSlot.setInventorySlotClickedFalse();
             }
         }
 
+        KarottenSeed karottenSeed = new KarottenSeed();
+        karottenSeed.draw(inventorySpriteBatch,inventory);
+        WeizenSeed weizenSeed = new WeizenSeed();
+        weizenSeed.draw(inventorySpriteBatch,inventory);
+        inventorySpriteBatch.end();
 
         if(framecounter == 30) {
             if (nightFaktorNull) {

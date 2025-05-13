@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-import Database.InventorySlot;
+import Database.InventorySlotDB;
 
 public class MainMenuScreen implements Screen {
 
@@ -80,7 +80,7 @@ public class MainMenuScreen implements Screen {
     }
 
     @Override public void show() {
-        InventorySlot inventory = ((Main) game).db.getInventorySlot(1);
+        InventorySlotDB inventory = ((Main) game).db.getInventorySlot(1);
         Gdx.app.log("Inventar", "Slot " +  inventory.slot +  " = " + inventory.item + " (" + inventory.anzahl + ")");
 
     }

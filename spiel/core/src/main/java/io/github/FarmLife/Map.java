@@ -55,8 +55,8 @@ public class Map {
 
     public Vector2 mapBorder(Joystick joystick, Vector2 cameraWeltPosition){
         Vector2 newPosition = new Vector2(cameraWeltPosition.x ,  cameraWeltPosition.y);
-        newPosition.x += joystick.getCameraWeltPosition().x * 1.55f;
-        newPosition.y += joystick.getCameraWeltPosition().y * 1.55f;
+        newPosition.x += joystick.getCameraWeltPosition().x * 40f * Gdx.graphics.getDeltaTime();
+        newPosition.y += joystick.getCameraWeltPosition().y * 40f * Gdx.graphics.getDeltaTime();
 
         Vector2 newXPosition = new Vector2(newPosition.x, cameraWeltPosition.y );
         Vector2 newYPosition = new Vector2(cameraWeltPosition.x, newPosition.y);
