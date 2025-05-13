@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
+import Database.InventorySlot;
+
 public class MainMenuScreen implements Screen {
 
     private Game game;
@@ -65,6 +67,7 @@ public class MainMenuScreen implements Screen {
         exitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+
                 Gdx.app.exit();
                 System.out.println("App Beenden Button gedrückt");
             }
@@ -76,7 +79,11 @@ public class MainMenuScreen implements Screen {
         table.add(exitButton).width(300).height(100);
     }
 
-    @Override public void show() {}
+    @Override public void show() {
+        InventorySlot inventory = ((Main) game).db.getInventorySlot(1);
+        Gdx.app.log("Inventar", "Slot " +  inventory.slot +  " = " + inventory.item + " (" + inventory.anzahl + ")");
+
+    }
     @Override public void render(float delta) {
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -88,10 +95,19 @@ public class MainMenuScreen implements Screen {
         stage.getViewport().update(width, height, true);
     }
 
-    @Override public void pause() {}
-    @Override public void resume() {}
-    @Override public void hide() {}
+    @Override public void pause() {
+
+
+    }
+    @Override public void resume() {
+
+    }
+    @Override public void hide() {
+
+    }
+
     @Override public void dispose() {
+        game.dispose();
         stage.dispose();
     }
 }

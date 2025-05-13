@@ -39,7 +39,6 @@ public class GameScreen implements Screen {
         player = new Player();
         playerSpriteBatch = new SpriteBatch();
 
-        shapeRendererMap = new ShapeRenderer();
         shapeRendererHUD = new ShapeRenderer();
 
         touchPos = new Vector2(0,0);
@@ -78,20 +77,11 @@ public class GameScreen implements Screen {
         shapeRendererHUD.setProjectionMatrix(cameraHUD.combined);
         playerSpriteBatch.setProjectionMatrix(cameraWelt.combined);
 
-        shapeRendererMap.setProjectionMatrix(cameraWelt.combined);
         //Map
         cameraWeltPosition.set(map.mapBorder(joystick,cameraWeltPosition));
         map.render(cameraWelt,player,playerSpriteBatch,joystick,cameraWeltPosition);
         cameraWelt.position.set(cameraWeltPosition, 0);
         cameraWelt.update();
-
-        //Player Fußpunkt
-        shapeRendererMap.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRendererMap.setColor(Color.WHITE);
-        shapeRendererMap.circle(cameraWeltPosition.x, cameraWeltPosition.y-8, 1);
-        shapeRendererMap.end();
-
-
 
 
         //Erkennt wenn Bildschirm TOUCHED
