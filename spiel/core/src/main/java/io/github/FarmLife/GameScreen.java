@@ -16,6 +16,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import Items.Karotte;
+import Items.KarottenSeed;
+import Items.Weizen;
+import Items.WeizenSeed;
+
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class GameScreen implements Screen {
     OrthographicCamera cameraWelt;
@@ -38,6 +43,10 @@ public class GameScreen implements Screen {
     InventorySlot[] inventory = new InventorySlot[5];
     FeldSlot[] feld = new FeldSlot[10];
     SpriteBatch inventorySpriteBatch;
+    WeizenSeed weizenSeed = new WeizenSeed();
+    KarottenSeed karottenSeed = new KarottenSeed();
+    Weizen weizen = new Weizen();
+    Karotte karotte = new Karotte();
 
 
     @Override
@@ -64,7 +73,6 @@ public class GameScreen implements Screen {
         cameraWelt = new OrthographicCamera();
         cameraWelt.setToOrtho(false,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         cameraWelt.update();
-
         cameraWelt.zoom = 0.15f;
 
         fpsFont = new BitmapFont();
@@ -85,8 +93,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        framecounter++;
+        delta = Gdx.graphics.getDeltaTime();
         //Einstellungen
+        framecounter++;
         Gdx.gl.glClearColor(0.0f,149/255f,233/255f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         shapeRendererHUD.setProjectionMatrix(cameraHUD.combined);
@@ -94,11 +103,11 @@ public class GameScreen implements Screen {
         inventorySpriteBatch.setProjectionMatrix(cameraHUD.combined);
         shapeRendererMap.setProjectionMatrix(cameraWelt.combined);
 
-        //TAG/NACHT
-        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRendererHUD.setColor(new Color(30/255f,30/255f,30/255f,0));
-        shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth() ,Gdx.graphics.getHeight());
-        shapeRendererHUD.end();
+//        //TAG/NACHT
+//        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
+//        shapeRendererHUD.setColor(new Color(30/255f,30/255f,30/255f,0));
+//        shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth() ,Gdx.graphics.getHeight());
+//        shapeRendererHUD.end();
 
         //Map
         cameraWeltPosition.set(map.mapBorder(joystick,cameraWeltPosition));
@@ -106,11 +115,11 @@ public class GameScreen implements Screen {
         cameraWelt.position.set(cameraWeltPosition, 0);
         cameraWelt.update();
 
-        //Player Fußpunkt
-        shapeRendererMap.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRendererMap.setColor(Color.WHITE);
-        shapeRendererMap.circle(cameraWeltPosition.x, cameraWeltPosition.y-8, 1);
-        shapeRendererMap.end();
+//        //Player Fußpunkt
+//        shapeRendererMap.begin(ShapeRenderer.ShapeType.Filled);
+//        shapeRendererMap.setColor(Color.WHITE);
+//        shapeRendererMap.circle(cameraWeltPosition.x, cameraWeltPosition.y-8, 1);
+//        shapeRendererMap.end();
 
 
 
@@ -124,18 +133,18 @@ public class GameScreen implements Screen {
         }
 
 
-        //Player HITBOX
-        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Line);
-        shapeRendererHUD.setColor(Color.RED);
-        shapeRendererHUD.rect(Gdx.graphics.getWidth() / 2 - 60,Gdx.graphics.getHeight() / 2 - 60,110,160);
-        shapeRendererHUD.setColor(Color.YELLOW);
-        shapeRendererHUD.rect(Gdx.graphics.getWidth() / 2 - 60,Gdx.graphics.getHeight() / 2 - 60,110,30);
+//        //Player HITBOX
+//        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Line);
+//        shapeRendererHUD.setColor(Color.RED);
+//        shapeRendererHUD.rect(Gdx.graphics.getWidth() / 2 - 60,Gdx.graphics.getHeight() / 2 - 60,110,160);
+//        shapeRendererHUD.setColor(Color.YELLOW);
+//        shapeRendererHUD.rect(Gdx.graphics.getWidth() / 2 - 60,Gdx.graphics.getHeight() / 2 - 60,110,30);
 
 
-        //Joystick HITBOX
-        shapeRendererHUD.setColor(Color.BLUE);
-        shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth() / 2,Gdx.graphics.getHeight());
-        shapeRendererHUD.end();
+//        //Joystick HITBOX
+//        shapeRendererHUD.setColor(Color.BLUE);
+//        shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth() / 2,Gdx.graphics.getHeight());
+//        shapeRendererHUD.end();
 
 
         //Joystick
@@ -144,32 +153,36 @@ public class GameScreen implements Screen {
 
 
 
+//        //Map Border
+//        shapeRendererMap.begin(ShapeRenderer.ShapeType.Line);
+//        shapeRendererMap.setColor(Color.BLACK);
+//        shapeRendererMap.polygon(map.getMapBorderPolygon().getTransformedVertices());
+//        for(PolygonMapObject object : map.getObjectBorderLayer().getByType(PolygonMapObject.class)) {
+//            shapeRendererMap.polygon(object.getPolygon().getTransformedVertices());
+//        }
+//        shapeRendererMap.end();
 
-
-        //Map Border
-        shapeRendererMap.begin(ShapeRenderer.ShapeType.Line);
-        shapeRendererMap.setColor(Color.BLACK);
-        shapeRendererMap.polygon(map.getMapBorderPolygon().getTransformedVertices());
-        for(PolygonMapObject object : map.getObjectBorderLayer().getByType(PolygonMapObject.class)) {
-            shapeRendererMap.polygon(object.getPolygon().getTransformedVertices());
-        }
-        shapeRendererMap.end();
-
-
+        inventorySpriteBatch.begin();
         //Inventory
         for (InventorySlot invSlot:inventory) {
             if(new Rectangle(invSlot.getCords().x,invSlot.getCords().y, 170,170).contains(touchPos) || invSlot.getInventorySlotClicked()) {
                 invSlot.drawSlot(inventorySpriteBatch, 1);
-                invSlot.setInventorySlotClicked(true);
+                invSlot.setInventorySlotClickedTrue(inventory);
                 if(touchPos.x == 0 && touchPos.y == 0){
-                    invSlot.setInventorySlotClicked(false);
+                    invSlot.setInventorySlotClickedFalse();
                 }
             }else {
                 invSlot.drawSlot(inventorySpriteBatch, 0);
-                invSlot.setInventorySlotClicked(false);
+                invSlot.setInventorySlotClickedFalse();
             }
         }
 
+        karottenSeed.draw(inventorySpriteBatch,inventory);
+
+        weizenSeed.draw(inventorySpriteBatch,inventory);
+        weizen.draw(inventorySpriteBatch,inventory);
+        karotte.draw(inventorySpriteBatch,inventory);
+        inventorySpriteBatch.end();
 
         if(framecounter == 30) {
             if (nightFaktorNull) {
