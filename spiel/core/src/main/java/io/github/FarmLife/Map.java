@@ -29,6 +29,9 @@ public class Map {
     private MapObjects objectBorderLayer;
     private boolean isCollidingX;
     private boolean isCollidingY;
+    private Vector2 newPosition = new Vector2();
+    private Vector2 newXPosition = new Vector2();
+    private Vector2 newYPosition = new Vector2();
 
     public Map(){
         map = new TmxMapLoader().load("map.tmx");
@@ -40,6 +43,7 @@ public class Map {
         objectBorderLayer = map.getLayers().get("Objekte - Border").getObjects();
         isCollidingX = false;
         isCollidingY = false;
+
     }
 
 
@@ -54,12 +58,12 @@ public class Map {
 
 
     public Vector2 mapBorder(Joystick joystick, Vector2 cameraWeltPosition){
-        Vector2 newPosition = new Vector2(cameraWeltPosition.x ,  cameraWeltPosition.y);
+        newPosition.set(cameraWeltPosition.x ,  cameraWeltPosition.y);
         newPosition.x += joystick.getCameraWeltPosition().x * 40f * Gdx.graphics.getDeltaTime();
         newPosition.y += joystick.getCameraWeltPosition().y * 40f * Gdx.graphics.getDeltaTime();
 
-        Vector2 newXPosition = new Vector2(newPosition.x, cameraWeltPosition.y );
-        Vector2 newYPosition = new Vector2(cameraWeltPosition.x, newPosition.y);
+        newXPosition.set(newPosition.x, cameraWeltPosition.y );
+        newYPosition.set(cameraWeltPosition.x, newPosition.y);
 
         mapBorderPolygon = mapBorder.getPolygon();
         isCollidingX = false;
