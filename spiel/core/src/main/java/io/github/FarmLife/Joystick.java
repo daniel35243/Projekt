@@ -103,8 +103,6 @@ public class Joystick{
 
         //Malt Joystick
         draw();
-
-
     }
     public void draw(){
 

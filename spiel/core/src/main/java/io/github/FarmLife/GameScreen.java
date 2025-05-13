@@ -16,7 +16,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-
+/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class GameScreen implements Screen {
     OrthographicCamera cameraWelt;
     OrthographicCamera cameraHUD;
@@ -121,8 +121,6 @@ public class GameScreen implements Screen {
             touchPos.x = 0;
             touchPos.y = 0;
         }
-
-
 
 
         //Player HITBOX
