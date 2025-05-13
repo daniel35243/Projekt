@@ -79,7 +79,7 @@ public class Map {
         if (!isCollidingX && mapBorderPolygon.contains(newXPosition.x, newXPosition.y)) {
             cameraWeltPosition.x = newXPosition.x;
         }
-        if (mapBorderPolygon.contains(newYPosition.x, newYPosition.y) && !isCollidingY) {
+        if (!isCollidingY && mapBorderPolygon.contains(newYPosition.x, newYPosition.y)  ) {
             cameraWeltPosition.y = newYPosition.y ;
         }
         return cameraWeltPosition;
