@@ -36,7 +36,7 @@ public class AndroidInventoryService implements inventarLogik {
         InventorySlot result = null;
 
         if (cursor != null && cursor.moveToFirst()) {
-            String item = cursor.getString(cursor.getColumnIndexOrThrow("Item"));
+            String item = cursor.getString(cursor.getColumnIndexOrThrow("item"));
             int anzahl = cursor.getInt(cursor.getColumnIndexOrThrow("Anzahl"));
             result = new InventorySlot(slot, item, anzahl);
             cursor.close();
