@@ -18,22 +18,37 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        // TABLE
         db.execSQL("CREATE TABLE Inventory (Slot INTEGER PRIMARY KEY, item TEXT, Anzahl INTEGER)");
         db.execSQL("CREATE TABLE Game (ID INTEGER PRIMARY KEY, Coins INTEGER, Level INTEGER, XP INTEGER)");
         db.execSQL("CREATE TABLE Shop (item TEXT PRIMARY KEY, Coins INTEGER)");
         db.execSQL("CREATE TABLE Seller (item TEXT PRIMARY KEY, Coins INTEGER)");
-        db.execSQL("CREATE TABLE Felder (item TEXT, Wachsstufe INTEGER,feld_x INTEGER, feld_y INTEGER)");
+        db.execSQL("CREATE TABLE Felder (feldID INTEGER PRIMARY KEY, item TEXT, Wachsstufe INTEGER,feld_x INTEGER, feld_y INTEGER)");
+        // Inventory
         db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (1, 'Hacke', 1)");
-        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (2, NULL, 1)");
-        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (3, NULL, 1)");
-        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (4, NULL, 1)");
-        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (5, NULL, 1)");
-        db.execSQL("INSERT INTO Game (Coins, Level, XP) VALUES (5, 1, 0)");
+        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (2, NULL, NULL)");
+        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (3, NULL, NULL)");
+        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (4, NULL, NULL)");
+        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (5, NULL, NULL)");
+        //Game
+        db.execSQL("INSERT INTO Game (ID, Coins, Level, XP) VALUES (1, 5, 1, 0)");
+        // Shop
         db.execSQL("INSERT INTO Shop (item, Coins) VALUES ('Karotten Samen', 1)");
         db.execSQL("INSERT INTO Shop (item, Coins) VALUES ('Weizen Samen', 2)");
+        //Seller
         db.execSQL("INSERT INTO Seller (item, Coins) VALUES ('Karotten', 2)");
         db.execSQL("INSERT INTO Seller (item, Coins) VALUES ('Weizen', 5)");
-        db.execSQL("INSERT INTO Felder (item, Wachsstufe, feld_x, feld_y) VALUES ('Karotten Samen', 1, NULL, NULL)");
+        //Felder
+        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (1, 'Karotten Samen', 1, NULL, NULL)");
+        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (2, NULL, NULL, NULL, NULL)");
+        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (3, NULL, NULL, NULL, NULL)");
+        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (4, NULL, NULL, NULL, NULL)");
+        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (5, NULL, NULL, NULL, NULL)");
+        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (6, NULL, NULL, NULL, NULL)");
+        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (7, 'Weizen Samen', NULL, NULL, NULL)");
+        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (8, NULL, NULL, NULL, NULL)");
+        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (9, NULL, NULL, NULL, NULL)");
+        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (10, NULL, NULL, NULL, NULL)");
     }
 
     @Override
@@ -41,7 +56,6 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS Inventory");
         db.execSQL("DROP TABLE IF EXISTS Game");
         db.execSQL("DROP TABLE IF EXISTS Shop");
-
         db.execSQL("DROP TABLE IF EXISTS Seller");
         db.execSQL("DROP TABLE IF EXISTS Felder");
         onCreate(db);
@@ -93,15 +107,15 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
 
     // Feld
-    public Cursor getFeldByCord(Float feld_x, Float feld_y) {
-        return db.rawQuery("SELECT * FROM Feld WHERE feld_x = ? AND feld_y = ?", new String[]{Float.toString(feld_x), Float.toString(feld_y)});
+    public Cursor getFeldByCord(int feldID) {
+        return db.rawQuery("SELECT * FROM Felder WHERE feldID = ?", new String[]{String.valueOf(feldID)});
     }
-    public void insertFeld(String item, int wachsstufe, float feld_x, float feld_y) {
-        db.execSQL("INSERT INTO Felder (FeldID, item, wachsstufe) VALUES (?, ?, ?)", new Object[]{item, wachsstufe, feld_x, feld_y});
+    public void insertFeld(int feldID, String item, int wachsstufe, float feld_x, float feld_y) {
+        db.execSQL("INSERT INTO Felder (feldID, item, wachsstufe, feld_x, feld_y) VALUES (?, ?, ?, ?, ?)", new Object[]{item, wachsstufe, feld_x, feld_y});
     }
 
-    public void updateFeld(String item, int wachsstufe, float feld_x, float feld_y) {
-        db.execSQL("UPDATE Felder SET item = ?, wachsstufe = ? WHERE FeldID = ?", new Object[]{item, wachsstufe, feld_x, feld_y});
+    public void updateFeld(String item, int wachsstufe, float feld_x, float feld_y, int feldID) {
+        db.execSQL("UPDATE Felder SET item = ?, wachsstufe = ?, feld_x = ?, feld_y = ? WHERE FeldID = ?", new Object[]{feldID, item, wachsstufe, feld_x, feld_y});
     }
 
 

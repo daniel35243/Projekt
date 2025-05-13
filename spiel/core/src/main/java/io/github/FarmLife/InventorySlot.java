@@ -27,6 +27,7 @@ public class InventorySlot {
     public Vector2 getCords(){
         return cords;
     }
+
     public void setInventorySlotClicked(boolean inventorySlotClicked) {
         this.inventorySlotClicked = inventorySlotClicked;
     }

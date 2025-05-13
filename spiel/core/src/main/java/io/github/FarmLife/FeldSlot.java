@@ -1,0 +1,34 @@
+package io.github.FarmLife;
+
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.math.Vector2;
+
+import Database.FeldByCord;
+
+public class FeldSlot {
+    private Vector2 cords;
+    private int Wachsstufe;
+    private String Item;
+    private int id_feld;
+    private Game game;
+
+    public FeldSlot(int id_feld) {
+        FeldByCord feld = ((Main) game).db.getFeldByCord(id_feld);
+        cords = new Vector2(feld.feld_x, feld.feld_y);
+        Wachsstufe = feld.Wachsstufe;
+        Item = feld.item;
+    }
+
+    public Vector2 getCords() {
+        return cords;
+    }
+
+    public int getWachsstufe() {
+        return this.Wachsstufe;
+    }
+
+    public String getItem() {
+        return this.Item;
+
+    }
+}

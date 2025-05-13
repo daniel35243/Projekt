@@ -36,6 +36,7 @@ public class GameScreen implements Screen {
     Vector2 zwischenspeicherCameraWeltPosition;
     ShapeRenderer shapeRendererMap;
     InventorySlot[] inventory = new InventorySlot[5];
+    FeldSlot[] feld = new FeldSlot[10];
     SpriteBatch inventorySpriteBatch;
 
 

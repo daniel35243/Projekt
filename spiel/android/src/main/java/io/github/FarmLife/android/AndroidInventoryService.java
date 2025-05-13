@@ -7,7 +7,7 @@ import com.mygdx.game.InventoryDbHelper;
 
 import Database.FeldByCord;
 import Database.GameByID;
-import Database.InventorySlot;
+import Database.InventorySlotDB;
 import Database.SellerByItem;
 import Database.ShopByItem;
 import Database.inventarLogik;
@@ -31,14 +31,14 @@ public class AndroidInventoryService implements inventarLogik {
     }
 
     @Override
-    public InventorySlot getInventorySlot(int slot) {
+    public InventorySlotDB getInventorySlot(int slot) {
         Cursor cursor = db.getInventorySlot(slot);
-        InventorySlot result = null;
+        InventorySlotDB result = null;
 
         if (cursor != null && cursor.moveToFirst()) {
             String item = cursor.getString(cursor.getColumnIndexOrThrow("item"));
             int anzahl = cursor.getInt(cursor.getColumnIndexOrThrow("Anzahl"));
-            result = new InventorySlot(slot, item, anzahl);
+            result = new InventorySlotDB(slot, item, anzahl);
             cursor.close();
         }
 
@@ -125,22 +125,24 @@ public class AndroidInventoryService implements inventarLogik {
 
     //Feld
     @Override
-    public void insertFeld(String item, int wachsstufe, float feld_x, float feld_y) {
-        db.insertFeld(item, wachsstufe, feld_x, feld_y);
+    public void insertFeld(int feldID, String item, int wachsstufe, float feld_x, float feld_y) {
+        db.insertFeld(feldID, item, wachsstufe, feld_x, feld_y);
     }
     @Override
-    public void updateFeld(String item, int wachsstufe, float feld_x, float feld_y) {
-        db.updateFeld(item, wachsstufe, feld_x, feld_y);
+    public void updateFeld(int feldID, String item, int wachsstufe, float feld_x, float feld_y) {
+        db.updateFeld(item, wachsstufe, feld_x, feld_y, feldID);
     }
     @Override
-    public FeldByCord getFeldByCord(float feld_x, float feld_y) {
-        Cursor cursor = db.getFeldByCord(feld_x, feld_y);
+    public FeldByCord getFeldByCord(int feldID) {
+        Cursor cursor = db.getFeldByCord(feldID);
         FeldByCord result = null;
 
         if (cursor != null && cursor.moveToFirst()) {
             String item = cursor.getString(cursor.getColumnIndexOrThrow("item"));
             int Wachsstufe = cursor.getInt(cursor.getColumnIndexOrThrow("Wachsstufe"));
-            result = new FeldByCord(item, Wachsstufe, feld_x, feld_y);
+            float feld_x = cursor.getInt(cursor.getColumnIndexOrThrow("feld_x"));
+            float feld_y = cursor.getInt(cursor.getColumnIndexOrThrow("feld_y"));
+            result = new FeldByCord(feldID, item, Wachsstufe, feld_x, feld_y);
             cursor.close();
         }
 

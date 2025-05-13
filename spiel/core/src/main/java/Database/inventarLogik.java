@@ -7,7 +7,7 @@ public interface inventarLogik {
 
     // Inventory
     void updateInventoryItem(int slot, String itemID, int anzahl);
-    InventorySlot getInventorySlot(int slot);
+    InventorySlotDB getInventorySlot(int slot);
 
 
 
@@ -28,8 +28,10 @@ public interface inventarLogik {
     SellerByItem getSellerByItem(String item);
 
     //Feld
-    FeldByCord getFeldByCord(float feld_x, float feld_y);
-    void insertFeld(String item, int wachsstufe, float feld_x, float feld_y);
+    FeldByCord getFeldByCord(int feldID);
+    void insertFeld(int feldID, String item, int wachsstufe, float feld_x, float feld_y);
 
-    void updateFeld(String item, int wachsstufe, float feld_x, float feld_y);
+    void updateFeld(int feldID, String item, int wachsstufe, float feld_x, float feld_y);
+
+
 }

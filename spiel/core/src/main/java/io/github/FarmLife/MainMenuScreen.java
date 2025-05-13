@@ -11,17 +11,20 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-import Database.InventorySlot;
+import Database.FeldByCord;
+import Database.InventorySlotDB;
 
 public class MainMenuScreen implements Screen {
 
     private Game game;
     private Stage stage;
+    private boolean displayButton = true;
 
     public MainMenuScreen(Game game) {
         this.game = game;
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
+
 
         //Skin laden
         Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -51,27 +54,35 @@ public class MainMenuScreen implements Screen {
         table.center();
         stage.addActor(table);
 
+
         Label title = new Label("Hauptmenü", titleStyle);
         TextButton startButton = new TextButton("Spiel starten", skin);
         TextButton exitButton = new TextButton("Beenden", skin);
 
         //Listener
-        startButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen((new GameScreen()));
-                System.out.println("App Spiel Starten Button gedrückt");
-            }
-        });
 
-        exitButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
+            startButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    if (displayButton) {
+                        displayButton = false;
+                        game.setScreen((new GameScreen()));
+                        System.out.println("App Spiel Starten Button gedrückt");
+                        System.out.println(displayButton);
+                    }
+                }
+            });
 
-                Gdx.app.exit();
-                System.out.println("App Beenden Button gedrückt");
-            }
-        });
+            exitButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    if (displayButton) {
+                        displayButton = false;
+                        Gdx.app.exit();
+                        System.out.println("App Beenden Button gedrückt");
+                    }
+                }
+            });
 
         //Layout der Buttons
         table.add(title).padBottom(60).row();
@@ -80,9 +91,11 @@ public class MainMenuScreen implements Screen {
     }
 
     @Override public void show() {
-        InventorySlot inventory = ((Main) game).db.getInventorySlot(1);
+        InventorySlotDB inventory = ((Main) game).db.getInventorySlot(1);
         Gdx.app.log("Inventar", "Slot " +  inventory.slot +  " = " + inventory.item + " (" + inventory.anzahl + ")");
 
+        FeldByCord feld = ((Main) game).db.getFeldByCord(7);
+        Gdx.app.log("Feld " + feld.feldID, " = " + feld.item + " = " + feld.Wachsstufe + " = " + feld.feld_x + " = " + feld.feld_y);
     }
     @Override public void render(float delta) {
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
