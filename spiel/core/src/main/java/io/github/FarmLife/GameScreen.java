@@ -16,10 +16,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import Items.Item;
 import Items.Karotte;
 import Items.KarottenSeed;
 import Items.Weizen;
 import Items.WeizenSeed;
+
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class GameScreen implements Screen {
@@ -43,12 +45,16 @@ public class GameScreen implements Screen {
     InventorySlot[] inventory = new InventorySlot[5];
     FeldSlot[] feld = new FeldSlot[10];
     SpriteBatch inventorySpriteBatch;
-    WeizenSeed weizenSeed = new WeizenSeed();
-    KarottenSeed karottenSeed = new KarottenSeed();
-    Weizen weizen = new Weizen();
-    Karotte karotte = new Karotte();
+
 
     HitBoxes hitBoxes = new HitBoxes();
+
+    Item selectedItem = null;
+    InventorySlot draggedSlot = null;
+    boolean dragging = false;
+    int numberAnimation = 0;
+    FeldSlot[] feldAnfänger = new FeldSlot[4];
+    FeldSlot[] feldFortgeschritten = new FeldSlot[6];
 
     @Override
     public void show() {
@@ -89,7 +95,20 @@ public class GameScreen implements Screen {
             inventory[counterInventorySlots] = new InventorySlot(Gdx.graphics.getWidth() - j);
             counterInventorySlots++;
         }
+        inventory[0].addItem(new Karotte(),1);
+        inventory[1].addItem(new Weizen(),1);
+        inventory[2].addItem(new WeizenSeed(),1);
+        inventory[3].addItem(new KarottenSeed(),1);
+        inventory[4].addItem(new Karotte(),1);
 
+        int anfängerFeld = 0;
+//        for(){
+//            for(){
+//                feldAnfänger[anfängerFeld] = new FeldSlot();
+//                anfängerFeld++;
+//
+//            }
+//        }
     }
 
     @Override
@@ -142,26 +161,40 @@ public class GameScreen implements Screen {
 
 
         inventorySpriteBatch.begin();
+
+
+
         //Inventory
         for (InventorySlot invSlot:inventory) {
-            if(new Rectangle(invSlot.getCords().x,invSlot.getCords().y, 170,170).contains(touchPos) || invSlot.getInventorySlotClicked()) {
-                invSlot.drawSlot(inventorySpriteBatch, 1);
+            Rectangle slotRect = new Rectangle(invSlot.getCords().x,invSlot.getCords().y, 170,170);
+
+            if(Gdx.input.isTouched() && slotRect.contains(touchPos.x,touchPos.y) && invSlot.getIsUsed() && selectedItem == null) {
+                selectedItem = invSlot.getItem();
+                draggedSlot = invSlot;
+                dragging = true;
                 invSlot.setInventorySlotClickedTrue(inventory);
-                if(touchPos.x == 0 && touchPos.y == 0){
-                    invSlot.setInventorySlotClickedFalse();
-                }
-            }else {
-                invSlot.drawSlot(inventorySpriteBatch, 0);
-                invSlot.setInventorySlotClickedFalse();
+            }
+            if(invSlot.getInventorySlotClicked()){numberAnimation = 1;}else{numberAnimation = 0;}
+            invSlot.drawSlot(inventorySpriteBatch,numberAnimation);
+
+            if(invSlot.getIsUsed() && invSlot != draggedSlot) {
+                invSlot.getItem().drawInSlot(inventorySpriteBatch,new Vector2(invSlot.getCords().x+25,invSlot.getCords().y+30),fpsFont);
+            }
+            if(dragging && selectedItem != null){
+                selectedItem.drawClicked(inventorySpriteBatch, touchPos, fpsFont, invSlot);
+            }
+            if(dragging && !Gdx.input.isTouched()){
+                dragging = false;
+                if(draggedSlot != null) draggedSlot.setInventorySlotClickedFalse();
+                selectedItem = null;
+                draggedSlot = null;
+                invSlot.removeItem();
             }
         }
 
-        karottenSeed.draw(inventorySpriteBatch,inventory,touchPos);
 
-        weizenSeed.draw(inventorySpriteBatch,inventory,touchPos);
-        weizen.draw(inventorySpriteBatch,inventory,touchPos);
-        karotte.draw(inventorySpriteBatch,inventory,touchPos);
         inventorySpriteBatch.end();
+
 
         if(framecounter == 30) {
             if (nightFaktorNull) {

@@ -126,6 +126,7 @@ public class Player {
         }
 
         batch.draw(frame, cords.x - 16,cords.y - 16);
+
         if (direction == 'l') {
             for (int i = 0; i < 6; i++) {
                 walkLeft[i].flip(true, false);

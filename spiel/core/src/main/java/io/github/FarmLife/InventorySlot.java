@@ -24,7 +24,7 @@ public class InventorySlot {
     public void drawSlot(SpriteBatch batch, int numb){
         batch.draw(slotTexture[numb],cords.x,cords.y);
     }
-    
+
     public Vector2 getCords(){
         return cords;
     }
@@ -48,14 +48,19 @@ public class InventorySlot {
         return inventorySlotClicked;
     }
 
-    public void addItem(Item item){
+    public void addItem(Item item,int anzahl){
+        item.addItemCounter(1);
         this.item = item;
+        item.addItemCounter(1);
         isUsed = true;
     }
 
     public void removeItem(){
-        this.item = null;
-        isUsed = false;
+        item.addItemCounter(-1);
+        if(item.getItemCounter() == 0) {
+            item = null;
+            isUsed = false;
+        }
     }
 
     public Item getItem(){

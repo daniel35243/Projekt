@@ -3,6 +3,7 @@ package Items;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -12,6 +13,7 @@ import io.github.FarmLife.InventorySlot;
 public class KarottenSeed extends Item{
     private TextureRegion[][] itemSpriteSheet = TextureRegion.split(new Texture(Gdx.files.internal("PixelMapPNGs/Outdoor decoration/Outdoor_Decor_Free.png")), 105, 105);
     private int itemCounter = 0;
+    private TextureRegion[] itemFrames = new TextureRegion[4];
     private Animation<TextureRegion> itemAnimation;
     private float stateTime = 0;
     private Vector2 cords = new Vector2();
@@ -23,21 +25,21 @@ public class KarottenSeed extends Item{
         itemCounter += anzahl;
     }
     @Override
-    public int getItemCounter(){
+    public int getItemCounter() {
         return itemCounter;
     }
 
 
     @Override
-    public void draw(SpriteBatch batch, InventorySlot[] inventory, Vector2 touchPosition){
+    public void drawInSlot(SpriteBatch batch, Vector2 cords, BitmapFont font){
         stateTime += Gdx.graphics.getDeltaTime();
-        for (InventorySlot invSlot : inventory) {
-            if(!invSlot.getIsUsed() || invSlot.getItem() instanceof KarottenSeed){
-                if(touchPosition.x == 0 && touchPosition.y == 0){cords.set(invSlot.getCords().x+25,invSlot.getCords().y+30);}else{cords = touchPosition;}
-                invSlot.addItem(this);
-                batch.draw(itemAnimation.getKeyFrame(stateTime,true),cords.x,cords.y);
-                break;
-            }
-        }
+        batch.draw(itemAnimation.getKeyFrame(stateTime, true), cords.x, cords.y);
+        font.draw(batch, Integer.toString(itemCounter), cords.x + 90, cords.y + 25);
+    }
+    @Override
+    public void drawClicked(SpriteBatch batch,  Vector2 touchPosition, BitmapFont font, InventorySlot invSlot){
+        stateTime += Gdx.graphics.getDeltaTime();
+        batch.draw(itemAnimation.getKeyFrame(stateTime, true), touchPosition.x, touchPosition.y);
+        font.draw(batch, Integer.toString(itemCounter), invSlot.getCords().x + 100, invSlot.getCords().y);
     }
 }
