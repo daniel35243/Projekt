@@ -15,7 +15,7 @@ public class InventorySlot {
     private boolean inventorySlotClicked;
 
     public InventorySlot(float x){
-        cords = new Vector2(x, Gdx.graphics.getHeight()-180);
+        cords = new Vector2(x, 100);
         isUsed = false;
         slotTexture[0] = new Texture("InventorySlot.png");
         slotTexture[1] = new Texture("UsedInventorySlot.png");
@@ -49,15 +49,14 @@ public class InventorySlot {
     }
 
     public void addItem(Item item,int anzahl){
-        item.addItemCounter(1);
+        item.addItemCounter(anzahl);
         this.item = item;
-        item.addItemCounter(1);
         isUsed = true;
     }
 
     public void removeItem(){
         item.addItemCounter(-1);
-        if(item.getItemCounter() == 0) {
+        if(item.getItemCounter() <= 0) {
             item = null;
             isUsed = false;
         }

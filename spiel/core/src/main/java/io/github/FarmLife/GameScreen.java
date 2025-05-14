@@ -45,16 +45,14 @@ public class GameScreen implements Screen {
     InventorySlot[] inventory = new InventorySlot[5];
     FeldSlot[] feld = new FeldSlot[10];
     SpriteBatch inventorySpriteBatch;
-
-
     HitBoxes hitBoxes = new HitBoxes();
-
     Item selectedItem = null;
     InventorySlot draggedSlot = null;
     boolean dragging = false;
     int numberAnimation = 0;
     FeldSlot[] feldAnfänger = new FeldSlot[4];
     FeldSlot[] feldFortgeschritten = new FeldSlot[6];
+    Clock clock = new Clock();
 
     @Override
     public void show() {
@@ -91,7 +89,7 @@ public class GameScreen implements Screen {
         zwischenspeicherCameraWeltPosition = new Vector2();
 
         int counterInventorySlots = 0;
-        for(int j = 180; j <= 900; j += 180) {
+        for(int j = 200; j <= 1000; j += 200) {
             inventory[counterInventorySlots] = new InventorySlot(Gdx.graphics.getWidth() - j);
             counterInventorySlots++;
         }
@@ -101,19 +99,13 @@ public class GameScreen implements Screen {
         inventory[3].addItem(new KarottenSeed(),1);
         inventory[4].addItem(new Karotte(),1);
 
-        int anfängerFeld = 0;
-//        for(){
-//            for(){
-//                feldAnfänger[anfängerFeld] = new FeldSlot();
-//                anfängerFeld++;
-//
-//            }
-//        }
+
     }
 
     @Override
     public void render(float delta) {
         delta = Gdx.graphics.getDeltaTime();
+
         //Einstellungen
         framecounter++;
         Gdx.gl.glClearColor(0.0f,149/255f,233/255f,1);
@@ -135,8 +127,8 @@ public class GameScreen implements Screen {
         cameraWelt.position.set(cameraWeltPosition, 0);
         cameraWelt.update();
 
-
-        hitBoxes.draw(shapeRendererMap,shapeRendererHUD,map,cameraWeltPosition);
+        //Hitboxes
+//        hitBoxes.draw(shapeRendererMap,shapeRendererHUD,map,cameraWeltPosition);
 
 
         //Erkennt wenn Bildschirm TOUCHED
@@ -150,50 +142,58 @@ public class GameScreen implements Screen {
 
 
 
-
-
         //Joystick
-        joystick.moveJoystick(touchPos,new Vector2(Gdx.graphics.getWidth()/5*4,Gdx.graphics.getHeight()/5*4));
+        joystick.moveJoystick(touchPos, new Vector2(Gdx.graphics.getWidth() / 5 * 4, Gdx.graphics.getHeight() / 5 * 4),dragging);
         cameraHUD.update();
-
-
-
 
 
         inventorySpriteBatch.begin();
 
+        clock.draw(inventorySpriteBatch,fpsFont);
 
 
         //Inventory
         for (InventorySlot invSlot:inventory) {
             Rectangle slotRect = new Rectangle(invSlot.getCords().x,invSlot.getCords().y, 170,170);
 
-            if(Gdx.input.isTouched() && slotRect.contains(touchPos.x,touchPos.y) && invSlot.getIsUsed() && selectedItem == null) {
+            if(Gdx.input.isTouched() && slotRect.contains(touchPos.x,touchPos.y) && invSlot.getIsUsed() && !dragging) {
                 selectedItem = invSlot.getItem();
                 draggedSlot = invSlot;
                 dragging = true;
                 invSlot.setInventorySlotClickedTrue(inventory);
             }
-            if(invSlot.getInventorySlotClicked()){numberAnimation = 1;}else{numberAnimation = 0;}
+            if(invSlot == draggedSlot && dragging) {
+                numberAnimation = 1;
+            }else{
+                numberAnimation = 0;
+            }
+
             invSlot.drawSlot(inventorySpriteBatch,numberAnimation);
 
             if(invSlot.getIsUsed() && invSlot != draggedSlot) {
                 invSlot.getItem().drawInSlot(inventorySpriteBatch,new Vector2(invSlot.getCords().x+25,invSlot.getCords().y+30),fpsFont);
             }
-            if(dragging && selectedItem != null){
-                selectedItem.drawClicked(inventorySpriteBatch, touchPos, fpsFont, invSlot);
-            }
+
             if(dragging && !Gdx.input.isTouched()){
+
+                if(draggedSlot != null){
+                    draggedSlot.removeItem();
+                }
+                selectedItem = null;
                 dragging = false;
                 if(draggedSlot != null) draggedSlot.setInventorySlotClickedFalse();
-                selectedItem = null;
                 draggedSlot = null;
-                invSlot.removeItem();
+                break;
             }
         }
-
-
+        if(dragging && selectedItem != null && draggedSlot != null){
+            selectedItem.drawClicked(inventorySpriteBatch, touchPos, fpsFont, draggedSlot);
+        }
         inventorySpriteBatch.end();
+
+
+
+
 
 
         if(framecounter == 30) {
