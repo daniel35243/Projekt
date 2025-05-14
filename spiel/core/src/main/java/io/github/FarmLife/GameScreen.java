@@ -48,6 +48,7 @@ public class GameScreen implements Screen {
     Weizen weizen = new Weizen();
     Karotte karotte = new Karotte();
 
+    HitBoxes hitBoxes = new HitBoxes();
 
     @Override
     public void show() {
@@ -115,12 +116,8 @@ public class GameScreen implements Screen {
         cameraWelt.position.set(cameraWeltPosition, 0);
         cameraWelt.update();
 
-//        //Player Fußpunkt
-//        shapeRendererMap.begin(ShapeRenderer.ShapeType.Filled);
-//        shapeRendererMap.setColor(Color.WHITE);
-//        shapeRendererMap.circle(cameraWeltPosition.x, cameraWeltPosition.y-8, 1);
-//        shapeRendererMap.end();
 
+        hitBoxes.draw(shapeRendererMap,shapeRendererHUD,map,cameraWeltPosition);
 
 
         //Erkennt wenn Bildschirm TOUCHED
@@ -133,18 +130,7 @@ public class GameScreen implements Screen {
         }
 
 
-//        //Player HITBOX
-//        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Line);
-//        shapeRendererHUD.setColor(Color.RED);
-//        shapeRendererHUD.rect(Gdx.graphics.getWidth() / 2 - 60,Gdx.graphics.getHeight() / 2 - 60,110,160);
-//        shapeRendererHUD.setColor(Color.YELLOW);
-//        shapeRendererHUD.rect(Gdx.graphics.getWidth() / 2 - 60,Gdx.graphics.getHeight() / 2 - 60,110,30);
 
-
-//        //Joystick HITBOX
-//        shapeRendererHUD.setColor(Color.BLUE);
-//        shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth() / 2,Gdx.graphics.getHeight());
-//        shapeRendererHUD.end();
 
 
         //Joystick
@@ -153,14 +139,7 @@ public class GameScreen implements Screen {
 
 
 
-//        //Map Border
-//        shapeRendererMap.begin(ShapeRenderer.ShapeType.Line);
-//        shapeRendererMap.setColor(Color.BLACK);
-//        shapeRendererMap.polygon(map.getMapBorderPolygon().getTransformedVertices());
-//        for(PolygonMapObject object : map.getObjectBorderLayer().getByType(PolygonMapObject.class)) {
-//            shapeRendererMap.polygon(object.getPolygon().getTransformedVertices());
-//        }
-//        shapeRendererMap.end();
+
 
         inventorySpriteBatch.begin();
         //Inventory

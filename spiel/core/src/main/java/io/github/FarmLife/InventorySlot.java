@@ -22,10 +22,9 @@ public class InventorySlot {
         inventorySlotClicked = false;
     }
     public void drawSlot(SpriteBatch batch, int numb){
-        batch.begin();
         batch.draw(slotTexture[numb],cords.x,cords.y);
-        batch.end();
     }
+    
     public Vector2 getCords(){
         return cords;
     }
