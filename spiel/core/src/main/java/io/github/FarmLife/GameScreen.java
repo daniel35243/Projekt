@@ -9,12 +9,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class GameScreen extends ApplicationAdapter implements Screen {
+public class GameScreen implements Screen {
     OrthographicCamera cameraWelt;
     OrthographicCamera cameraHUD;
     Map map;
@@ -24,19 +25,14 @@ public class GameScreen extends ApplicationAdapter implements Screen {
     Vector2 cameraWeltPosition;
     BitmapFont fpsFont;
     SpriteBatch fps;
-    float delta;
     Player player;
     SpriteBatch playerSpriteBatch;
     Viewport hudViewport;
-
-    @Override
-    public void create() {
-    }
-
-    @Override
-    public void render() {
-
-    }
+    float nightFaktor;
+    boolean nightFaktorNull;
+    int framecounter;
+    Vector2 zwischenspeicherCameraWeltPosition;
+    ShapeRenderer shapeRendererMap;
 
     @Override
     public void show() {
@@ -65,19 +61,26 @@ public class GameScreen extends ApplicationAdapter implements Screen {
 
         fpsFont = new BitmapFont();
         fps = new SpriteBatch();
+
+        nightFaktor = 0.8f;
+        nightFaktorNull = false;
+        framecounter = 0;
+        zwischenspeicherCameraWeltPosition = new Vector2();
     }
 
     @Override
     public void render(float delta) {
+        framecounter++;
         //Einstellungen
         Gdx.gl.glClearColor(0.0f,149/255f,233/255f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         shapeRendererHUD.setProjectionMatrix(cameraHUD.combined);
-        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
-        playerSpriteBatch.setProjectionMatrix(cameraHUD.combined);
+        playerSpriteBatch.setProjectionMatrix(cameraWelt.combined);
 
         //Map
-        map.render(cameraWelt);
+        cameraWeltPosition.set(map.mapBorder(joystick,cameraWeltPosition));
+        map.render(cameraWelt,player,playerSpriteBatch,joystick,cameraWeltPosition);
+        cameraWelt.position.set(cameraWeltPosition, 0);
         cameraWelt.update();
 
 
@@ -90,34 +93,54 @@ public class GameScreen extends ApplicationAdapter implements Screen {
             touchPos.y = 0;
         }
 
-        //Joystick
-        joystick.moveJoystick(touchPos,player,playerSpriteBatch,new Vector2(Gdx.graphics.getWidth()/5*4,Gdx.graphics.getHeight()/5*4));
-        shapeRendererHUD.end();
 
         //Player HITBOX
         shapeRendererHUD.begin(ShapeRenderer.ShapeType.Line);
         shapeRendererHUD.setColor(Color.RED);
         shapeRendererHUD.rect(Gdx.graphics.getWidth() / 2 - 60,Gdx.graphics.getHeight() / 2 - 60,110,160);
-        shapeRendererHUD.end();
+        shapeRendererHUD.setColor(Color.YELLOW);
+        shapeRendererHUD.rect(Gdx.graphics.getWidth() / 2 - 60,Gdx.graphics.getHeight() / 2 - 60,110,30);
+
 
         //Joystick HITBOX
-        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Line);
         shapeRendererHUD.setColor(Color.BLUE);
         shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth() / 2,Gdx.graphics.getHeight());
         shapeRendererHUD.end();
 
 
-
-        //MOVEMENT
-        if(joystick.getCameraWeltPosition().x != 0) {
-            cameraWeltPosition.x += joystick.getCameraWeltPosition().x * 1.55f;
-        }
-        if(joystick.getCameraWeltPosition().y != 0){
-            cameraWeltPosition.y += joystick.getCameraWeltPosition().y * 1.55f;
-        }
-        cameraWelt.position.set(cameraWeltPosition, 0);
+        //Joystick
+        joystick.moveJoystick(touchPos,player,playerSpriteBatch,new Vector2(Gdx.graphics.getWidth()/5*4,Gdx.graphics.getHeight()/5*4));
         cameraHUD.update();
 
+        //TAG/NACHT
+        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRendererHUD.setColor(new Color(30/255f,30/255f,30/255f,0));
+        shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth() ,Gdx.graphics.getHeight());
+        shapeRendererHUD.end();
+
+        //Map Border
+        shapeRendererMap.begin(ShapeRenderer.ShapeType.Line);
+        shapeRendererMap.setColor(Color.BLACK);
+        shapeRendererMap.polygon(map.getMapBorderPolygon().getTransformedVertices());
+        for(RectangleMapObject object : map.getObjectBorderLayer().getByType(RectangleMapObject.class)) {
+            shapeRendererMap.rect(object.getRectangle().x, object.getRectangle().y, object.getRectangle().width, object.getRectangle().height);
+        }
+        shapeRendererMap.end();
+
+        if(framecounter == 30) {
+            if (nightFaktorNull) {
+                nightFaktor += 0.0133f;
+                if (nightFaktor >= 0.8) {
+                    nightFaktorNull = false;
+                }
+            } else {
+                nightFaktor -= 0.0133f;
+                if (nightFaktor <= 0) {
+                    nightFaktorNull = true;
+                }
+            }
+            framecounter = 0;
+        }
 
         //FPS
         fpsFont.getData().setScale(3f);
@@ -127,13 +150,41 @@ public class GameScreen extends ApplicationAdapter implements Screen {
     }
 
     @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
     public void hide() {
 
     }
 
     @Override
     public void dispose() {
-
+        playerSpriteBatch.dispose();
+        fpsFont.dispose();
+        fps.dispose();
+        shapeRendererHUD.dispose();
+        shapeRendererMap.dispose();
+        fps.dispose();
+        fpsFont.dispose();
+        shapeRendererHUD.dispose();
+        shapeRendererMap.dispose();
+        fps.dispose();
+        fpsFont.dispose();
+        shapeRendererHUD.dispose();
+        shapeRendererMap.dispose();
+        map.dispose();
     }
 
 
