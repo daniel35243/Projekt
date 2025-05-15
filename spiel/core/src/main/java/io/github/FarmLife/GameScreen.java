@@ -43,7 +43,6 @@ public class GameScreen implements Screen {
     Vector2 zwischenspeicherCameraWeltPosition;
     ShapeRenderer shapeRendererMap;
     InventorySlot[] inventory = new InventorySlot[5];
-    FeldSlot[] feld = new FeldSlot[10];
     SpriteBatch inventorySpriteBatch;
     HitBoxes hitBoxes = new HitBoxes();
     Item selectedItem = null;
@@ -53,6 +52,7 @@ public class GameScreen implements Screen {
     FeldSlot[] feldAnfänger = new FeldSlot[4];
     FeldSlot[] feldFortgeschritten = new FeldSlot[6];
     Clock clock = new Clock();
+    Rectangle feldRect = new Rectangle();
 
     @Override
     public void show() {
@@ -78,7 +78,7 @@ public class GameScreen implements Screen {
         cameraWelt = new OrthographicCamera();
         cameraWelt.setToOrtho(false,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         cameraWelt.update();
-        cameraWelt.zoom = 0.15f;
+        cameraWelt.zoom = 01f;
 
         fpsFont = new BitmapFont();
         fps = new SpriteBatch();
@@ -99,6 +99,10 @@ public class GameScreen implements Screen {
         inventory[3].addItem(new KarottenSeed(),1);
         inventory[4].addItem(new Karotte(),1);
 
+        Main game = (Main) Gdx.app.getApplicationListener();
+        for(int i = 0; i < 4; i++) {
+            feldAnfänger[i] = new FeldSlot(i+1,game);
+        }
 
     }
 
@@ -175,9 +179,15 @@ public class GameScreen implements Screen {
             }
 
             if(dragging && !Gdx.input.isTouched()){
-
-                if(draggedSlot != null){
-                    draggedSlot.removeItem();
+                for(FeldSlot feldSlot : feldAnfänger) {
+                    feldRect.set(feldSlot.getCords().x,feldSlot.getCords().y,32,32);
+                    if (draggedSlot != null && selectedItem != null && feldRect.contains(touchPos.x,touchPos.y)) {
+                        shapeRendererMap.begin(ShapeRenderer.ShapeType.Filled);
+                        shapeRendererMap.setColor(Color.RED);
+                        shapeRendererMap.rect(feldSlot.getCords().x,feldSlot.getCords().y,32,32);
+                        shapeRendererMap.end();
+                        draggedSlot.removeItem();
+                    }
                 }
                 selectedItem = null;
                 dragging = false;

@@ -12,8 +12,9 @@ public class FeldSlot {
     private int id_feld;
     private Game game;
 
-    public FeldSlot(int id_feld) {
-        FeldByCord feld = ((Main) game).db.getFeldByCord(id_feld);
+    public FeldSlot(int id_feld,Main game) {
+        this.game = game;
+        FeldByCord feld = game.db.getFeldByCord(id_feld);
         cords = new Vector2(feld.feld_x, feld.feld_y);
         Wachsstufe = feld.Wachsstufe;
         Item = feld.item;

@@ -80,7 +80,6 @@ public class Clock {
 
 
     public void draw(SpriteBatch batch, BitmapFont font){
-        System.out.println(daytimeEmoji);
         tick();
         Font.draw(batch, dayCounter + ". TAG", Gdx.graphics.getWidth() - 350, Gdx.graphics.getHeight() - 50);
         Font.draw(batch, setAusgabeClock() , Gdx.graphics.getWidth() - 350, Gdx.graphics.getHeight() - 100);
