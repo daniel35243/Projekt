@@ -78,7 +78,7 @@ public class GameScreen implements Screen {
         cameraWelt = new OrthographicCamera();
         cameraWelt.setToOrtho(false,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         cameraWelt.update();
-        cameraWelt.zoom = 01f;
+        cameraWelt.zoom = 0.15f;
 
         fpsFont = new BitmapFont();
         fps = new SpriteBatch();
@@ -146,14 +146,21 @@ public class GameScreen implements Screen {
 
 
 
+        shapeRendererMap.begin(ShapeRenderer.ShapeType.Line);
+        shapeRendererMap.rect(880,688,32,32);
+        shapeRendererMap.rect(944,688,32,32);
+        shapeRendererMap.rect(880,624,32,32);
+        shapeRendererMap.rect(944,624,32,32);
+        shapeRendererMap.end();
+
         //Joystick
         joystick.moveJoystick(touchPos, new Vector2(Gdx.graphics.getWidth() / 5 * 4, Gdx.graphics.getHeight() / 5 * 4),dragging);
         cameraHUD.update();
 
 
         inventorySpriteBatch.begin();
-
-        clock.draw(inventorySpriteBatch,fpsFont);
+        //UHR
+        clock.draw(inventorySpriteBatch);
 
 
         //Inventory

@@ -23,9 +23,9 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE Game (ID INTEGER PRIMARY KEY, Coins INTEGER, Level INTEGER, XP INTEGER)");
         db.execSQL("CREATE TABLE Shop (item TEXT PRIMARY KEY, Coins INTEGER)");
         db.execSQL("CREATE TABLE Seller (item TEXT PRIMARY KEY, Coins INTEGER)");
-        db.execSQL("CREATE TABLE Felder (feldID INTEGER PRIMARY KEY, item TEXT, Wachsstufe INTEGER,feld_x INTEGER, feld_y INTEGER)");
+        db.execSQL("CREATE TABLE Felder (feldID INTEGER PRIMARY KEY, item TEXT, Wachsstufe INTEGER,feld_x INTEGER, feld_y INTEGER, feld_groesse INTEGER)");
         // Inventory
-        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (1, 'Hacke', 1)");
+        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (1, NULL, NULL)");
         db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (2, NULL, NULL)");
         db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (3, NULL, NULL)");
         db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (4, NULL, NULL)");
@@ -100,7 +100,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
 
 
-    // Feld
+    // Field
     public Cursor getFeldByCord(int feldID) {
         return db.rawQuery("SELECT * FROM Felder WHERE feldID = ?", new String[]{String.valueOf(feldID)});
     }
