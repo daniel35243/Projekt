@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import Database.FeldByCord;
 
 public class FeldSlot {
+    private boolean isTouched;
     private Vector2 cords;
     private int Wachsstufe;
     private String Item;
@@ -18,6 +19,13 @@ public class FeldSlot {
         cords = new Vector2(feld.feld_x, feld.feld_y);
         Wachsstufe = feld.Wachsstufe;
         Item = feld.item;
+        isTouched = false;
+    }
+    public void setTouched(boolean isTouched) {
+        this.isTouched = isTouched;
+    }
+    public boolean getIsTouched() {
+        return isTouched;
     }
 
     public Vector2 getCords() {

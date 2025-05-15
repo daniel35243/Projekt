@@ -15,7 +15,11 @@ public class HitBoxes {
         for (PolygonMapObject object : map.getObjectBorderLayer().getByType(PolygonMapObject.class)) {
             shapeRendererMap.polygon(object.getPolygon().getTransformedVertices());
         }
-
+        //Anfangsfeld
+        shapeRendererMap.rect(880,688,32,32);
+        shapeRendererMap.rect(944,688,32,32);
+        shapeRendererMap.rect(880,624,32,32);
+        shapeRendererMap.rect(944,624,32,32);
         shapeRendererMap.end();
         //Player HITBOX
         shapeRendererHUD.begin(ShapeRenderer.ShapeType.Line);

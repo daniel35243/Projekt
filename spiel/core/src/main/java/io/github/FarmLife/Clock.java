@@ -13,7 +13,6 @@ public class Clock {
     private boolean isNight;
     private int dayCounter;
     private String ausgabeClock;
-    private String ausgabeDay;
     private String daytimeEmoji;
     BitmapFont  font;
     FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("clockFont.ttf"));
@@ -24,11 +23,12 @@ public class Clock {
         minute = 0;
         dayCounter = 1;
         ausgabeClock = "";
-        ausgabeDay = "";
         daytimeEmoji = "☀️";
         parameter.size = 50;
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "☀️🌙";
         font = generator.generateFont(parameter);
+        isDay = true;
+        isNight = false;
     }
 
     public void tick(){
@@ -80,7 +80,7 @@ public class Clock {
 
 
 
-    public void draw(SpriteBatch batch, BitmapFont font){
+    public void draw(SpriteBatch batch){
         tick();
         font.draw(batch, dayCounter + ". TAG", Gdx.graphics.getWidth() - 350, Gdx.graphics.getHeight() - 50);
         font.draw(batch, setAusgabeClock() , Gdx.graphics.getWidth() - 350, Gdx.graphics.getHeight() - 100);

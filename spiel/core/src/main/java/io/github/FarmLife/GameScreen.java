@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -29,7 +30,8 @@ public class GameScreen implements Screen {
     OrthographicCamera cameraHUD;
     Map map;
     Joystick joystick;
-    Vector2 touchPos;
+    Vector2 touchPosHUD;
+    Vector3 touchPosMap = new Vector3();
     ShapeRenderer shapeRendererHUD;
     Vector2 cameraWeltPosition;
     BitmapFont fpsFont;
@@ -63,7 +65,7 @@ public class GameScreen implements Screen {
         shapeRendererMap = new ShapeRenderer();
         shapeRendererHUD = new ShapeRenderer();
 
-        touchPos = new Vector2(0,0);
+        touchPosHUD = new Vector2(0,0);
 
         map = new Map();
 
@@ -137,24 +139,21 @@ public class GameScreen implements Screen {
 
         //Erkennt wenn Bildschirm TOUCHED
         if(Gdx.input.isTouched()){
-            touchPos.x = Gdx.input.getX();
-            touchPos.y = Gdx.graphics.getHeight() - Gdx.input.getY();
+            touchPosHUD.x = Gdx.input.getX();
+            touchPosHUD.y = Gdx.graphics.getHeight() - Gdx.input.getY();
+            touchPosMap.set(Gdx.input.getX(),Gdx.input.getY(),0);
         }else{
-            touchPos.x = 0;
-            touchPos.y = 0;
+            touchPosHUD.x = 0;
+            touchPosHUD.y = 0;
         }
+        cameraWelt.unproject(touchPosMap);
 
 
 
-        shapeRendererMap.begin(ShapeRenderer.ShapeType.Line);
-        shapeRendererMap.rect(880,688,32,32);
-        shapeRendererMap.rect(944,688,32,32);
-        shapeRendererMap.rect(880,624,32,32);
-        shapeRendererMap.rect(944,624,32,32);
-        shapeRendererMap.end();
+
 
         //Joystick
-        joystick.moveJoystick(touchPos, new Vector2(Gdx.graphics.getWidth() / 5 * 4, Gdx.graphics.getHeight() / 5 * 4),dragging);
+        joystick.moveJoystick(touchPosHUD, new Vector2(Gdx.graphics.getWidth() / 5 * 4, Gdx.graphics.getHeight() / 5 * 4),dragging);
         cameraHUD.update();
 
 
@@ -167,7 +166,7 @@ public class GameScreen implements Screen {
         for (InventorySlot invSlot:inventory) {
             Rectangle slotRect = new Rectangle(invSlot.getCords().x,invSlot.getCords().y, 170,170);
 
-            if(Gdx.input.isTouched() && slotRect.contains(touchPos.x,touchPos.y) && invSlot.getIsUsed() && !dragging) {
+            if(Gdx.input.isTouched() && slotRect.contains(touchPosHUD.x,touchPosHUD.y) && invSlot.getIsUsed() && !dragging) {
                 selectedItem = invSlot.getItem();
                 draggedSlot = invSlot;
                 dragging = true;
@@ -188,11 +187,7 @@ public class GameScreen implements Screen {
             if(dragging && !Gdx.input.isTouched()){
                 for(FeldSlot feldSlot : feldAnfänger) {
                     feldRect.set(feldSlot.getCords().x,feldSlot.getCords().y,32,32);
-                    if (draggedSlot != null && selectedItem != null && feldRect.contains(touchPos.x,touchPos.y)) {
-                        shapeRendererMap.begin(ShapeRenderer.ShapeType.Filled);
-                        shapeRendererMap.setColor(Color.RED);
-                        shapeRendererMap.rect(feldSlot.getCords().x,feldSlot.getCords().y,32,32);
-                        shapeRendererMap.end();
+                    if (draggedSlot != null && selectedItem != null && feldRect.contains(touchPosMap.x,touchPosMap.y)) {
                         draggedSlot.removeItem();
                     }
                 }
@@ -204,7 +199,7 @@ public class GameScreen implements Screen {
             }
         }
         if(dragging && selectedItem != null && draggedSlot != null){
-            selectedItem.drawClicked(inventorySpriteBatch, touchPos, fpsFont, draggedSlot);
+            selectedItem.drawClicked(inventorySpriteBatch, touchPosHUD, fpsFont, draggedSlot);
         }
         inventorySpriteBatch.end();
 
