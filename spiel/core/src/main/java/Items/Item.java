@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import io.github.FarmLife.InventorySlot;
 
 public class Item {
-    private TextureRegion[][] itemSpriteSheet = TextureRegion.split(new Texture(Gdx.files.internal("PixelMapPNGs/Outdoor decoration/Outdoor_Decor_Free.png")), 16, 16);
+    private TextureRegion[][] itemSpriteSheet = TextureRegion.split(new Texture(Gdx.files.internal("PixelMapPNGs/Outdoor decoration/ItemsZoomed.png")), 16, 16);
     private int itemCounter = 0;
     private Animation<TextureRegion> itemAnimation;
     private float stateTime = 0;

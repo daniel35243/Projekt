@@ -85,4 +85,10 @@ public class Clock {
         font.draw(batch, dayCounter + ". TAG", Gdx.graphics.getWidth() - 350, Gdx.graphics.getHeight() - 50);
         font.draw(batch, setAusgabeClock() , Gdx.graphics.getWidth() - 350, Gdx.graphics.getHeight() - 100);
     }
+    public int getHour(){
+        return hour;
+    }
+    public int getMinute() {
+        return minute;
+    }
 }

@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import io.github.FarmLife.InventorySlot;
 
 public class KarottenSeed extends Item{
-    private TextureRegion[][] itemSpriteSheet = TextureRegion.split(new Texture(Gdx.files.internal("PixelMapPNGs/Outdoor decoration/Outdoor_Decor_Free.png")), 105, 105);
+    private TextureRegion[][] itemSpriteSheet = TextureRegion.split(new Texture(Gdx.files.internal("PixelMapPNGs/Outdoor decoration/ItemsZoomed.png")), 105, 105);
     private int itemCounter = 0;
     private TextureRegion[] itemFrames = new TextureRegion[4];
     private Animation<TextureRegion> itemAnimation;

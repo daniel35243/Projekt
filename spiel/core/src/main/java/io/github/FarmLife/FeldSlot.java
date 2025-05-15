@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Vector2;
 
 import Database.FeldByCord;
+import Pflanzen.Pflanze;
 
 public class FeldSlot {
     private boolean isTouched;
@@ -12,8 +13,9 @@ public class FeldSlot {
     private String Item;
     private int id_feld;
     private Game game;
+    private Pflanze pflanze;
 
-    public FeldSlot(int id_feld,Main game) {
+    public FeldSlot(int id_feld, Main game) {
         this.game = game;
         FeldByCord feld = game.db.getFeldByCord(id_feld);
         cords = new Vector2(feld.feld_x, feld.feld_y);
@@ -21,9 +23,11 @@ public class FeldSlot {
         Item = feld.item;
         isTouched = false;
     }
+
     public void setTouched(boolean isTouched) {
         this.isTouched = isTouched;
     }
+
     public boolean getIsTouched() {
         return isTouched;
     }
@@ -39,5 +43,13 @@ public class FeldSlot {
     public String getItem() {
         return this.Item;
 
+    }
+
+    public void setPflanze(Pflanze pflanze) {
+        this.pflanze = pflanze;
+    }
+
+    public Pflanze getPflanze() {
+        return this.pflanze;
     }
 }

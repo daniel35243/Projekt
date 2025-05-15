@@ -22,6 +22,7 @@ import Items.Karotte;
 import Items.KarottenSeed;
 import Items.Weizen;
 import Items.WeizenSeed;
+import Pflanzen.Karottenpflanze;
 
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
@@ -96,9 +97,9 @@ public class GameScreen implements Screen {
             counterInventorySlots++;
         }
         inventory[0].addItem(new Karotte(),1);
-        inventory[1].addItem(new Weizen(),1);
+        inventory[1].addItem(new Weizen(),20);
         inventory[2].addItem(new WeizenSeed(),1);
-        inventory[3].addItem(new KarottenSeed(),1);
+        inventory[3].addItem(new KarottenSeed(),20);
         inventory[4].addItem(new Karotte(),1);
 
         Main game = (Main) Gdx.app.getApplicationListener();
@@ -141,11 +142,11 @@ public class GameScreen implements Screen {
         if(Gdx.input.isTouched()){
             touchPosHUD.x = Gdx.input.getX();
             touchPosHUD.y = Gdx.graphics.getHeight() - Gdx.input.getY();
-            touchPosMap.set(Gdx.input.getX(),Gdx.input.getY(),0);
         }else{
             touchPosHUD.x = 0;
             touchPosHUD.y = 0;
         }
+        touchPosMap.set(Gdx.input.getX(),Gdx.input.getY(),0);
         cameraWelt.unproject(touchPosMap);
 
 
@@ -188,7 +189,12 @@ public class GameScreen implements Screen {
                 for(FeldSlot feldSlot : feldAnfänger) {
                     feldRect.set(feldSlot.getCords().x,feldSlot.getCords().y,32,32);
                     if (draggedSlot != null && selectedItem != null && feldRect.contains(touchPosMap.x,touchPosMap.y)) {
-                        draggedSlot.removeItem();
+
+                        if(selectedItem instanceof KarottenSeed){
+                          feldSlot.setPflanze(new Karottenpflanze(feldSlot.getCords().x + 8, feldSlot.getCords().y + 8, clock.getHour(), clock.getMinute()));
+                            draggedSlot.removeItem();
+                        }
+
                     }
                 }
                 selectedItem = null;
@@ -202,6 +208,14 @@ public class GameScreen implements Screen {
             selectedItem.drawClicked(inventorySpriteBatch, touchPosHUD, fpsFont, draggedSlot);
         }
         inventorySpriteBatch.end();
+
+        playerSpriteBatch.begin();
+        for(FeldSlot feldSlot : feldAnfänger) {
+            if(feldSlot.getPflanze() != null) {
+                feldSlot.getPflanze().draw(clock.getHour(), clock.getMinute(), playerSpriteBatch);
+            }
+        }
+        playerSpriteBatch.end();
 
 
 
