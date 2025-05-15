@@ -23,9 +23,9 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE Game (ID INTEGER PRIMARY KEY, Coins INTEGER, Level INTEGER, XP INTEGER)");
         db.execSQL("CREATE TABLE Shop (item TEXT PRIMARY KEY, Coins INTEGER)");
         db.execSQL("CREATE TABLE Seller (item TEXT PRIMARY KEY, Coins INTEGER)");
-        db.execSQL("CREATE TABLE Felder (feldID INTEGER PRIMARY KEY, item TEXT, Wachsstufe INTEGER,feld_x INTEGER, feld_y INTEGER)");
+        db.execSQL("CREATE TABLE Felder (feldID INTEGER PRIMARY KEY, item TEXT, Wachsstufe INTEGER,feld_x INTEGER, feld_y INTEGER, feld_groesse INTEGER)");
         // Inventory
-        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (1, 'Hacke', 1)");
+        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (1, NULL, NULL)");
         db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (2, NULL, NULL)");
         db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (3, NULL, NULL)");
         db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (4, NULL, NULL)");
@@ -39,16 +39,10 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO Seller (item, Coins) VALUES ('Karotten', 2)");
         db.execSQL("INSERT INTO Seller (item, Coins) VALUES ('Weizen', 5)");
         //Felder
-        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (1, 'Karotten Samen', 1, NULL, NULL)");
-        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (2, NULL, NULL, NULL, NULL)");
-        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (3, NULL, NULL, NULL, NULL)");
-        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (4, NULL, NULL, NULL, NULL)");
-        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (5, NULL, NULL, NULL, NULL)");
-        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (6, NULL, NULL, NULL, NULL)");
-        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (7, 'Weizen Samen', NULL, NULL, NULL)");
-        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (8, NULL, NULL, NULL, NULL)");
-        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (9, NULL, NULL, NULL, NULL)");
-        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (10, NULL, NULL, NULL, NULL)");
+        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (1, NULL, NULL, 880, 688)");
+        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (2, NULL, NULL, 944, 688)");
+        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (3, NULL, NULL, 880, 624)");
+        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (4, NULL, NULL, 944, 624)");
     }
 
     @Override
@@ -106,7 +100,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
 
 
-    // Feld
+    // Field
     public Cursor getFeldByCord(int feldID) {
         return db.rawQuery("SELECT * FROM Felder WHERE feldID = ?", new String[]{String.valueOf(feldID)});
     }

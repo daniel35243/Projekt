@@ -94,7 +94,7 @@ public class MainMenuScreen implements Screen {
         InventorySlotDB inventory = ((Main) game).db.getInventorySlot(1);
         Gdx.app.log("Inventar", "Slot " +  inventory.slot +  " = " + inventory.item + " (" + inventory.anzahl + ")");
 
-        FeldByCord feld = ((Main) game).db.getFeldByCord(7);
+        FeldByCord feld = ((Main) game).db.getFeldByCord(1);
         Gdx.app.log("Feld " + feld.feldID, " = " + feld.item + " = " + feld.Wachsstufe + " = " + feld.feld_x + " = " + feld.feld_y);
     }
     @Override public void render(float delta) {

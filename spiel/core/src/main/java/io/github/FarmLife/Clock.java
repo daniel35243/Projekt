@@ -15,12 +15,12 @@ public class Clock {
     private String ausgabeClock;
     private String ausgabeDay;
     private String daytimeEmoji;
-    BitmapFont  Font;
+    BitmapFont  font;
     FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("clockFont.ttf"));
     FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
     public Clock(){
         stateTime = 0;
-        hour = 0;
+        hour = 6;
         minute = 0;
         dayCounter = 1;
         ausgabeClock = "";
@@ -28,7 +28,7 @@ public class Clock {
         daytimeEmoji = "☀️";
         parameter.size = 50;
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "☀️🌙";
-        Font = generator.generateFont(parameter);
+        font = generator.generateFont(parameter);
     }
 
     public void tick(){
@@ -47,7 +47,7 @@ public class Clock {
         }
     }
 
-    public void setDaytimeEmoji(){
+    public String setDaytimeEmoji(){
         if(hour >= 6 && hour <= 18){
             daytimeEmoji = "☀️";
             isDay = true;
@@ -57,6 +57,7 @@ public class Clock {
             isDay = false;
             isNight = true;
         }
+        return daytimeEmoji;
     }
 
     public String setAusgabeClock(){
@@ -73,16 +74,15 @@ public class Clock {
         }else{
             ausgabeClock += minute;
         }
-        ausgabeClock += " Uhr " + daytimeEmoji;
+        ausgabeClock += " Uhr " + setDaytimeEmoji();
         return ausgabeClock;
     }
 
 
 
-    public void draw(SpriteBatch batch, BitmapFont font){
-        System.out.println(daytimeEmoji);
+    public void draw(SpriteBatch batch){
         tick();
-        Font.draw(batch, dayCounter + ". TAG", Gdx.graphics.getWidth() - 350, Gdx.graphics.getHeight() - 50);
-        Font.draw(batch, setAusgabeClock() , Gdx.graphics.getWidth() - 350, Gdx.graphics.getHeight() - 100);
+        font.draw(batch, dayCounter + ". TAG", Gdx.graphics.getWidth() - 350, Gdx.graphics.getHeight() - 50);
+        font.draw(batch, setAusgabeClock() , Gdx.graphics.getWidth() - 350, Gdx.graphics.getHeight() - 100);
     }
 }
