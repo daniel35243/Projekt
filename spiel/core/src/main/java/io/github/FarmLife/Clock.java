@@ -48,11 +48,11 @@ public class Clock {
     }
 
     public String setDaytimeEmoji(){
-        if(hour >= 6 && hour <= 18){
+        if(hour > 6 && hour < 18){
             daytimeEmoji = "☀️";
             isDay = true;
             isNight = false;
-        }else if(hour >= 19 && hour <= 5) {
+        }else if(hour > 18 || hour < 6) {
             daytimeEmoji = "🌙";
             isDay = false;
             isNight = true;
@@ -61,7 +61,6 @@ public class Clock {
     }
 
     public String setAusgabeClock(){
-        setDaytimeEmoji();
         ausgabeClock = "";
         if(hour < 10){
             ausgabeClock += "0" + hour;

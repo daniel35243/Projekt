@@ -53,10 +53,17 @@ public class InventorySlot {
     }
 
     public void addItem(Item item,int anzahl){
-        item.addItemCounter(anzahl);
-        this.item = item;
-        isUsed = true;
+        if(this.item == null){
+            item.addItemCounter(anzahl);
+            this.item = item;
+            isUsed = true;
+        } else if(item.getClass() == this.item.getClass()){
+            this.item.addItemCounter(anzahl);
+        }
+
     }
+
+
 
     public void addItem(String item, int anzahl){
         switch (item) {

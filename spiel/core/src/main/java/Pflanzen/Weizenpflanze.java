@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-public class Karottenpflanze extends Pflanze{
+public class Weizenpflanze extends Pflanze{
     private TextureRegion[][] pflanzenSpriteSheet = TextureRegion.split(new Texture(Gdx.files.internal("PixelMapPNGs/Outdoor decoration/Items.png")), 16, 16);
     private Animation<TextureRegion>[] pflanzenAnimation = new Animation[4];
     private Vector2 cords = new Vector2();
@@ -16,14 +16,14 @@ public class Karottenpflanze extends Pflanze{
     private int currentHour;
     private int stage = 0;
 
-    public Karottenpflanze(float x, float y, int plantHour, int plantMinute){
+    public Weizenpflanze(float x, float y, int plantHour, int plantMinute){
         this.plantHour = plantHour;
         this.plantMinute = plantMinute;
         cords.set(x,y);
-        pflanzenAnimation[0] = new Animation<>(0f, pflanzenSpriteSheet[1][3]);
-        pflanzenAnimation[1] = new Animation<>(0f, pflanzenSpriteSheet[1][4]);
-        pflanzenAnimation[2] = new Animation<>(0f, pflanzenSpriteSheet[2][3]);
-        pflanzenAnimation[3] = new Animation<>(0f, pflanzenSpriteSheet[2][4]);
+        pflanzenAnimation[0] = new Animation<>(0f, pflanzenSpriteSheet[1][5]);
+        pflanzenAnimation[1] = new Animation<>(0f, pflanzenSpriteSheet[1][6]);
+        pflanzenAnimation[2] = new Animation<>(0f, pflanzenSpriteSheet[2][5]);
+        pflanzenAnimation[3] = new Animation<>(0f, pflanzenSpriteSheet[2][6]);
     }
 
     @Override

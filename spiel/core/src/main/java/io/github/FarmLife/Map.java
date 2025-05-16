@@ -47,12 +47,18 @@ public class Map {
     }
 
 
-    public void render(OrthographicCamera camera, Player player , SpriteBatch playerSpriteBatch,Joystick joystick, Vector2 cameraWeltPosition){
+    public void renderFirst(OrthographicCamera camera){
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render(startLayers);
+
+
+    }
+    public void renderPlayer( Player player , SpriteBatch playerSpriteBatch,Joystick joystick, Vector2 cameraWeltPosition){
         playerSpriteBatch.begin();
         player.draw(playerSpriteBatch, joystick.getStillAnimation(), joystick.getPlayerDirection(), cameraWeltPosition);
         playerSpriteBatch.end();
+    }
+    public void renderLast(){
         tiledMapRenderer.render(new int[]{9});
     }
 

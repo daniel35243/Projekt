@@ -23,6 +23,7 @@ import Items.KarottenSeed;
 import Items.Weizen;
 import Items.WeizenSeed;
 import Pflanzen.Karottenpflanze;
+import Pflanzen.Weizenpflanze;
 
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
@@ -96,11 +97,11 @@ public class GameScreen implements Screen {
             inventory[counterInventorySlots] = new InventorySlot(Gdx.graphics.getWidth() - j);
             counterInventorySlots++;
         }
-        inventory[0].addItem(new Karotte(),1);
-        inventory[1].addItem(new Weizen(),20);
-        inventory[2].addItem(new WeizenSeed(),1);
+        //inventory[0].addItem(new Karotte(),1);
+        //inventory[1].addItem(new Weizen(),20);
+        inventory[2].addItem(new WeizenSeed(),20);
         inventory[3].addItem(new KarottenSeed(),20);
-        inventory[4].addItem(new Karotte(),1);
+        //inventory[4].addItem(new Karotte(),1);
 
         Main game = (Main) Gdx.app.getApplicationListener();
         for(int i = 0; i < 4; i++) {
@@ -130,7 +131,7 @@ public class GameScreen implements Screen {
 
         //Map
         cameraWeltPosition.set(map.mapBorder(joystick,cameraWeltPosition));
-        map.render(cameraWelt,player,playerSpriteBatch,joystick,cameraWeltPosition);
+        map.renderFirst(cameraWelt);
         cameraWelt.position.set(cameraWeltPosition, 0);
         cameraWelt.update();
 
@@ -150,19 +151,7 @@ public class GameScreen implements Screen {
         cameraWelt.unproject(touchPosMap);
 
 
-
-
-
-        //Joystick
-        joystick.moveJoystick(touchPosHUD, new Vector2(Gdx.graphics.getWidth() / 5 * 4, Gdx.graphics.getHeight() / 5 * 4),dragging);
-        cameraHUD.update();
-
-
         inventorySpriteBatch.begin();
-        //UHR
-        clock.draw(inventorySpriteBatch);
-
-
         //Inventory
         for (InventorySlot invSlot:inventory) {
             Rectangle slotRect = new Rectangle(invSlot.getCords().x,invSlot.getCords().y, 170,170);
@@ -173,25 +162,15 @@ public class GameScreen implements Screen {
                 dragging = true;
                 invSlot.setInventorySlotClickedTrue(inventory);
             }
-            if(invSlot == draggedSlot && dragging) {
-                numberAnimation = 1;
-            }else{
-                numberAnimation = 0;
-            }
-
-            invSlot.drawSlot(inventorySpriteBatch,numberAnimation);
-
-            if(invSlot.getIsUsed() && invSlot != draggedSlot) {
-                invSlot.getItem().drawInSlot(inventorySpriteBatch,new Vector2(invSlot.getCords().x+25,invSlot.getCords().y+30),fpsFont);
-            }
-
             if(dragging && !Gdx.input.isTouched()){
                 for(FeldSlot feldSlot : feldAnfänger) {
                     feldRect.set(feldSlot.getCords().x,feldSlot.getCords().y,32,32);
-                    if (draggedSlot != null && selectedItem != null && feldRect.contains(touchPosMap.x,touchPosMap.y)) {
-
+                    if (draggedSlot != null && selectedItem != null && feldRect.contains(touchPosMap.x,touchPosMap.y) && feldSlot.getPflanze() == null) {
                         if(selectedItem instanceof KarottenSeed){
                           feldSlot.setPflanze(new Karottenpflanze(feldSlot.getCords().x + 8, feldSlot.getCords().y + 8, clock.getHour(), clock.getMinute()));
+                            draggedSlot.removeItem();
+                        }else if(selectedItem instanceof WeizenSeed){
+                            feldSlot.setPflanze(new Weizenpflanze(feldSlot.getCords().x + 8, feldSlot.getCords().y + 8, clock.getHour(), clock.getMinute()));
                             draggedSlot.removeItem();
                         }
 
@@ -217,10 +196,35 @@ public class GameScreen implements Screen {
         }
         playerSpriteBatch.end();
 
+        map.renderPlayer( player , playerSpriteBatch,joystick,cameraWeltPosition);
+        map.renderLast();
 
 
+        //Joystick
+        joystick.moveJoystick(touchPosHUD, new Vector2(Gdx.graphics.getWidth() / 5 * 4, Gdx.graphics.getHeight() / 5 * 4),dragging);
+        cameraHUD.update();
 
+        inventorySpriteBatch.begin();
+        for(InventorySlot invSlot:inventory) {
+            if(invSlot == draggedSlot && dragging) {
+                numberAnimation = 1;
+            }else{
+                numberAnimation = 0;
+            }
 
+            invSlot.drawSlot(inventorySpriteBatch,numberAnimation);
+
+            if(invSlot.getIsUsed() && invSlot != draggedSlot) {
+                invSlot.getItem().drawInSlot(inventorySpriteBatch,new Vector2(invSlot.getCords().x+25,invSlot.getCords().y+30),fpsFont);
+            }
+        }
+        //UHR
+        clock.draw(inventorySpriteBatch);
+        inventorySpriteBatch.end();
+
+        for(FeldSlot feld: feldAnfänger) {
+            feld.harvest(touchPosMap,inventory);
+        }
 
         if(framecounter == 30) {
             if (nightFaktorNull) {
