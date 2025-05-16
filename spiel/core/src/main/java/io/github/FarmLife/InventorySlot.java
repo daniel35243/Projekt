@@ -6,6 +6,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 import Items.Item;
+import Items.Karotte;
+import Items.KarottenSeed;
+import Items.Weizen;
+import Items.WeizenSeed;
 
 public class InventorySlot {
     private Vector2 cords;
@@ -51,6 +55,21 @@ public class InventorySlot {
     public void addItem(Item item,int anzahl){
         item.addItemCounter(anzahl);
         this.item = item;
+        isUsed = true;
+    }
+
+    public void addItem(String item, int anzahl){
+        switch (item) {
+            case "Karotte":
+                this.item = new Karotte();
+            case "Weizen":
+                this.item = new Weizen();
+            case "WeizenSeed":
+                this.item = new WeizenSeed();
+            case "KarottenSeed":
+                this.item = new KarottenSeed();
+        }
+        this.item.addItemCounter(anzahl);
         isUsed = true;
     }
 
