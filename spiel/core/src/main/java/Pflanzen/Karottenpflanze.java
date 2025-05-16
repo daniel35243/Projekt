@@ -14,6 +14,7 @@ public class Karottenpflanze extends Pflanze{
     private int plantHour;
     private int plantMinute;
     private int currentHour;
+    private int stage = 0;
 
     public Karottenpflanze(float x, float y, int plantHour, int plantMinute){
         this.plantHour = plantHour;
@@ -31,14 +32,11 @@ public class Karottenpflanze extends Pflanze{
         if(hour < plantHour){
             currentHour += 24;
         }
-        if(currentHour >= plantHour + 3 && minute >= plantMinute){
-            batch.draw(pflanzenAnimation[3].getKeyFrame(0,true),cords.x,cords.y);
-        }else if(currentHour >= plantHour + 2 && minute >= plantMinute){
-            batch.draw(pflanzenAnimation[2].getKeyFrame(0,true),cords.x,cords.y);
-        }else if(currentHour >= plantHour + 1 && minute >= plantMinute){
-            batch.draw(pflanzenAnimation[1].getKeyFrame(0,true),cords.x,cords.y);
-        }else if(currentHour >= plantHour  && minute >= plantMinute){
-            batch.draw(pflanzenAnimation[0].getKeyFrame(0,true),cords.x,cords.y);
+        if(currentHour > plantHour && minute >= plantMinute && stage < 3){
+            stage++;
+            plantHour++;
+            System.out.println(stage);
         }
+        batch.draw(pflanzenAnimation[stage].getKeyFrame(0,true),cords.x,cords.y);
     }
 }
