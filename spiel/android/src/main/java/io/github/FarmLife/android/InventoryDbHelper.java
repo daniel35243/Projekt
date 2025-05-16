@@ -25,18 +25,18 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE Seller (item TEXT PRIMARY KEY, Coins INTEGER)");
         db.execSQL("CREATE TABLE Felder (feldID INTEGER PRIMARY KEY, item TEXT, Wachsstufe INTEGER,feld_x INTEGER, feld_y INTEGER, feld_groesse INTEGER)");
         // Inventory
-        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (1, NULL, NULL)");
-        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (2, NULL, NULL)");
-        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (3, NULL, NULL)");
-        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (4, NULL, NULL)");
-        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (5, NULL, NULL)");
+        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (1, 'KarottenSeed', 1)");
+        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (2, 'KarottenSeed', 5)");
+        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (3, 'Nix', 0)");
+        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (4, 'Nix', 0)");
+        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (5, 'Karotte', 1)");
         //Game
         db.execSQL("INSERT INTO Game (ID, Coins, Level, XP) VALUES (1, 5, 1, 0)");
         // Shop
-        db.execSQL("INSERT INTO Shop (item, Coins) VALUES ('Karotten Samen', 1)");
-        db.execSQL("INSERT INTO Shop (item, Coins) VALUES ('Weizen Samen', 2)");
+        db.execSQL("INSERT INTO Shop (item, Coins) VALUES ('KarottenSeed', 1)");
+        db.execSQL("INSERT INTO Shop (item, Coins) VALUES ('WeizenSeed', 2)");
         //Seller
-        db.execSQL("INSERT INTO Seller (item, Coins) VALUES ('Karotten', 2)");
+        db.execSQL("INSERT INTO Seller (item, Coins) VALUES ('Karotte', 2)");
         db.execSQL("INSERT INTO Seller (item, Coins) VALUES ('Weizen', 5)");
         //Felder
         db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (1, NULL, NULL, 880, 688)");

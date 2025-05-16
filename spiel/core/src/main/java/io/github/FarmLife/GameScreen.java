@@ -14,9 +14,21 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+import Database.InventorySlotDB;
 import Items.Item;
 import Items.Karotte;
 import Items.KarottenSeed;
@@ -56,9 +68,17 @@ public class GameScreen implements Screen {
     FeldSlot[] feldFortgeschritten = new FeldSlot[6];
     Clock clock = new Clock();
     Rectangle feldRect = new Rectangle();
+    private Skin skin;
+    private boolean showButton = true;
+
+    private TextButton shopButton;
+    private Window shopWindow;
+
+    private Stage stage;
 
     @Override
     public void show() {
+        stage = new Stage(new ScreenViewport());
         player = new Player();
         playerSpriteBatch = new SpriteBatch();
         inventorySpriteBatch = new SpriteBatch();
@@ -96,16 +116,51 @@ public class GameScreen implements Screen {
             inventory[counterInventorySlots] = new InventorySlot(Gdx.graphics.getWidth() - j);
             counterInventorySlots++;
         }
-        inventory[0].addItem(new Karotte(),1);
-        inventory[1].addItem(new Weizen(),20);
-        inventory[2].addItem(new WeizenSeed(),1);
-        inventory[3].addItem(new KarottenSeed(),20);
-        inventory[4].addItem(new Karotte(),1);
+        for(int i = 0; i < 5; i++) {
+            InventorySlotDB inventar = ((Main) Gdx.app.getApplicationListener()).db.getInventorySlot(i+1);
+            inventory[i].addItem(inventar.item, inventar.anzahl);
+        }
+
 
         Main game = (Main) Gdx.app.getApplicationListener();
         for(int i = 0; i < 4; i++) {
             feldAnfänger[i] = new FeldSlot(i+1,game);
         }
+
+        skin = new Skin(Gdx.files.internal("uiskin.json"));
+
+        // Shop-Button erstellen
+        shopButton = new TextButton("Shop öffnen", skin);
+        shopButton.setPosition(1900, 600);
+        shopButton.setSize(400, 150);
+        shopButton.getLabel().setFontScale(4f);
+        stage.addActor(shopButton);
+
+        // Shop-Fenster erstellen
+        shopWindow = new Window("Shop", skin);
+        shopWindow.setSize(300, 250);
+        shopWindow.setPosition(200, 200); // Position anpassen
+        shopWindow.setVisible(false); // Anfangs versteckt
+
+        // Drei Buttons im Shop-Fenster
+        TextButton item1Button = new TextButton("Item 1 kaufen", skin);
+        TextButton item2Button = new TextButton("Item 2 kaufen", skin);
+        TextButton item3Button = new TextButton("Item 3 kaufen", skin);
+
+        shopWindow.add(item1Button).pad(10).row();
+        shopWindow.add(item2Button).pad(10).row();
+        shopWindow.add(item3Button).pad(10).row();
+
+        stage.addActor(shopWindow);
+
+        // Listener: Fenster anzeigen beim Klick
+        shopButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                shopWindow.setVisible(true);
+            }
+        });
+
 
     }
 
@@ -150,7 +205,8 @@ public class GameScreen implements Screen {
         cameraWelt.unproject(touchPosMap);
 
 
-
+        stage.act(delta);
+        stage.draw();
 
 
         //Joystick

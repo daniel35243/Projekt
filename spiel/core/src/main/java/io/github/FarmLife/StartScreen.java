@@ -24,7 +24,7 @@ public class StartScreen implements Screen {
     public void show() {
         batch = new SpriteBatch();
         logo = new Texture("FarmLifeLogo.png");
-        ShopByItem shop = ((Main) game).db.getShopByItem("Karotten Samen");
+        ShopByItem shop = ((Main) game).db.getShopByItem("KarottenSeed");
         Gdx.app.log("Shop", "Item: " + shop.item + "  = " + shop.coins);
 
     }

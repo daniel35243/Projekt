@@ -52,22 +52,31 @@ public class InventorySlot {
         return inventorySlotClicked;
     }
 
-    public void addItem(Item item,int anzahl){
-        item.addItemCounter(anzahl);
-        this.item = item;
-        isUsed = true;
-    }
+//    public void addItem(Item item,int anzahl){
+//        item.addItemCounter(anzahl);
+//        this.item = item;
+//        isUsed = true;
+//    }
 
     public void addItem(String item, int anzahl){
         switch (item) {
             case "Karotte":
                 this.item = new Karotte();
+                break;
             case "Weizen":
                 this.item = new Weizen();
+                break;
             case "WeizenSeed":
                 this.item = new WeizenSeed();
+                break;
             case "KarottenSeed":
                 this.item = new KarottenSeed();
+                break;
+            case "nix":
+                break;
+            default:
+                System.out.println("Item nicht gefunden");
+                return;
         }
         this.item.addItemCounter(anzahl);
         isUsed = true;
