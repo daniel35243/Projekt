@@ -25,74 +25,81 @@ public class Map {
     private MapObjects mapBorderObject;
     private PolygonMapObject mapBorder;
     private Polygon mapBorderPolygon;
-    private float[] playerHitboxCords;
     private int[] startLayers;
     private MapObjects objectBorderLayer;
-    private RectangleMapObject objectBorder;
+    private boolean isCollidingX;
+    private boolean isCollidingY;
+    private Vector2 newPosition = new Vector2();
+    private Vector2 newXPosition = new Vector2();
+    private Vector2 newYPosition = new Vector2();
+
     public Map(){
         map = new TmxMapLoader().load("map.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
 
-        mapBorderObject = map.getLayers().get("MapBorder").getObjects();
+        mapBorderObject = map.getLayers().get("Map - Border").getObjects();
         mapBorder = (PolygonMapObject) mapBorderObject.get(0);
         startLayers = new int[]{0,1,2,3,4,5,6,7};
+        objectBorderLayer = map.getLayers().get("Objekte - Border").getObjects();
+        isCollidingX = false;
+        isCollidingY = false;
 
-        objectBorderLayer = map.getLayers().get("Objekte").getObjects();
-//        objectBorder = (RectangleMapObject) objectBorderLayer.get(0);
     }
 
 
-    public void render(OrthographicCamera camera, Player player , SpriteBatch playerSpriteBatch,Joystick joystick, Vector2 cameraWeltPosition){
+    public void renderFirst(OrthographicCamera camera){
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render(startLayers);
+
+
+    }
+    public void renderPlayer( Player player , SpriteBatch playerSpriteBatch,Joystick joystick, Vector2 cameraWeltPosition){
         playerSpriteBatch.begin();
-        player.draw(playerSpriteBatch, joystick.getStillAnimation(), joystick.getPlayerDirection(),cameraWeltPosition);
+        player.draw(playerSpriteBatch, joystick.getStillAnimation(), joystick.getPlayerDirection(), cameraWeltPosition);
         playerSpriteBatch.end();
-        tiledMapRenderer.render(new int[]{8});
+    }
+    public void renderLast(){
+        tiledMapRenderer.render(new int[]{9});
     }
 
-    public Vector2 objectBorders(Joystick joystick, Vector2 cameraWeltPosition){
-        Vector2 newPosition = new Vector2(cameraWeltPosition);
-        newPosition.x += joystick.getCameraWeltPosition().x*1.55f;
-        newPosition.y += joystick.getCameraWeltPosition().y*1.55f;
 
-        Vector2 newXPosition = new Vector2(newPosition.x, cameraWeltPosition.y);
-        Vector2 newYPosition = new Vector2(cameraWeltPosition.x, newPosition.y);
-
-        for(RectangleMapObject object : objectBorderLayer.getByType(RectangleMapObject.class)) {
-            Rectangle rectangle = object.getRectangle();
-            if (rectangle.contains(newXPosition.x, newXPosition.y)) {
-                cameraWeltPosition.x = newXPosition.x;
-            }
-            if (rectangle.contains(newYPosition.x, newYPosition.y)) {
-                cameraWeltPosition.y = newYPosition.y;
-            }
-
-        }
-        return cameraWeltPosition;
-    }
     public Vector2 mapBorder(Joystick joystick, Vector2 cameraWeltPosition){
-        Vector2 newPosition = new Vector2(cameraWeltPosition);
-        newPosition.x += joystick.getCameraWeltPosition().x*1.55f;
-        newPosition.y += joystick.getCameraWeltPosition().y*1.55f;
+        //BERECHNET ZUKÜNFTIGE POSITION
+        newPosition.set(cameraWeltPosition.x ,  cameraWeltPosition.y);
+        newPosition.x += joystick.getCameraWeltPosition().x * 40f * Gdx.graphics.getDeltaTime();
+        newPosition.y += joystick.getCameraWeltPosition().y * 40f * Gdx.graphics.getDeltaTime();
+        newXPosition.set(newPosition.x, cameraWeltPosition.y );
+        newYPosition.set(cameraWeltPosition.x, newPosition.y);
 
-        Vector2 newXPosition = new Vector2(newPosition.x, cameraWeltPosition.y);
-        Vector2 newYPosition = new Vector2(cameraWeltPosition.x, newPosition.y);
+
 
         mapBorderPolygon = mapBorder.getPolygon();
-        for(RectangleMapObject object : objectBorderLayer.getByType(RectangleMapObject.class)) {
+        isCollidingX = false;
+        isCollidingY = false;
 
-            Rectangle rectangle = object.getRectangle();
-            if (mapBorderPolygon.contains(newXPosition.x, newXPosition.y) && !Intersector.overlaps(rectangle, new Rectangle(newPosition.x,newPosition.y,110,30))) {
-                cameraWeltPosition.x = newXPosition.x;
+        //GUCKT IN LISTE MIT OBJEKTEN
+        for(PolygonMapObject object : objectBorderLayer.getByType(PolygonMapObject.class)) {
+            Polygon objectBorder = object.getPolygon();
+
+            if (objectBorder.contains(newXPosition.x, newXPosition.y)) {
+                isCollidingX = true;
             }
-            if (mapBorderPolygon.contains(newYPosition.x, newYPosition.y) && !Intersector.overlaps(rectangle, new Rectangle(newPosition.x,newPosition.y,110,30))) {
-                cameraWeltPosition.y = newYPosition.y;
+            if(objectBorder.contains(newYPosition.x, newYPosition.y - 8)){
+                isCollidingY = true;
             }
         }
-        return cameraWeltPosition;
 
+        //PRÜFT OB JEMAND GEGEN OBJEKTE IN DER LISTE LÄUFT ODER DIE MAP BORDER VERLÄSST
+        if (!isCollidingX && mapBorderPolygon.contains(newXPosition.x, newXPosition.y)) {
+            cameraWeltPosition.x = newXPosition.x;
+        }
+        if (!isCollidingY && mapBorderPolygon.contains(newYPosition.x, newYPosition.y)  ) {
+            cameraWeltPosition.y = newYPosition.y ;
+        }
+        return cameraWeltPosition;
     }
+
+
 
 
     public Polygon getMapBorderPolygon(){
