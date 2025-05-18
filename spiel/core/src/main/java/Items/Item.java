@@ -27,7 +27,7 @@ public class Item {
     public int getItemCounter(){
         return itemCounter;
     }
-
+    public void setItemCounter(int anzahl){ itemCounter = anzahl;}
 
     public void drawInSlot(SpriteBatch batch,  Vector2 cords, BitmapFont font){}
     public void drawClicked(SpriteBatch batch, Vector2 touchPosition, BitmapFont font, InventorySlot invSlot){

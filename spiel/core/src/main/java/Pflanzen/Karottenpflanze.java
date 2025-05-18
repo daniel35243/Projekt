@@ -14,7 +14,7 @@ public class Karottenpflanze extends Pflanze{
     private int plantHour;
     private int plantMinute;
     private int currentHour;
-    private int stage = 0;
+    private int stage = 3;
 
     public Karottenpflanze(float x, float y, int plantHour, int plantMinute){
         this.plantHour = plantHour;

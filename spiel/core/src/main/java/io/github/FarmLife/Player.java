@@ -6,9 +6,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 public class Player {
+    private int Level;
+    private int xp;
+    private int coins;
+    private Texture LevelBarStructure = new Texture(Gdx.files.internal("LevelBarStructure.png"));
+    private Texture LevelBarXP = new Texture(Gdx.files.internal("LevelBarXP.png"));
     private Texture playerSpriteSheet;
     private TextureRegion[][] playerFrames;
     private TextureRegion[] walkUp;
@@ -29,6 +35,10 @@ public class Player {
     private boolean flipped;
 
     public Player() {
+        Level = 1;
+        xp = 0;
+        coins = 0;
+
         playerSpriteSheet = new Texture(Gdx.files.internal("PixelMapPNGs/Player/Player.png"));
         playerFrames = TextureRegion.split(playerSpriteSheet, 32, 32);
         walkUp = new TextureRegion[6];
@@ -51,6 +61,37 @@ public class Player {
         Down();
         flipped = false;
 
+    }
+    public void drawLevel(SpriteBatch spriteBatch){
+        spriteBatch.begin();
+        spriteBatch.draw(LevelBarStructure, 5, Gdx.graphics.getHeight()-220);
+        spriteBatch.draw(LevelBarXP,5, Gdx.graphics.getHeight()-220);
+        spriteBatch.end();
+    }
+
+    public void addLevel(){
+        Level++;
+    }
+    public int getLevel(){
+        return Level;
+    }
+    public void addXp(int xp){
+        this.xp += xp;
+    }
+    public int getXp() {
+        return xp;
+    }
+    public void setXp(int xp){
+        this.xp = xp;
+    }
+    public void addCoins(int coins){
+        this.coins += coins;
+    }
+    public int getCoins() {
+        return coins;
+    }
+    public void removeCoins(int coins){
+        this.coins -= coins;
     }
 
     public void Up() {

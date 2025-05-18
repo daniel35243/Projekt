@@ -41,8 +41,8 @@ public class GameScreen implements Screen {
     Player player;
     SpriteBatch playerSpriteBatch;
     Viewport hudViewport;
-    float nightFaktor;
-    boolean nightFaktorNull;
+
+
     int framecounter;
     Vector2 zwischenspeicherCameraWeltPosition;
     ShapeRenderer shapeRendererMap;
@@ -57,6 +57,7 @@ public class GameScreen implements Screen {
     FeldSlot[] feldFortgeschritten = new FeldSlot[6];
     Clock clock = new Clock();
     Rectangle feldRect = new Rectangle();
+    Rectangle invSlotRect = new Rectangle();
 
     @Override
     public void show() {
@@ -87,8 +88,7 @@ public class GameScreen implements Screen {
         fpsFont = new BitmapFont();
         fps = new SpriteBatch();
 
-        nightFaktor = 0.8f;
-        nightFaktorNull = false;
+
         framecounter = 0;
         zwischenspeicherCameraWeltPosition = new Vector2();
 
@@ -97,11 +97,10 @@ public class GameScreen implements Screen {
             inventory[counterInventorySlots] = new InventorySlot(Gdx.graphics.getWidth() - j);
             counterInventorySlots++;
         }
-        //inventory[0].addItem(new Karotte(),1);
-        //inventory[1].addItem(new Weizen(),20);
+
         inventory[2].addItem(new WeizenSeed(),20);
         inventory[3].addItem(new KarottenSeed(),20);
-        //inventory[4].addItem(new Karotte(),1);
+
 
         Main game = (Main) Gdx.app.getApplicationListener();
         for(int i = 0; i < 4; i++) {
@@ -112,8 +111,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        delta = Gdx.graphics.getDeltaTime();
-
         //Einstellungen
         framecounter++;
         Gdx.gl.glClearColor(0.0f,149/255f,233/255f,1);
@@ -123,11 +120,7 @@ public class GameScreen implements Screen {
         inventorySpriteBatch.setProjectionMatrix(cameraHUD.combined);
         shapeRendererMap.setProjectionMatrix(cameraWelt.combined);
 
-//        //TAG/NACHT
-//        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
-//        shapeRendererHUD.setColor(new Color(30/255f,30/255f,30/255f,0));
-//        shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth() ,Gdx.graphics.getHeight());
-//        shapeRendererHUD.end();
+//        clock.tick();
 
         //Map
         cameraWeltPosition.set(map.mapBorder(joystick,cameraWeltPosition));
@@ -136,55 +129,75 @@ public class GameScreen implements Screen {
         cameraWelt.update();
 
         //Hitboxes
-//        hitBoxes.draw(shapeRendererMap,shapeRendererHUD,map,cameraWeltPosition);
+        //hitBoxes.draw(shapeRendererMap,shapeRendererHUD,map,cameraWeltPosition);
 
 
         //Erkennt wenn Bildschirm TOUCHED
-        if(Gdx.input.isTouched()){
-            touchPosHUD.x = Gdx.input.getX();
-            touchPosHUD.y = Gdx.graphics.getHeight() - Gdx.input.getY();
-        }else{
-            touchPosHUD.x = 0;
-            touchPosHUD.y = 0;
-        }
+        touchPosHUD.x = Gdx.input.getX();
+        touchPosHUD.y = Gdx.graphics.getHeight() - Gdx.input.getY();
+
         touchPosMap.set(Gdx.input.getX(),Gdx.input.getY(),0);
         cameraWelt.unproject(touchPosMap);
 
 
         inventorySpriteBatch.begin();
         //Inventory
-        for (InventorySlot invSlot:inventory) {
-            Rectangle slotRect = new Rectangle(invSlot.getCords().x,invSlot.getCords().y, 170,170);
+        for (InventorySlot invSlotTouched:inventory) {
+            Rectangle slotRect = new Rectangle(invSlotTouched.getCords().x,invSlotTouched.getCords().y, 170,170);
 
-            if(Gdx.input.isTouched() && slotRect.contains(touchPosHUD.x,touchPosHUD.y) && invSlot.getIsUsed() && !dragging) {
-                selectedItem = invSlot.getItem();
-                draggedSlot = invSlot;
+            if(Gdx.input.isTouched() && slotRect.contains(touchPosHUD.x,touchPosHUD.y) && invSlotTouched.getIsUsed() && !dragging) {
+                selectedItem = invSlotTouched.getItem();
+                draggedSlot = invSlotTouched;
                 dragging = true;
-                invSlot.setInventorySlotClickedTrue(inventory);
+                invSlotTouched.setInventorySlotClickedTrue(inventory);
             }
             if(dragging && !Gdx.input.isTouched()){
-                for(FeldSlot feldSlot : feldAnfänger) {
-                    feldRect.set(feldSlot.getCords().x,feldSlot.getCords().y,32,32);
-                    if (draggedSlot != null && selectedItem != null && feldRect.contains(touchPosMap.x,touchPosMap.y) && feldSlot.getPflanze() == null) {
-                        if(selectedItem instanceof KarottenSeed){
-                          feldSlot.setPflanze(new Karottenpflanze(feldSlot.getCords().x + 8, feldSlot.getCords().y + 8, clock.getHour(), clock.getMinute()));
-                            draggedSlot.removeItem();
-                        }else if(selectedItem instanceof WeizenSeed){
-                            feldSlot.setPflanze(new Weizenpflanze(feldSlot.getCords().x + 8, feldSlot.getCords().y + 8, clock.getHour(), clock.getMinute()));
-                            draggedSlot.removeItem();
-                        }
+                boolean swapped = false;
+                for(InventorySlot invSlotHotSwap : inventory) {
+                    invSlotRect.set(invSlotHotSwap.getCords().x,invSlotHotSwap.getCords().y,170,170);
+                    if(invSlotRect.contains(touchPosHUD.x,touchPosHUD.y) && invSlotHotSwap != draggedSlot) {
 
+                        Item draggedSlotItem = draggedSlot.getItem();
+                        int draggedSlotCounter = draggedSlot.getItem().getItemCounter();
+
+                        if (invSlotHotSwap.getIsUsed()) {
+                            Item invSlotHotSwapItem = invSlotHotSwap.getItem();
+                            int invSlotHotSwapCounter = invSlotHotSwap.getItem().getItemCounter();
+
+                            draggedSlot.setItem(invSlotHotSwapItem);
+                            draggedSlot.getItem().setItemCounter(invSlotHotSwapCounter);
+
+                        } else {
+                            draggedSlot.removeItem(draggedSlotCounter);
+                        }
+                        invSlotHotSwap.setItem(draggedSlotItem);
+                        invSlotHotSwap.getItem().setItemCounter(draggedSlotCounter);
+                        System.out.println(invSlotHotSwap.getItem() + " " + invSlotHotSwap.getItem().getItemCounter());
+                        swapped = true;
+                        break;
                     }
                 }
+                if(!swapped) {
+                    for(FeldSlot feldSlot : feldAnfänger) {
+                        feldRect.set(feldSlot.getCords().x,feldSlot.getCords().y,32,32);
+                        if (draggedSlot != null && selectedItem != null && feldRect.contains(touchPosMap.x,touchPosMap.y) && feldSlot.getPflanze() == null) {
+                            if (selectedItem instanceof KarottenSeed) {
+                                feldSlot.setPflanze(new Karottenpflanze(feldSlot.getCords().x + 8, feldSlot.getCords().y + 8, clock.getHour(), clock.getMinute()));
+                                draggedSlot.removeItem(-1);
+                            } else if (selectedItem instanceof WeizenSeed) {
+                                feldSlot.setPflanze(new Weizenpflanze(feldSlot.getCords().x + 8, feldSlot.getCords().y + 8, clock.getHour(), clock.getMinute()));
+                                draggedSlot.removeItem(-1);
+                            }
+                        }
+                    }
+                }
+
                 selectedItem = null;
                 dragging = false;
                 if(draggedSlot != null) draggedSlot.setInventorySlotClickedFalse();
                 draggedSlot = null;
                 break;
             }
-        }
-        if(dragging && selectedItem != null && draggedSlot != null){
-            selectedItem.drawClicked(inventorySpriteBatch, touchPosHUD, fpsFont, draggedSlot);
         }
         inventorySpriteBatch.end();
 
@@ -199,7 +212,9 @@ public class GameScreen implements Screen {
         map.renderPlayer( player , playerSpriteBatch,joystick,cameraWeltPosition);
         map.renderLast();
 
+        clock.TagNacht(shapeRendererHUD);
 
+        player.drawLevel(inventorySpriteBatch);
         //Joystick
         joystick.moveJoystick(touchPosHUD, new Vector2(Gdx.graphics.getWidth() / 5 * 4, Gdx.graphics.getHeight() / 5 * 4),dragging);
         cameraHUD.update();
@@ -220,25 +235,15 @@ public class GameScreen implements Screen {
         }
         //UHR
         clock.draw(inventorySpriteBatch);
+
+        if(dragging && selectedItem != null && draggedSlot != null){
+            selectedItem.drawClicked(inventorySpriteBatch, touchPosHUD, fpsFont, draggedSlot);
+        }
+
         inventorySpriteBatch.end();
 
         for(FeldSlot feld: feldAnfänger) {
-            feld.harvest(touchPosMap,inventory);
-        }
-
-        if(framecounter == 30) {
-            if (nightFaktorNull) {
-                nightFaktor += 0.0133f;
-                if (nightFaktor >= 0.8) {
-                    nightFaktorNull = false;
-                }
-            } else {
-                nightFaktor -= 0.0133f;
-                if (nightFaktor <= 0) {
-                    nightFaktorNull = true;
-                }
-            }
-            framecounter = 0;
+            feld.harvest(touchPosMap,inventory,dragging);
         }
 
         //FPS

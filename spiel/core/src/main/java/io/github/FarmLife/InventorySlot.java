@@ -79,9 +79,13 @@ public class InventorySlot {
         this.item.addItemCounter(anzahl);
         isUsed = true;
     }
+    public void setItem(Item item){
+        this.item = item;
+        isUsed = true;
+    }
 
-    public void removeItem(){
-        item.addItemCounter(-1);
+    public void removeItem(int anzahl){
+        item.addItemCounter(-anzahl);
         if(item.getItemCounter() <= 0) {
             item = null;
             isUsed = false;

@@ -45,8 +45,8 @@ public class FeldSlot {
 
 
 
-    public void harvest(Vector3 touchPosMap, InventorySlot[] inventory){
-        if(pflanze != null && pflanze.getStage() == 3 && feldRect.contains(touchPosMap.x,touchPosMap.y) && Gdx.input.isTouched()){
+    public void harvest(Vector3 touchPosMap, InventorySlot[] inventory,Boolean dragging){
+        if(pflanze != null && pflanze.getStage() == 3 && feldRect.contains(touchPosMap.x,touchPosMap.y) && Gdx.input.isTouched() && !dragging){
             for(InventorySlot invSlot:inventory) {
                 inventoryArrayList.add(invSlot);
                 if(invSlot.getItem() != null) {

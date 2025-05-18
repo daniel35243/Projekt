@@ -4,7 +4,11 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -19,6 +23,13 @@ public class MainMenuScreen implements Screen {
     private Game game;
     private Stage stage;
     private boolean displayButton = true;
+    private Map map;
+    private ShapeRenderer shapeRendererMap;
+    private OrthographicCamera cameraWelt;
+    boolean startGame;
+    private SpriteBatch playerSpriteBatch;
+    private Player player;
+    private Joystick joystick;
 
     public MainMenuScreen(Game game) {
         this.game = game;
@@ -66,9 +77,7 @@ public class MainMenuScreen implements Screen {
                 public void changed(ChangeEvent event, Actor actor) {
                     if (displayButton) {
                         displayButton = false;
-                        game.setScreen((new GameScreen()));
-                        System.out.println("App Spiel Starten Button gedrückt");
-                        System.out.println(displayButton);
+                        startGame = true;
                     }
                 }
             });
@@ -79,7 +88,6 @@ public class MainMenuScreen implements Screen {
                     if (displayButton) {
                         displayButton = false;
                         Gdx.app.exit();
-                        System.out.println("App Beenden Button gedrückt");
                     }
                 }
             });
@@ -91,6 +99,19 @@ public class MainMenuScreen implements Screen {
     }
 
     @Override public void show() {
+        joystick = new Joystick(new Vector2(Gdx.graphics.getWidth()/5*4,Gdx.graphics.getHeight()/5*4));
+        player = new Player();
+        playerSpriteBatch = new SpriteBatch();
+        map = new Map();
+        shapeRendererMap = new ShapeRenderer();
+        cameraWelt = new OrthographicCamera();
+        cameraWelt.setToOrtho(false,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        cameraWelt.update();
+        cameraWelt.zoom = 0.8f;
+        startGame = false;
+
+
+
         InventorySlotDB inventory = ((Main) game).db.getInventorySlot(1);
         Gdx.app.log("Inventar", "Slot " +  inventory.slot +  " = " + inventory.item + " (" + inventory.anzahl + ")");
 
@@ -98,8 +119,22 @@ public class MainMenuScreen implements Screen {
         Gdx.app.log("Feld " + feld.feldID, " = " + feld.item + " = " + feld.Wachsstufe + " = " + feld.feld_x + " = " + feld.feld_y);
     }
     @Override public void render(float delta) {
-        Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
+        Gdx.gl.glClearColor(0.0f,149/255f,233/255f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        playerSpriteBatch.setProjectionMatrix(cameraWelt.combined);
+        shapeRendererMap.setProjectionMatrix(cameraWelt.combined);
+        map.renderFirst(cameraWelt);
+        map.renderPlayer(player,playerSpriteBatch,joystick,new Vector2(800,800));
+        map.renderLast();
+        cameraWelt.position.set(800,800, 0);
+
+        if (startGame) {
+            cameraWelt.zoom = Math.max(0.15f, cameraWelt.zoom - delta * 1.2f);
+            if (cameraWelt.zoom <= 0.15f) {
+                game.setScreen(new GameScreen());
+            }
+        }
+        cameraWelt.update();
         stage.act(delta);
         stage.draw();
     }
@@ -120,7 +155,9 @@ public class MainMenuScreen implements Screen {
     }
 
     @Override public void dispose() {
-        game.dispose();
         stage.dispose();
+        playerSpriteBatch.dispose();
+        shapeRendererMap.dispose();
+        map.dispose();
     }
 }
