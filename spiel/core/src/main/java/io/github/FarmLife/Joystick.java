@@ -21,6 +21,7 @@ public class Joystick{
     private Vector2 direction;
     private char playerDirection;
     private boolean neuePositionJoystick;
+    private boolean stillAnimation;
 
     public Joystick(Vector2 cords){
         cameraWeltPosition = new Vector2(800,800);
@@ -35,81 +36,77 @@ public class Joystick{
         shapeRendererJoystick = new ShapeRenderer();
         playerDirection = 'r';
         neuePositionJoystick = false;
+        direction  = new Vector2();
+        stillAnimation = true;
     }
 
-    public void moveJoystick(Vector2 touchPosition, Player player, SpriteBatch batch,Vector2 cords){
+    public void moveJoystick(Vector2 touchPosition, Vector2 cords, boolean inventoryDragging){
 
-        //Erkennt, wenn in Joystick getouched wird
-        inputJoystick = touchPosition.dst(bigCircleCords) <= radiusBigCircle;
 
-        //Erkennt ob gerade Joystick getouched wird
-        if(Gdx.input.justTouched() && inputJoystick) {
-            isPressed = true;
-
-        }else if(!Gdx.input.isTouched()){
+        if (inventoryDragging) {
             isPressed = false;
-            bigCircleCords.set(new Vector2(cords.x/20*3f,cords.y/10*3f));
-            neuePositionJoystick = false;
-        }else if(Gdx.input.isTouched() && touchPosition.x <= Gdx.graphics.getWidth()/2 && !neuePositionJoystick){
-            bigCircleCords.set(touchPosition);
-            neuePositionJoystick = true;
-        }
-
-
-        //Joystick-Logik
-        if(isPressed) {
-
-
-            //Wenn Joystick im großen Kreis gehalten wird
-            if(inputJoystick){
-                smallCircleCords = touchPosition;
-
-            //Wenn man außerhalb des Joysticks geht
-            }else{
-                float angle = MathUtils.atan2(touchPosition.y - bigCircleCords.y,touchPosition.x - bigCircleCords.x);
-
-                smallCircleCords.x = bigCircleCords.x + MathUtils.cos(angle) * radiusBigCircle;
-                smallCircleCords.y = bigCircleCords.y + MathUtils.sin(angle) * radiusBigCircle;
-            }
-
-            //Führt Animation aus je nach Direction
-            direction = new Vector2(smallCircleCords).sub(bigCircleCords);
-            if (Math.abs(direction.x) > Math.abs(direction.y)) {
-                if (direction.x > 0) {
-                    player.drawRIGHT(batch,false);
-                    playerDirection = 'r';
-                } else {
-                    player.drawLEFT(batch,false);
-                    playerDirection = 'l';
-                }
-            } else {
-                if (direction.y > 0) {
-                    player.drawUP(batch,false);
-                    playerDirection = 'u';
-                } else {
-                    player.drawDOWN(batch,false);
-                    playerDirection = 'd';
-                }
-            }
-
-        //Wenn Joystick nicht gehalten wird
-        }else{
             smallCircleCords = bigCircleCords;
-            switch (playerDirection){
-                case 'r':
-                    player.drawRIGHT(batch,true);
-                    break;
-                case 'l':
-                    player.drawLEFT(batch,true);
-                    break;
-                case 'u':
-                    player.drawUP(batch,true);
-                    break;
-                case 'd':
-                    player.drawDOWN(batch,true);
-                    break;
+            stillAnimation = true;
+            cameraWeltPosition.set(0, 0);
+            draw();
+        }else {
+
+            //Erkennt, wenn in Joystick getouched wird
+            inputJoystick = touchPosition.dst(bigCircleCords) <= radiusBigCircle;
+
+            //Erkennt ob gerade Joystick getouched wird
+            if (Gdx.input.justTouched() && inputJoystick) {
+                isPressed = true;
+            } else if (!Gdx.input.isTouched()) {
+                isPressed = false;
+                bigCircleCords.set(new Vector2(cords.x / 20 * 3f, cords.y / 10 * 3f));
+                neuePositionJoystick = false;
+            } else if (Gdx.input.isTouched() && touchPosition.x <= Gdx.graphics.getWidth() / 2 && !neuePositionJoystick) {
+                bigCircleCords.set(touchPosition);
+                neuePositionJoystick = true;
+            }
+
+
+            //Joystick-Logik
+            if (isPressed) {
+
+                //Wenn Joystick im großen Kreis gehalten wird
+                if (inputJoystick) {
+                    smallCircleCords = touchPosition;
+
+                    //Wenn man außerhalb des Joysticks geht
+                } else {
+                    float angle = MathUtils.atan2(touchPosition.y - bigCircleCords.y, touchPosition.x - bigCircleCords.x);
+
+                    smallCircleCords.x = bigCircleCords.x + MathUtils.cos(angle) * radiusBigCircle;
+                    smallCircleCords.y = bigCircleCords.y + MathUtils.sin(angle) * radiusBigCircle;
+                }
+
+                //Führt Animation aus je nach Direction
+                direction.set(smallCircleCords).sub(bigCircleCords);
+                if (Math.abs(direction.x) > Math.abs(direction.y)) {
+                    if (direction.x > 0) {
+                        playerDirection = 'r';
+                    } else {
+                        playerDirection = 'l';
+                    }
+                } else {
+                    if (direction.y > 0) {
+                        playerDirection = 'u';
+                    } else {
+                        playerDirection = 'd';
+                    }
+                }
+                stillAnimation = false;
+
+                //Wenn Joystick nicht gehalten wird
+            } else {
+                smallCircleCords = bigCircleCords;
+                stillAnimation = true;
             }
         }
+
+
 
 
         //Bewegung
@@ -137,5 +134,13 @@ public class Joystick{
     public Vector2 getCameraWeltPosition(){
         return cameraWeltPosition;
     }
+
+    public char getPlayerDirection(){
+        return playerDirection;
+    }
+    public boolean getStillAnimation(){
+        return stillAnimation;
+    }
+
 
 }

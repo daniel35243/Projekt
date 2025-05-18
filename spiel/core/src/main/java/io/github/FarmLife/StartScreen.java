@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import Database.ShopByItem;
+
 public class StartScreen implements Screen {
 
     private Game game;
@@ -22,6 +24,9 @@ public class StartScreen implements Screen {
     public void show() {
         batch = new SpriteBatch();
         logo = new Texture("FarmLifeLogo.png");
+        ShopByItem shop = ((Main) game).db.getShopByItem("Karotten Samen");
+        Gdx.app.log("Shop", "Item: " + shop.item + "  = " + shop.coins);
+
     }
 
     @Override
@@ -72,6 +77,7 @@ public class StartScreen implements Screen {
 
     @Override
     public void dispose() {
+        game.dispose();
         batch.dispose();
         logo.dispose();
     }
