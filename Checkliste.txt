@@ -1,0 +1,10 @@
+Checkliste:
+- Hotswapen Inventory |
+- Inventory Bug fixen | X
+- Geld system         |
+- Level Bar           |
+- Advanced Feld       |  
+- Item bug fixen      | X
+- Start Screen        | X
+- Weizen Bug          |
+- Tag/Nacht           | x
