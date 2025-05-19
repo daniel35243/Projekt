@@ -66,13 +66,13 @@ public class GameScreen implements Screen {
     Clock clock = new Clock();
     Rectangle feldRect = new Rectangle();
 
-    // Menü-System
-    private Stage uiStage;
-    private Skin skin;
-    private Window mainMenuWindow, subMenuWindow;
+    private Shop shop;
 
     @Override
     public void show() {
+        shop = new Shop();
+        shop.show();
+
         player = new Player();
         playerSpriteBatch = new SpriteBatch();
         inventorySpriteBatch = new SpriteBatch();
@@ -80,20 +80,20 @@ public class GameScreen implements Screen {
         shapeRendererMap = new ShapeRenderer();
         shapeRendererHUD = new ShapeRenderer();
 
-        touchPosHUD = new Vector2(0,0);
+        touchPosHUD = new Vector2(0, 0);
 
         map = new Map();
 
-        joystick = new Joystick(new Vector2(Gdx.graphics.getWidth()/5*4,Gdx.graphics.getHeight()/5*4));
+        joystick = new Joystick(new Vector2(Gdx.graphics.getWidth() / 5 * 4, Gdx.graphics.getHeight() / 5 * 4));
 
-        cameraHUD = new OrthographicCamera(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
-        cameraHUD.position.set(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2,0);
+        cameraHUD = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        cameraHUD.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
         cameraHUD.update();
         hudViewport = new ScreenViewport(cameraHUD);
 
-        cameraWeltPosition = new Vector2(800,800);
+        cameraWeltPosition = new Vector2(800, 800);
         cameraWelt = new OrthographicCamera();
-        cameraWelt.setToOrtho(false,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        cameraWelt.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cameraWelt.update();
         cameraWelt.zoom = 0.15f;
 
@@ -106,7 +106,7 @@ public class GameScreen implements Screen {
         zwischenspeicherCameraWeltPosition = new Vector2();
 
         int counterInventorySlots = 0;
-        for(int j = 200; j <= 1000; j += 200) {
+        for (int j = 200; j <= 1000; j += 200) {
             inventory[counterInventorySlots] = new InventorySlot(Gdx.graphics.getWidth() - j);
             counterInventorySlots++;
         }
@@ -121,102 +121,12 @@ public class GameScreen implements Screen {
         inventory[1].addItem(new WeizenSeed(), 12);
 
         Main game = (Main) Gdx.app.getApplicationListener();
-        for(int i = 0; i < 4; i++) {
-            feldAnfänger[i] = new FeldSlot(i+1,game);
+        for (int i = 0; i < 4; i++) {
+            feldAnfänger[i] = new FeldSlot(i + 1, game);
         }
-
-        uiStage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(uiStage);
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
-
-        TextButton openMenu = new TextButton("Händler", skin);
-        openMenu.getLabel().setSize(500, 300);
-        openMenu.setScale(10f);
-        openMenu.setPosition(1800, 800);
-        openMenu.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                showMainMenu();
-            }
-        });
-        uiStage.addActor(openMenu);
-
     }
 
-    private void showMainMenu() {
-        if (mainMenuWindow != null) mainMenuWindow.remove();
 
-        mainMenuWindow = new Window("Trader", skin);
-        mainMenuWindow.setSize(Gdx.graphics.getWidth() * 0.7f, Gdx.graphics.getHeight() * 0.7f);
-        mainMenuWindow.setPosition((Gdx.graphics.getWidth() - mainMenuWindow.getWidth()) / 2f,
-            (Gdx.graphics.getHeight() - mainMenuWindow.getHeight()) / 2f);
-
-        Table content = new Table();
-        content.pad(10);
-
-        TextButton shopButton = new TextButton("Shop", skin);
-        shopButton.setSize(200, 200);
-        TextButton sellerButton = new TextButton("Verkäufer", skin);
-        sellerButton.setSize(200, 200);
-        TextButton exitButton = new TextButton("Schließen", skin);
-        exitButton.setSize(200, 200);
-
-        shopButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                showSubMenu("Shop");
-            }
-        });
-
-        sellerButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                showSubMenu("Verkäufer");
-            }
-        });
-
-        exitButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                mainMenuWindow.remove();
-            }
-        });
-
-        content.add(shopButton).pad(10).row();
-        content.add(sellerButton).pad(10).row();
-        content.add(exitButton).pad(10);
-
-        mainMenuWindow.add(content);
-        uiStage.addActor(mainMenuWindow);
-    }
-
-    private void showSubMenu(String title) {
-        if (subMenuWindow != null) subMenuWindow.remove();
-
-        subMenuWindow = new Window(title, skin);
-        subMenuWindow.setSize(Gdx.graphics.getWidth() * 0.6f, Gdx.graphics.getHeight() * 0.6f);
-        subMenuWindow.setPosition((Gdx.graphics.getWidth() - subMenuWindow.getWidth()) / 2f,
-            (Gdx.graphics.getHeight() - subMenuWindow.getHeight()) / 2f);
-
-        Table content = new Table();
-        TextButton option1 = new TextButton("Option 1", skin);
-        TextButton option2 = new TextButton("Option 2", skin);
-        TextButton back = new TextButton("Zurück", skin);
-
-        back.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                subMenuWindow.remove();
-            }
-        });
-
-        content.add(option1).pad(10).row();
-        content.add(option2).pad(10).row();
-        content.add(back).pad(10);
-
-        subMenuWindow.add(content);
-        uiStage.addActor(subMenuWindow);
-    }
 
     @Override
     public void render(float delta) {
@@ -349,14 +259,14 @@ public class GameScreen implements Screen {
             framecounter = 0;
         }
 
+        shop.render();
+
         //FPS
         fpsFont.getData().setScale(3f);
         fps.begin();
         fpsFont.draw(fps, "Fps: " + (Gdx.graphics.getFramesPerSecond()), 20, Gdx.graphics.getHeight()-20);
         fps.end();
 
-        uiStage.act(delta);
-        uiStage.draw();
     }
 
     @Override
@@ -395,6 +305,7 @@ public class GameScreen implements Screen {
         shapeRendererHUD.dispose();
         shapeRendererMap.dispose();
         map.dispose();
+        shop.dispose();
 
     }
 

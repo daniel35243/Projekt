@@ -23,6 +23,8 @@ public class MainMenuScreen implements Screen {
     private Texture background;
     private boolean displayButton = true;
 
+
+
     public MainMenuScreen(Game game) {
         this.game = game;
     }
