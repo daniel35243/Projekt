@@ -183,10 +183,10 @@ public class GameScreen implements Screen {
                         if (draggedSlot != null && selectedItem != null && feldRect.contains(touchPosMap.x,touchPosMap.y) && feldSlot.getPflanze() == null) {
                             if (selectedItem instanceof KarottenSeed) {
                                 feldSlot.setPflanze(new Karottenpflanze(feldSlot.getCords().x + 8, feldSlot.getCords().y + 8, clock.getHour(), clock.getMinute()));
-                                draggedSlot.removeItem(-1);
+                                draggedSlot.removeItem(1);
                             } else if (selectedItem instanceof WeizenSeed) {
                                 feldSlot.setPflanze(new Weizenpflanze(feldSlot.getCords().x + 8, feldSlot.getCords().y + 8, clock.getHour(), clock.getMinute()));
-                                draggedSlot.removeItem(-1);
+                                draggedSlot.removeItem(1);
                             }
                         }
                     }
@@ -243,7 +243,7 @@ public class GameScreen implements Screen {
         inventorySpriteBatch.end();
 
         for(FeldSlot feld: feldAnfänger) {
-            feld.harvest(touchPosMap,inventory,dragging);
+            feld.harvest(touchPosMap,inventory,dragging,player);
         }
 
         //FPS

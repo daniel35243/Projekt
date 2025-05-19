@@ -17,9 +17,9 @@ public class Clock {
     private int dayCounter;
     private String ausgabeClock;
     private String daytimeEmoji;
-    BitmapFont  font;
-    FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("clockFont.ttf"));
-    FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+    private BitmapFont  font;
+    private FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("clockFont.ttf"));
+    private FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
     float alpha = 0f;
 
     public Clock(){
@@ -93,14 +93,14 @@ public class Clock {
     public void TagNacht(ShapeRenderer shapeRendererHUD){
         if(isDay && alpha > 0){
             alpha -= 0.05f * Gdx.graphics.getDeltaTime();
-        } else if (isNight && alpha < 0.8) {
+        } else if (isNight && alpha < 0.65) {
             alpha += 0.05f * Gdx.graphics.getDeltaTime();
         }
         if(alpha > 0) {
             Gdx.gl.glEnable(GL20.GL_BLEND);
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
             shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRendererHUD.setColor(new Color(30 / 255f, 30 / 255f, 30 / 255f, alpha));
+            shapeRendererHUD.setColor(new Color(0, 0, 33 / 255f, alpha));
             shapeRendererHUD.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             shapeRendererHUD.end();
             Gdx.gl.glDisable(GL20.GL_BLEND);

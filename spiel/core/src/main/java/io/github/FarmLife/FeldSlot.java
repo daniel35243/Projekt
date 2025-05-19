@@ -45,7 +45,7 @@ public class FeldSlot {
 
 
 
-    public void harvest(Vector3 touchPosMap, InventorySlot[] inventory,Boolean dragging){
+    public void harvest(Vector3 touchPosMap, InventorySlot[] inventory,Boolean dragging,Player player){
         if(pflanze != null && pflanze.getStage() == 3 && feldRect.contains(touchPosMap.x,touchPosMap.y) && Gdx.input.isTouched() && !dragging){
             for(InventorySlot invSlot:inventory) {
                 inventoryArrayList.add(invSlot);
@@ -71,7 +71,8 @@ public class FeldSlot {
                     }else{
                         inventory[nullIndex].addItem(new Karotte(), random.nextInt(4) + 2);
                     }
-                }else if(pflanze.getClass() == Weizenpflanze.class) {
+                }
+                if(pflanze.getClass() == Weizenpflanze.class) {
                     if (weizenIndex != 10) {
                         inventory[weizenIndex].addItem(new Weizen(), random.nextInt(4) + 2);
                     }else{
@@ -79,6 +80,7 @@ public class FeldSlot {
                     }
                 }
             this.setPflanze(null);
+            player.addXp(random.nextInt(11) + 30);
         }
 
     }

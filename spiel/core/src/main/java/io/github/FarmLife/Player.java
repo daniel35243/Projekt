@@ -2,19 +2,24 @@ package io.github.FarmLife;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 public class Player {
-    private int Level;
-    private int xp;
+    private float xpMultiplier;
+    private int level;
+    private float xp;
     private int coins;
     private Texture LevelBarStructure = new Texture(Gdx.files.internal("LevelBarStructure.png"));
-    private Texture LevelBarXP = new Texture(Gdx.files.internal("LevelBarXP.png"));
+    private Sprite[] LevelBarXP = new Sprite[3];
     private Texture playerSpriteSheet;
     private TextureRegion[][] playerFrames;
     private TextureRegion[] walkUp;
@@ -33,11 +38,28 @@ public class Player {
     private Animation<TextureRegion> stillLeftAnimation;
     private float stateTime;
     private boolean flipped;
-
+    private BitmapFont font;
+    private FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("clockFont.ttf"));
+    private FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+    int delta;
     public Player() {
-        Level = 1;
-        xp = 0;
+        xpMultiplier = 1;
+        level = 1;
+        xp = 365;
         coins = 0;
+
+        LevelBarXP[0] = new Sprite(new Texture(Gdx.files.internal("LevelBarXPStart.png")));
+        LevelBarXP[1] = new Sprite(new Texture(Gdx.files.internal("LevelBarXPMitte.png")));
+        LevelBarXP[2] = new Sprite(new Texture(Gdx.files.internal("LevelBarXPEnde.png")));
+
+
+
+        parameter.size = 40;
+        font = generator.generateFont(parameter);
+
+        LevelBarXP[0].setPosition(190, Gdx.graphics.getHeight()-188);
+        LevelBarXP[1].setPosition(190 + LevelBarXP[0].getWidth(), Gdx.graphics.getHeight()-188);
+
 
         playerSpriteSheet = new Texture(Gdx.files.internal("PixelMapPNGs/Player/Player.png"));
         playerFrames = TextureRegion.split(playerSpriteSheet, 32, 32);
@@ -63,22 +85,36 @@ public class Player {
 
     }
     public void drawLevel(SpriteBatch spriteBatch){
+        if(xp > 365){
+            addLevel();
+            xp = 0;
+        }
+        LevelBarXP[1].setSize(xp, 42);
+        LevelBarXP[2].setPosition(190 + LevelBarXP[0].getWidth() + LevelBarXP[1].getWidth(), Gdx.graphics.getHeight() - 188);
+
         spriteBatch.begin();
-        spriteBatch.draw(LevelBarStructure, 5, Gdx.graphics.getHeight()-220);
-        spriteBatch.draw(LevelBarXP,5, Gdx.graphics.getHeight()-220);
+        spriteBatch.draw(LevelBarStructure, 5, Gdx.graphics.getHeight() - 220);
+        LevelBarXP[0].draw(spriteBatch);
+        LevelBarXP[1].draw(spriteBatch);
+        LevelBarXP[2].draw(spriteBatch);
+        font.draw(spriteBatch, "LvL: " + level, 50, Gdx.graphics.getHeight() - 155);
         spriteBatch.end();
+
+
+
     }
 
     public void addLevel(){
-        Level++;
+        level++;
+        xpMultiplier *= 0.75f;
     }
     public int getLevel(){
-        return Level;
+        return level;
     }
-    public void addXp(int xp){
-        this.xp += xp;
+    public void addXp(float xp){
+        this.xp += xp * xpMultiplier;
     }
-    public int getXp() {
+    public float getXp() {
         return xp;
     }
     public void setXp(int xp){
