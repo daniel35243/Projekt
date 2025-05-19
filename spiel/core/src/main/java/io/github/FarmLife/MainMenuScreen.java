@@ -52,7 +52,7 @@ public class MainMenuScreen implements Screen {
         cameraWelt = new OrthographicCamera();
         cameraWelt.setToOrtho(false,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         cameraWelt.update();
-        cameraWelt.zoom = 0.8f;
+        cameraWelt.zoom = 0.6f;
         startGame = false;
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
@@ -167,7 +167,6 @@ public class MainMenuScreen implements Screen {
     public void dispose() {
         stage.dispose();
         skin.dispose();
-        background.dispose();
         map.dispose();
 
     }
