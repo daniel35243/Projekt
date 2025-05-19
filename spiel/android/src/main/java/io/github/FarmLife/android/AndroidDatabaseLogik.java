@@ -10,13 +10,13 @@ import Database.GameByID;
 import Database.InventorySlotDB;
 import Database.SellerByItem;
 import Database.ShopByItem;
-import Database.inventarLogik;
+import Database.DatabaseLogik;
 
-public class AndroidInventoryService implements inventarLogik {
+public class AndroidDatabaseLogik implements DatabaseLogik {
 
     private final InventoryDbHelper db;
 
-    public AndroidInventoryService(Context context) {
+    public AndroidDatabaseLogik(Context context) {
         db = new InventoryDbHelper(context);
     }
 

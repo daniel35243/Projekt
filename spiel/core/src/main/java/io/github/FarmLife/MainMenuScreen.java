@@ -63,11 +63,11 @@ public class MainMenuScreen implements Screen {
 
 
         FreeTypeFontGenerator.FreeTypeFontParameter titleParam = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        titleParam.size = 100;
+        titleParam.size = 75;
         BitmapFont titleFont = generator.generateFont(titleParam);
 
         FreeTypeFontGenerator.FreeTypeFontParameter buttonParam = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        buttonParam.size = 50;
+        buttonParam.size = 52;
         BitmapFont buttonFont = generator.generateFont(buttonParam);
 
         generator.dispose();
@@ -75,16 +75,28 @@ public class MainMenuScreen implements Screen {
         skin = new Skin(Gdx.files.internal("uiskin.json"));
 
         // Eigene Button-Grafiken laden
-        Texture buttonUpTex = new Texture(Gdx.files.internal("ButtonUp.PNG"));
-        Texture buttonDownTex = new Texture(Gdx.files.internal("ButtonDown.PNG"));
+        Texture buttonUpTex = new Texture(Gdx.files.internal("ButtonUp.png"));
+        Texture buttonDownTex = new Texture(Gdx.files.internal("ButtonDown.png"));
         Drawable buttonUp = new TextureRegionDrawable(buttonUpTex);
         Drawable buttonDown = new TextureRegionDrawable(buttonDownTex);
 
         // Custom ButtonStyle mit eigener Font + Grafiken
-        TextButton.TextButtonStyle customStyle = new TextButton.TextButtonStyle();
-        customStyle.font = buttonFont;
-        customStyle.up = buttonUp;
-        customStyle.down = buttonDown;
+        TextButton.TextButtonStyle Normalbutton = new TextButton.TextButtonStyle();
+        Normalbutton.font = buttonFont;
+        Normalbutton.up = buttonUp;
+        Normalbutton.down = buttonDown;
+
+        // Eigene Button-Grafiken laden
+        buttonUpTex = new Texture(Gdx.files.internal("Topbutton.png"));
+        buttonDownTex = new Texture(Gdx.files.internal("Topbutton.png"));
+        Drawable buttonUpx = new TextureRegionDrawable(buttonUpTex);
+        Drawable buttonDownx = new TextureRegionDrawable(buttonDownTex);
+
+        // Custom ButtonStyle mit eigener Font + Grafiken
+        TextButton.TextButtonStyle TitleStyle = new TextButton.TextButtonStyle();
+        TitleStyle.font = titleFont;
+        TitleStyle.up = buttonUpx;
+        TitleStyle.down = buttonDownx;
 
         Table table = new Table();
         table.setFillParent(true);
@@ -94,19 +106,18 @@ public class MainMenuScreen implements Screen {
         // Titel mit eigener Font
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = titleFont;
-        Label title = new Label("Main Menu", labelStyle);
+        Label title = new Label("Hauptmenü", labelStyle);
 
         // Buttons mit Style
-        TextButton startButton = new TextButton("Spiel Starten", customStyle);
-        TextButton exitButton = new TextButton("Spiel Beenden", customStyle);
-        TextButton MMbg = new TextButton("Main Menu", customStyle);
+        TextButton startButton = new TextButton("Spiel Starten", Normalbutton);
+        TextButton exitButton = new TextButton("Spiel Beenden", Normalbutton);
+        TextButton TitleButton = new TextButton("Hauptmenü", TitleStyle);
 
         startButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 if (displayButton) {
                     displayButton = false;
                     startGame = true;
-                    System.out.println("App Spiel Starten Button gedrückt");
                 }
             }
         });
@@ -116,15 +127,14 @@ public class MainMenuScreen implements Screen {
                 if (displayButton) {
                     displayButton = false;
                     Gdx.app.exit();
-                    System.out.println("App Beenden Button gedrückt");
                 }
             }
         });
 
 
-        table.add(MMbg).size(1200, 160).padBottom(50).row();
-        table.add(startButton).size(800, 300).padBottom(20).row();
-        table.add(exitButton).size(800, 300);
+        table.add(TitleButton).size(1400, 180).padBottom(70).row();
+        table.add(startButton).size(840, 230).padBottom(30).row();
+        table.add(exitButton).size(840, 230);
     }
 
 

@@ -1,7 +1,7 @@
 package Database;
 
 
-public interface inventarLogik {
+public interface DatabaseLogik {
 
 
 

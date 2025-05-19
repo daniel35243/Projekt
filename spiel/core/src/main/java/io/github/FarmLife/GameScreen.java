@@ -112,8 +112,10 @@ public class GameScreen implements Screen {
             counterInventorySlots++;
         }
 
-        inventory[2].addItem(new WeizenSeed(),20);
-        inventory[3].addItem(new KarottenSeed(),20);
+//        for(i = 0; i < inventory.length; i++) {
+//            InventorySlotDB inventar = ((Main) game).db.getInventorySlot(i);
+//            inventory[2].addItem(inventar.item, inventar.anzahl);
+//        }
 
 
         Main game = (Main) Gdx.app.getApplicationListener();
