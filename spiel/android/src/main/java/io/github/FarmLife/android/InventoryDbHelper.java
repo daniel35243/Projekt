@@ -25,11 +25,13 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE Seller (item TEXT PRIMARY KEY, Coins INTEGER)");
         db.execSQL("CREATE TABLE Felder (feldID INTEGER PRIMARY KEY, item TEXT, Wachsstufe INTEGER,feld_x INTEGER, feld_y INTEGER, feld_groesse INTEGER)");
         // Inventory
-        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (1, NULL, NULL)");
-        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (2, NULL, NULL)");
-        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (3, NULL, NULL)");
-        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (4, NULL, NULL)");
-        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (5, NULL, NULL)");
+        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (1, 'Leer', 0)");
+        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (2, 'Leer', 0)");
+        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (3, 'Karotte', 2)");
+        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (4, 'WeizenSeed', 12)");
+        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (5, 'KarottenSeed', 12)");
+
+
         //Game
         db.execSQL("INSERT INTO Game (ID, Coins, Level, XP) VALUES (1, 5, 1, 0)");
         // Shop

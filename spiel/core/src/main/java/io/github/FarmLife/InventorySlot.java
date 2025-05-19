@@ -69,12 +69,18 @@ public class InventorySlot {
         switch (item) {
             case "Karotte":
                 this.item = new Karotte();
+                break;
             case "Weizen":
                 this.item = new Weizen();
+                break;
             case "WeizenSeed":
                 this.item = new WeizenSeed();
+                break;
             case "KarottenSeed":
                 this.item = new KarottenSeed();
+                break;
+            case "Leer":
+                break;
         }
         this.item.addItemCounter(anzahl);
         isUsed = true;

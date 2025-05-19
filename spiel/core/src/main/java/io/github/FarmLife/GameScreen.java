@@ -14,9 +14,18 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import Database.InventorySlotDB;
 import Items.Item;
 import Items.Karotte;
 import Items.KarottenSeed;
@@ -58,9 +67,13 @@ public class GameScreen implements Screen {
     Clock clock = new Clock();
     Rectangle feldRect = new Rectangle();
     Rectangle invSlotRect = new Rectangle();
+    private Shop shop;
 
     @Override
     public void show() {
+        shop = new Shop();
+        shop.show();
+
         player = new Player();
         playerSpriteBatch = new SpriteBatch();
         inventorySpriteBatch = new SpriteBatch();
@@ -68,7 +81,7 @@ public class GameScreen implements Screen {
         shapeRendererMap = new ShapeRenderer();
         shapeRendererHUD = new ShapeRenderer();
 
-        touchPosHUD = new Vector2(0,0);
+        touchPosHUD = new Vector2(0, 0);
 
         map = new Map();
 
@@ -83,6 +96,7 @@ public class GameScreen implements Screen {
         cameraWelt = new OrthographicCamera();
         cameraWelt.setToOrtho(false,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         cameraWelt.update();
+
         cameraWelt.zoom = 0.15f;
 
         fpsFont = new BitmapFont();
@@ -112,7 +126,6 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         //Einstellungen
-        framecounter++;
         Gdx.gl.glClearColor(0.0f,149/255f,233/255f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         shapeRendererHUD.setProjectionMatrix(cameraHUD.combined);
@@ -246,11 +259,14 @@ public class GameScreen implements Screen {
             feld.harvest(touchPosMap,inventory,dragging,player);
         }
 
+        shop.render();
+
         //FPS
         fpsFont.getData().setScale(3f);
         fps.begin();
         fpsFont.draw(fps, "Fps: " + (Gdx.graphics.getFramesPerSecond()), 20, Gdx.graphics.getHeight()-20);
         fps.end();
+
     }
 
     @Override
@@ -289,6 +305,8 @@ public class GameScreen implements Screen {
         shapeRendererHUD.dispose();
         shapeRendererMap.dispose();
         map.dispose();
+        shop.dispose();
+
     }
 
 
