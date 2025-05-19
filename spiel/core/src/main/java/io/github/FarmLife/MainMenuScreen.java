@@ -67,7 +67,7 @@ public class MainMenuScreen implements Screen {
         BitmapFont titleFont = generator.generateFont(titleParam);
 
         FreeTypeFontGenerator.FreeTypeFontParameter buttonParam = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        buttonParam.size = 50;
+        buttonParam.size = 38;
         BitmapFont buttonFont = generator.generateFont(buttonParam);
 
         generator.dispose();
@@ -122,9 +122,9 @@ public class MainMenuScreen implements Screen {
         });
 
 
-        table.add(MMbg).size(1200, 160).padBottom(50).row();
-        table.add(startButton).size(800, 300).padBottom(20).row();
-        table.add(exitButton).size(800, 300);
+        table.add(MMbg).size(1200, 160).padBottom(80).row();
+        table.add(startButton).size(700, 150).padBottom(35).row();
+        table.add(exitButton).size(700, 150);
     }
 
 

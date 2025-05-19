@@ -1,13 +1,19 @@
 package io.github.FarmLife;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class Shop {
@@ -15,6 +21,8 @@ public class Shop {
     private Stage uiStage;
     private Skin skin;
     private Window mainMenuWindow, subMenuWindow;
+    private Stage stage;
+
 
     public void render() {
         uiStage.act(Gdx.graphics.getDeltaTime());
@@ -124,11 +132,6 @@ public class Shop {
     }
 
     public void show() {
-
-        uiStage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(uiStage);
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
-
         TextButton openMenu = new TextButton("Händler", skin);
         openMenu.getLabel().setSize(500, 300);
         openMenu.setScale(10f);
@@ -140,6 +143,7 @@ public class Shop {
             }
         });
         uiStage.addActor(openMenu);
+
 
     }
 
