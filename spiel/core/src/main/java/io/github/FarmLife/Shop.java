@@ -45,7 +45,7 @@ public class Shop {
 
     private void initFontStyle() {
         // Font Laden
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("PressStart2P-Regular.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fontRegular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter fontParam = new FreeTypeFontGenerator.FreeTypeFontParameter();
         fontParam.size = 35;
         buttonFont = generator.generateFont(fontParam);
@@ -172,19 +172,9 @@ public class Shop {
 
         Table content = new Table();
         TextButton Laden = new TextButton("Laden", TitleStyle);
-        TextButton KarottenSeeds = new TextButton("\n\n\n\n\n\nKarotten Samen", BigStyle);
-        TextButton WeizenSeeds = new TextButton("\n\n\n\n\n\nWeizen Samen", BigStyle);
+        TextButton KarottenSeeds = new TextButton("\n\n\n\n\n\nKarotten Samen\n\n1$", BigStyle);
+        TextButton WeizenSeeds = new TextButton("\n\n\n\n\n\nWeizen Samen\n\n1$", BigStyle);
         TextButton back = new TextButton("Zurück", Normalbutton);
-        Image karottenSamenImg = new Image(new Texture(Gdx.files.internal("karotten_samen.png")));
-        karottenSamenImg.setSize(200, 200);
-        karottenSamenImg.setPosition(1100, 600);
-        uiStage.addActor(karottenSamenImg);
-        Image weizenSamenImg = new Image(new Texture(Gdx.files.internal("weizen_samen.png")));
-        weizenSamenImg.setSize(200, 200);
-        weizenSamenImg.setPosition(1800, 800);
-        uiStage.addActor(weizenSamenImg);
-
-
 
 
         KarottenSeeds.addListener(new ChangeListener() {
@@ -200,12 +190,13 @@ public class Shop {
 
             }
         });
+
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 subMenuWindow.remove();
-                karottenSamenImg.remove();
                 weizenSamenImg.remove();
+                karottenSamenImg.remove();
             }
         });
 
@@ -220,6 +211,19 @@ public class Shop {
 
         subMenuWindow.add(content);
         uiStage.addActor(subMenuWindow);
+
+        karottenSamenImg = new Image(new Texture(Gdx.files.internal("karotten_samen.png")));
+        karottenSamenImg.setSize(180, 180);
+        karottenSamenImg.setPosition(850, 630);
+        uiStage.addActor(karottenSamenImg);
+
+        weizenSamenImg = new Image(new Texture(Gdx.files.internal("weizen_samen.png")));
+        weizenSamenImg.setSize(180, 180);
+        weizenSamenImg.setPosition(1300, 630);
+        uiStage.addActor(weizenSamenImg);
+
+        karottenSamenImg.toFront();
+        weizenSamenImg.toFront();
     }
 
     private void showSellerMenu(String title) {
@@ -240,19 +244,10 @@ public class Shop {
         if (weizenSamenImg != null) weizenSamenImg.remove();
 
         Table content = new Table();
-        TextButton Karotte = new TextButton("\n\n\n\n\n\nKarotte", BigStyle);
-        TextButton Weizen = new TextButton("\n\n\n\n\n\nWeizen", BigStyle);
+        TextButton Karotte = new TextButton("\n\n\n\n\n\nKarotte\n\n1$", BigStyle);
+        TextButton Weizen = new TextButton("\n\n\n\n\n\nWeizen\n\n1$", BigStyle);
         TextButton Markt = new TextButton("Markt", TitleStyle);
         TextButton back = new TextButton("Zurück", Normalbutton);
-        Image karotteImg = new Image(new Texture(Gdx.files.internal("karotte.png")));
-        karotteImg.setSize(200, 200);
-        karotteImg.setPosition(1600, 800);
-        uiStage.addActor(karotteImg);
-
-        Image weizenImg = new Image(new Texture(Gdx.files.internal("weizen.png")));
-        weizenImg.setSize(200, 200);
-        weizenImg.setPosition(1800, 800);
-        uiStage.addActor(weizenImg);
 
         Karotte.addListener(new ChangeListener() {
             @Override
@@ -267,6 +262,7 @@ public class Shop {
 
             }
         });
+
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -283,6 +279,19 @@ public class Shop {
 
         subMenuWindow.add(content);
         uiStage.addActor(subMenuWindow);
+
+        karotteImg = new Image(new Texture(Gdx.files.internal("karotte.png")));
+        karotteImg.setSize(180, 180);
+        karotteImg.setPosition(850, 630);
+        uiStage.addActor(karotteImg);
+
+        weizenImg = new Image(new Texture(Gdx.files.internal("weizen.png")));
+        weizenImg.setSize(180, 180);
+        weizenImg.setPosition(1300, 630);
+        uiStage.addActor(weizenImg);
+
+        karotteImg.toFront();
+        weizenImg.toFront();
     }
 
     public void show() {
