@@ -48,7 +48,7 @@ public class Player {
         xpMultiplier = 1;
         level = 1;
         xp = 365;
-        coins = 0;
+        coins = 200;
 
         levelBarXP[0] = new Sprite(new Texture(Gdx.files.internal("LevelBarXPStart.png")));
         levelBarXP[1] = new Sprite(new Texture(Gdx.files.internal("LevelBarXPMitte.png")));
@@ -103,7 +103,6 @@ public class Player {
         spriteBatch.end();
     }
     public void drawCoins(SpriteBatch spriteBatch){
-        coins += 10;
         spriteBatch.begin();
         spriteBatch.draw(coinBarStructure, 5, Gdx.graphics.getHeight() - 320);
         spriteBatch.draw(coinTexture, 150, Gdx.graphics.getHeight() - 295);
@@ -128,13 +127,15 @@ public class Player {
         this.xp = xp;
     }
     public void addCoins(int coins){
-        this.coins += coins;
+        if(coins <= 9999) {
+            this.coins += coins;
+        }
     }
     public int getCoins() {
         return coins;
     }
     public void removeCoins(int coins){
-        this.coins -= coins;
+        if(coins <= this.coins)this.coins -= coins;
     }
 
     public void Up() {

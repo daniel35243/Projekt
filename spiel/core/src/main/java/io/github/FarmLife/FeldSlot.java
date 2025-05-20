@@ -73,7 +73,6 @@ public class FeldSlot {
                     nullIndex = inventoryArrayList.indexOf(invSlot);
                 }
             }
-            System.out.println(karottenIndex);
                 if(pflanze.getClass() == Karottenpflanze.class){
                     if(karottenIndex != 10) {
                         inventory[karottenIndex].addItem(new Karotte(), random.nextInt(4) + 2);

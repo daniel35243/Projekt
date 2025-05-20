@@ -40,6 +40,6 @@ public class Weizen extends Item{
     public void drawClicked(SpriteBatch batch,  Vector2 touchPosition, BitmapFont font, InventorySlot invSlot){
         stateTime += Gdx.graphics.getDeltaTime();
         batch.draw(itemAnimation.getKeyFrame(stateTime, true), touchPosition.x, touchPosition.y);
-        font.draw(batch, Integer.toString(itemCounter), invSlot.getCords().x + 100, invSlot.getCords().y);
+        font.draw(batch, Integer.toString(itemCounter), invSlot.getCords().x + 115, invSlot.getCords().y + 50);
     }
 }

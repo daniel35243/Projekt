@@ -114,7 +114,6 @@ public class GameScreen implements Screen {
 
 //        for(i = 0; i < inventory.length; i++) {
 //            InventorySlotDB inventar = ((Main) game).db.getInventorySlot(i);
-//            inventory[2].addItem(inventar.item, inventar.anzahl);
 //        }
 
 
@@ -122,6 +121,8 @@ public class GameScreen implements Screen {
         for(int i = 0; i < 4; i++) {
             feldAnfänger[i] = new FeldSlot(i+1,game);
         }
+
+        inventory[2].addItem(new KarottenSeed(), 20);
 
     }
 
@@ -135,7 +136,6 @@ public class GameScreen implements Screen {
         inventorySpriteBatch.setProjectionMatrix(cameraHUD.combined);
         shapeRendererMap.setProjectionMatrix(cameraWelt.combined);
 
-//        clock.tick();
 
         //Map
         cameraWeltPosition.set(map.mapBorder(joystick,cameraWeltPosition));
@@ -196,10 +196,10 @@ public class GameScreen implements Screen {
                     for(FeldSlot feldSlot : feldAnfänger) {
                         feldRect.set(feldSlot.getCords().x,feldSlot.getCords().y,32,32);
                         if (draggedSlot != null && selectedItem != null && feldRect.contains(touchPosMap.x,touchPosMap.y) && feldSlot.getPflanze() == null) {
-                            if (selectedItem instanceof KarottenSeed) {
+                            if (selectedItem instanceof KarottenSeed && !shop.getShopOpened()) {
                                 feldSlot.setPflanze(new Karottenpflanze(feldSlot.getCords().x + 8, feldSlot.getCords().y + 8, clock.getHour(), clock.getMinute()));
                                 draggedSlot.removeItem(1);
-                            } else if (selectedItem instanceof WeizenSeed) {
+                            } else if (selectedItem instanceof WeizenSeed && !shop.getShopOpened()) {
                                 feldSlot.setPflanze(new Weizenpflanze(feldSlot.getCords().x + 8, feldSlot.getCords().y + 8, clock.getHour(), clock.getMinute()));
                                 draggedSlot.removeItem(1);
                             }
@@ -233,8 +233,14 @@ public class GameScreen implements Screen {
         player.drawCoins(inventorySpriteBatch);
 
         //Joystick
-        joystick.moveJoystick(touchPosHUD, new Vector2(Gdx.graphics.getWidth() / 5 * 4, Gdx.graphics.getHeight() / 5 * 4),dragging);
+        joystick.moveJoystick(touchPosHUD, new Vector2(Gdx.graphics.getWidth() / 5 * 4, Gdx.graphics.getHeight() / 5 * 4),dragging,shop.getShopOpened());
         cameraHUD.update();
+
+        if(!shop.getShopOpened()) {
+            for (FeldSlot feld : feldAnfänger) {
+                feld.harvest(touchPosMap, inventory, dragging, player);
+            }
+        }
 
         inventorySpriteBatch.begin();
         for(InventorySlot invSlot:inventory) {
@@ -259,11 +265,12 @@ public class GameScreen implements Screen {
 
         inventorySpriteBatch.end();
 
-        for(FeldSlot feld: feldAnfänger) {
-            feld.harvest(touchPosMap,inventory,dragging,player);
-        }
-
+        shop.setPlayerInventory(player,inventory);
         shop.render();
+        player = shop.getPlayer();
+        inventory = shop.getInventory();
+
+
 
         //FPS
         fpsFont.getData().setScale(3f);

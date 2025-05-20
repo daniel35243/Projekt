@@ -1,6 +1,7 @@
 package io.github.FarmLife;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -19,6 +20,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
+import java.util.ArrayList;
+
+import Items.KarottenSeed;
+import Items.WeizenSeed;
+import Items.Weizen;
+import Items.Karotte;
+
 public class Shop {
 
     private Stage uiStage;
@@ -31,9 +39,22 @@ public class Shop {
     private Window.WindowStyle windowStyle;
     private Image karotteImg, weizenImg;
     private Image karottenSamenImg, weizenSamenImg;
+    private boolean shopOpened;
+    private Player player;
+    private InventorySlot[] inventory;
+    private ArrayList<InventorySlot> inventorySlotArrayList = new ArrayList<>();
+    private int index;
+    private int nullIndex;
+    private boolean indexBoolean;
 
+    public Shop(){
+        index = 0;
+        nullIndex = 0;
+        indexBoolean = false;
+    }
     private void initWindowStyle() {
-        BitmapFont windowFont = new BitmapFont(); // oder eigene Font, falls gewünscht
+        shopOpened = false;
+        BitmapFont windowFont = new BitmapFont();
         Texture windowTex = new Texture(Gdx.files.internal("window_bg.png"));
         Drawable windowBackground = new TextureRegionDrawable(new TextureRegion(windowTex));
 
@@ -102,7 +123,7 @@ public class Shop {
         uiStage.act(Gdx.graphics.getDeltaTime());
         uiStage.draw();
     }
-    private void showMainMenu() {
+    private void showMainMenu(InventorySlot[] inventory, Player player) {
         if (mainMenuWindow != null) mainMenuWindow.remove();
 
         if (skin == null) {
@@ -142,6 +163,7 @@ public class Shop {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 mainMenuWindow.remove();
+                shopOpened = false;
             }
         });
 
@@ -172,8 +194,8 @@ public class Shop {
 
         Table content = new Table();
         TextButton Laden = new TextButton("Laden", TitleStyle);
-        TextButton KarottenSeeds = new TextButton("\n\n\n\n\n\nKarotten Samen\n\n1$", BigStyle);
-        TextButton WeizenSeeds = new TextButton("\n\n\n\n\n\nWeizen Samen\n\n1$", BigStyle);
+        TextButton KarottenSeeds = new TextButton("\n\n\n\n\n\nKarotten Samen\n\n2$", BigStyle);
+        TextButton WeizenSeeds = new TextButton("\n\n\n\n\n\nWeizen Samen\n\n4$", BigStyle);
         TextButton back = new TextButton("Zurück", Normalbutton);
 
 
@@ -182,6 +204,25 @@ public class Shop {
             public void changed(ChangeEvent event, Actor actor) {
                 karottenSamenImg.toFront();
                 weizenSamenImg.toFront();
+                if (player.getCoins() >= 2) {
+                    indexBoolean = false;
+                    inventorySlotArrayList.clear();
+                    for (InventorySlot invSlot : inventory) {
+                        inventorySlotArrayList.add(invSlot);
+                        if (invSlot.getItem() instanceof KarottenSeed) {
+                            index = inventorySlotArrayList.indexOf(invSlot);
+                            indexBoolean = true;
+                        } else if (!indexBoolean) {
+                            nullIndex = inventorySlotArrayList.indexOf(invSlot);
+                        }
+                    }
+                    if (indexBoolean) {
+                        inventory[index].addItem(new KarottenSeed(), 1);
+                    } else {
+                        inventory[nullIndex].addItem(new KarottenSeed(), 1);
+                    }
+                    player.removeCoins(2);
+                }
             }
         });
 
@@ -190,6 +231,25 @@ public class Shop {
             public void changed(ChangeEvent event, Actor actor) {
                 karottenSamenImg.toFront();
                 weizenSamenImg.toFront();
+                if (player.getCoins() >= 4) {
+                    indexBoolean = false;
+                    inventorySlotArrayList.clear();
+                    for (InventorySlot invSlot : inventory) {
+                        inventorySlotArrayList.add(invSlot);
+                        if (invSlot.getItem() instanceof WeizenSeed) {
+                            index = inventorySlotArrayList.indexOf(invSlot);
+                            indexBoolean = true;
+                        } else if (!indexBoolean) {
+                            nullIndex = inventorySlotArrayList.indexOf(invSlot);
+                        }
+                    }
+                    if (indexBoolean) {
+                        inventory[index].addItem(new WeizenSeed(), 1);
+                    } else {
+                        inventory[nullIndex].addItem(new WeizenSeed(), 1);
+                    }
+                    player.removeCoins(4);
+                }
             }
         });
 
@@ -247,7 +307,7 @@ public class Shop {
 
         Table content = new Table();
         TextButton Karotte = new TextButton("\n\n\n\n\n\nKarotte\n\n1$", BigStyle);
-        TextButton Weizen = new TextButton("\n\n\n\n\n\nWeizen\n\n1$", BigStyle);
+        TextButton Weizen = new TextButton("\n\n\n\n\n\nWeizen\n\n3$", BigStyle);
         TextButton Markt = new TextButton("Markt", TitleStyle);
         TextButton back = new TextButton("Zurück", Normalbutton);
 
@@ -256,6 +316,12 @@ public class Shop {
             public void changed(ChangeEvent event, Actor actor) {
                 karotteImg.toFront();
                 weizenImg.toFront();
+                for(InventorySlot invSlot : inventory){
+                    if(invSlot.getItem() instanceof Karotte){
+                        invSlot.removeItem(1);
+                        player.addCoins(1);
+                    }
+                }
             }
         });
 
@@ -264,6 +330,12 @@ public class Shop {
             public void changed(ChangeEvent event, Actor actor) {
                 karotteImg.toFront();
                 weizenImg.toFront();
+                for(InventorySlot invSlot : inventory){
+                    if(invSlot.getItem() instanceof Weizen){
+                        invSlot.removeItem(1);
+                        player.addCoins(3);
+                    }
+                }
             }
         });
 
@@ -311,10 +383,12 @@ public class Shop {
         openMenu.getLabel().setSize(500, 300);
         openMenu.setScale(10f);
         openMenu.setPosition(1950, 700);
+        openMenu.setVisible(true);
         openMenu.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                showMainMenu();
+                showMainMenu(inventory, player);
+                shopOpened = true;
             }
         });
         uiStage.addActor(openMenu);
@@ -329,6 +403,22 @@ public class Shop {
         if (subMenuWindow != null) subMenuWindow.remove();
         if (skin != null) skin.dispose();
 
+    }
+
+    public boolean getShopOpened() {
+        return shopOpened;
+    }
+
+    public void setPlayerInventory(Player player, InventorySlot[] inventory){
+        this.player = player;
+        this.inventory = inventory;
+    }
+
+    public Player getPlayer(){
+        return player;
+    }
+    public InventorySlot[] getInventory(){
+        return inventory;
     }
 
 }

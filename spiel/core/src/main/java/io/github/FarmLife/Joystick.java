@@ -40,10 +40,10 @@ public class Joystick{
         stillAnimation = true;
     }
 
-    public void moveJoystick(Vector2 touchPosition, Vector2 cords, boolean inventoryDragging){
+    public void moveJoystick(Vector2 touchPosition, Vector2 cords, boolean inventoryDragging, boolean shopOpened){
 
 
-        if (inventoryDragging) {
+        if (inventoryDragging || shopOpened) {
             isPressed = false;
             smallCircleCords = bigCircleCords;
             stillAnimation = true;
