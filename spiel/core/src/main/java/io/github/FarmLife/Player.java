@@ -18,8 +18,10 @@ public class Player {
     private int level;
     private float xp;
     private int coins;
-    private Texture LevelBarStructure = new Texture(Gdx.files.internal("LevelBarStructure.png"));
-    private Sprite[] LevelBarXP = new Sprite[3];
+    private Texture levelBarStructure = new Texture(Gdx.files.internal("LevelBarStructure.png"));
+    private Texture coinBarStructure = new Texture(Gdx.files.internal("CoinBarStructure.png"));
+    private Texture coinTexture = new Texture(Gdx.files.internal("Coin.png"));
+    private Sprite[] levelBarXP = new Sprite[3];
     private Texture playerSpriteSheet;
     private TextureRegion[][] playerFrames;
     private TextureRegion[] walkUp;
@@ -48,17 +50,17 @@ public class Player {
         xp = 365;
         coins = 0;
 
-        LevelBarXP[0] = new Sprite(new Texture(Gdx.files.internal("LevelBarXPStart.png")));
-        LevelBarXP[1] = new Sprite(new Texture(Gdx.files.internal("LevelBarXPMitte.png")));
-        LevelBarXP[2] = new Sprite(new Texture(Gdx.files.internal("LevelBarXPEnde.png")));
+        levelBarXP[0] = new Sprite(new Texture(Gdx.files.internal("LevelBarXPStart.png")));
+        levelBarXP[1] = new Sprite(new Texture(Gdx.files.internal("LevelBarXPMitte.png")));
+        levelBarXP[2] = new Sprite(new Texture(Gdx.files.internal("LevelBarXPEnde.png")));
 
 
 
         parameter.size = 40;
         font = generator.generateFont(parameter);
 
-        LevelBarXP[0].setPosition(190, Gdx.graphics.getHeight()-188);
-        LevelBarXP[1].setPosition(190 + LevelBarXP[0].getWidth(), Gdx.graphics.getHeight()-188);
+        levelBarXP[0].setPosition(190, Gdx.graphics.getHeight()-188);
+        levelBarXP[1].setPosition(190 + levelBarXP[0].getWidth(), Gdx.graphics.getHeight()-188);
 
 
         playerSpriteSheet = new Texture(Gdx.files.internal("PixelMapPNGs/Player/Player.png"));
@@ -89,19 +91,24 @@ public class Player {
             addLevel();
             xp = 0;
         }
-        LevelBarXP[1].setSize(xp, 42);
-        LevelBarXP[2].setPosition(190 + LevelBarXP[0].getWidth() + LevelBarXP[1].getWidth(), Gdx.graphics.getHeight() - 188);
+        levelBarXP[1].setSize(xp, 42);
+        levelBarXP[2].setPosition(190 + levelBarXP[0].getWidth() + levelBarXP[1].getWidth(), Gdx.graphics.getHeight() - 188);
 
         spriteBatch.begin();
-        spriteBatch.draw(LevelBarStructure, 5, Gdx.graphics.getHeight() - 220);
-        LevelBarXP[0].draw(spriteBatch);
-        LevelBarXP[1].draw(spriteBatch);
-        LevelBarXP[2].draw(spriteBatch);
+        spriteBatch.draw(levelBarStructure, 5, Gdx.graphics.getHeight() - 220);
+        levelBarXP[0].draw(spriteBatch);
+        levelBarXP[1].draw(spriteBatch);
+        levelBarXP[2].draw(spriteBatch);
         font.draw(spriteBatch, "LvL: " + level, 50, Gdx.graphics.getHeight() - 155);
         spriteBatch.end();
-
-
-
+    }
+    public void drawCoins(SpriteBatch spriteBatch){
+        coins += 10;
+        spriteBatch.begin();
+        spriteBatch.draw(coinBarStructure, 5, Gdx.graphics.getHeight() - 320);
+        spriteBatch.draw(coinTexture, 150, Gdx.graphics.getHeight() - 295);
+        font.draw(spriteBatch, Integer.toString(coins),100 - Integer.toString(coins).length() * 12,Gdx.graphics.getHeight() - 255);
+        spriteBatch.end();
     }
 
     public void addLevel(){

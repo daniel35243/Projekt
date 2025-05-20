@@ -230,6 +230,8 @@ public class GameScreen implements Screen {
         clock.TagNacht(shapeRendererHUD);
 
         player.drawLevel(inventorySpriteBatch);
+        player.drawCoins(inventorySpriteBatch);
+
         //Joystick
         joystick.moveJoystick(touchPosHUD, new Vector2(Gdx.graphics.getWidth() / 5 * 4, Gdx.graphics.getHeight() / 5 * 4),dragging);
         cameraHUD.update();

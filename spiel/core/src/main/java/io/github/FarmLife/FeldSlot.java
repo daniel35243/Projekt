@@ -30,6 +30,9 @@ public class FeldSlot {
     private int weizenIndex;
     private int nullIndex;
     private ArrayList<InventorySlot> inventoryArrayList = new ArrayList<>();
+    private boolean karottenIndexBoolean = false;
+    private boolean weizenIndexBoolean = false;
+
     public FeldSlot(int id_feld, Main game) {
         this.game = game;
         FeldByCord feld = game.db.getFeldByCord(id_feld);
@@ -46,6 +49,9 @@ public class FeldSlot {
 
 
     public void harvest(Vector3 touchPosMap, InventorySlot[] inventory,Boolean dragging,Player player){
+        inventoryArrayList.clear();
+        karottenIndexBoolean = false;
+        weizenIndexBoolean = false;
         if(pflanze != null && pflanze.getStage() == 3 && feldRect.contains(touchPosMap.x,touchPosMap.y) && Gdx.input.isTouched() && !dragging){
             for(InventorySlot invSlot:inventory) {
                 inventoryArrayList.add(invSlot);
@@ -53,18 +59,21 @@ public class FeldSlot {
 
                     if (invSlot.getItem().getClass() == Karotte.class) {
                         karottenIndex = inventoryArrayList.indexOf(invSlot);
-                    } else {
+                        karottenIndexBoolean = true;
+                    } else if(!karottenIndexBoolean){
                         karottenIndex = 10;
                     }
                     if (invSlot.getItem().getClass() == Weizen.class) {
                         weizenIndex = inventoryArrayList.indexOf(invSlot);
-                    } else {
+                        weizenIndexBoolean = true;
+                    } else if(!weizenIndexBoolean){
                         weizenIndex = 10;
                     }
                 } else {
                     nullIndex = inventoryArrayList.indexOf(invSlot);
                 }
             }
+            System.out.println(karottenIndex);
                 if(pflanze.getClass() == Karottenpflanze.class){
                     if(karottenIndex != 10) {
                         inventory[karottenIndex].addItem(new Karotte(), random.nextInt(4) + 2);
