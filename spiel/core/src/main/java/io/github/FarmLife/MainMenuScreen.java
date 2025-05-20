@@ -152,6 +152,7 @@ public class MainMenuScreen implements Screen {
         map.renderFirst(cameraWelt);
         map.renderPlayer(player,playerSpriteBatch,joystick,new Vector2(800,800));
         map.renderLast();
+        map.renderLock(player);
         cameraWelt.position.set(800,800, 0);
 
         if (startGame) {

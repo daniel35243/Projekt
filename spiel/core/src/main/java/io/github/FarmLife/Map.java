@@ -27,6 +27,9 @@ public class Map {
     private Polygon mapBorderPolygon;
     private int[] startLayers;
     private MapObjects objectBorderLayer;
+    private MapObjects advancedFeldBorderLayer;
+    private PolygonMapObject advancedFeldBorder;
+    private Polygon advancedFeldBorderPolygon;
     private boolean isCollidingX;
     private boolean isCollidingY;
     private Vector2 newPosition = new Vector2();
@@ -41,6 +44,8 @@ public class Map {
         mapBorder = (PolygonMapObject) mapBorderObject.get(0);
         startLayers = new int[]{0,1,2,3,4,5,6,7};
         objectBorderLayer = map.getLayers().get("Objekte - Border").getObjects();
+        advancedFeldBorderLayer = map.getLayers().get("AdvancedFeld - Border").getObjects();
+        advancedFeldBorder = (PolygonMapObject) advancedFeldBorderLayer.get(0);
         isCollidingX = false;
         isCollidingY = false;
 
@@ -50,8 +55,6 @@ public class Map {
     public void renderFirst(OrthographicCamera camera){
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render(startLayers);
-
-
     }
     public void renderPlayer( Player player , SpriteBatch playerSpriteBatch,Joystick joystick, Vector2 cameraWeltPosition){
         playerSpriteBatch.begin();
@@ -68,7 +71,7 @@ public class Map {
     }
 
 
-    public Vector2 mapBorder(Joystick joystick, Vector2 cameraWeltPosition){
+    public Vector2 mapBorder(Joystick joystick, Vector2 cameraWeltPosition, Player player){
         //BERECHNET ZUKÜNFTIGE POSITION
         newPosition.set(cameraWeltPosition.x ,  cameraWeltPosition.y);
         newPosition.x += joystick.getCameraWeltPosition().x * 40f * Gdx.graphics.getDeltaTime();
@@ -77,8 +80,9 @@ public class Map {
         newYPosition.set(cameraWeltPosition.x, newPosition.y);
 
 
-
+        advancedFeldBorderPolygon = advancedFeldBorder.getPolygon();
         mapBorderPolygon = mapBorder.getPolygon();
+
         isCollidingX = false;
         isCollidingY = false;
 
@@ -95,10 +99,10 @@ public class Map {
         }
 
         //PRÜFT OB JEMAND GEGEN OBJEKTE IN DER LISTE LÄUFT ODER DIE MAP BORDER VERLÄSST
-        if (!isCollidingX && mapBorderPolygon.contains(newXPosition.x, newXPosition.y)) {
+        if (!isCollidingX && mapBorderPolygon.contains(newXPosition.x, newXPosition.y) && ((player.getLevel() < 5 && !advancedFeldBorderPolygon.contains(newXPosition.x, newXPosition.y)) || player.getLevel() >= 5)) {
             cameraWeltPosition.x = newXPosition.x;
         }
-        if (!isCollidingY && mapBorderPolygon.contains(newYPosition.x, newYPosition.y)  ) {
+        if (!isCollidingY && mapBorderPolygon.contains(newYPosition.x, newYPosition.y) && ((player.getLevel() < 5 && !advancedFeldBorderPolygon.contains(newYPosition.x, newYPosition.y)) || player.getLevel() >= 5)) {
             cameraWeltPosition.y = newYPosition.y ;
         }
         return cameraWeltPosition;

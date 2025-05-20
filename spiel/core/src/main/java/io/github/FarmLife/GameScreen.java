@@ -37,37 +37,34 @@ import Pflanzen.Weizenpflanze;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class GameScreen implements Screen {
-    OrthographicCamera cameraWelt;
-    OrthographicCamera cameraHUD;
-    Map map;
-    Joystick joystick;
-    Vector2 touchPosHUD;
-    Vector3 touchPosMap = new Vector3();
-    ShapeRenderer shapeRendererHUD;
-    Vector2 cameraWeltPosition;
-    BitmapFont fpsFont;
-    SpriteBatch fps;
-    Player player;
-    SpriteBatch playerSpriteBatch;
-    Viewport hudViewport;
-
-
-    int framecounter;
-    Vector2 zwischenspeicherCameraWeltPosition;
-    ShapeRenderer shapeRendererMap;
-    InventorySlot[] inventory = new InventorySlot[5];
-    SpriteBatch inventorySpriteBatch;
-    HitBoxes hitBoxes = new HitBoxes();
-    Item selectedItem = null;
-    InventorySlot draggedSlot = null;
-    boolean dragging = false;
-    int numberAnimation = 0;
-
-    FeldSlot[] feldAnfänger = new FeldSlot[4];
-    FeldSlot[] feldFortgeschritten = new FeldSlot[6];
-    Clock clock = new Clock();
-    Rectangle feldRect = new Rectangle();
-    Rectangle invSlotRect = new Rectangle();
+    private OrthographicCamera cameraWelt;
+    private OrthographicCamera cameraHUD;
+    private Map map;
+    private Joystick joystick;
+    private Vector2 touchPosHUD;
+    private Vector3 touchPosMap = new Vector3();
+    private ShapeRenderer shapeRendererHUD;
+    private Vector2 cameraWeltPosition;
+    private BitmapFont fpsFont;
+    private SpriteBatch fps;
+    private Player player;
+    private SpriteBatch playerSpriteBatch;
+    private Viewport hudViewport;
+    private int framecounter;
+    private Vector2 zwischenspeicherCameraWeltPosition;
+    private ShapeRenderer shapeRendererMap;
+    private InventorySlot[] inventory = new InventorySlot[5];
+    private SpriteBatch inventorySpriteBatch;
+    private HitBoxes hitBoxes = new HitBoxes();
+    private Item selectedItem = null;
+    private InventorySlot draggedSlot = null;
+    private boolean dragging = false;
+    private int numberAnimation = 0;
+    private FeldSlot[] feldAnfänger = new FeldSlot[4];
+    private FeldSlot[] feldFortgeschritten = new FeldSlot[6];
+    private Clock clock = new Clock();
+    private Rectangle feldRect = new Rectangle();
+    private Rectangle invSlotRect = new Rectangle();
     private Shop shop;
 
     @Override
@@ -123,7 +120,6 @@ public class GameScreen implements Screen {
             feldAnfänger[i] = new FeldSlot(i+1,game);
         }
 
-//        inventory[2].addItem(new KarottenSeed(), 20);
 
     }
 
@@ -139,13 +135,13 @@ public class GameScreen implements Screen {
 
 
         //Map
-        cameraWeltPosition.set(map.mapBorder(joystick,cameraWeltPosition));
+        cameraWeltPosition.set(map.mapBorder(joystick,cameraWeltPosition,player));
         map.renderFirst(cameraWelt);
         cameraWelt.position.set(cameraWeltPosition, 0);
         cameraWelt.update();
 
         //Hitboxes
-        hitBoxes.draw(shapeRendererMap,shapeRendererHUD,map,cameraWeltPosition);
+//        hitBoxes.draw(shapeRendererMap,shapeRendererHUD,map,cameraWeltPosition);
 
 
         //Erkennt wenn Bildschirm TOUCHED
@@ -227,6 +223,7 @@ public class GameScreen implements Screen {
 
         map.renderPlayer( player , playerSpriteBatch,joystick,cameraWeltPosition);
         map.renderLast();
+        map.renderLock(player);
 
         clock.TagNacht(shapeRendererHUD);
 
