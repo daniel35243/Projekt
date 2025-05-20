@@ -62,7 +62,9 @@ public class GameScreen implements Screen {
     InventorySlot draggedSlot = null;
     boolean dragging = false;
     int numberAnimation = 0;
-    FeldSlot[][] felder = new FeldSlot[2][6];
+
+    FeldSlot[] feldAnfänger = new FeldSlot[4];
+    FeldSlot[] feldFortgeschritten = new FeldSlot[6];
     Clock clock = new Clock();
     Rectangle feldRect = new Rectangle();
     Rectangle invSlotRect = new Rectangle();
@@ -118,12 +120,10 @@ public class GameScreen implements Screen {
 
         Main game = (Main) Gdx.app.getApplicationListener();
         for(int i = 0; i < 4; i++) {
-            felder[0][i] = new FeldSlot(i+1,game);
+            feldAnfänger[i] = new FeldSlot(i+1,game);
         }
-//        for(int i = 10; i < 16; i++){
-//            felder[1][i-10] = new FeldSlot(i+1,game);
-//        }
 
+//        inventory[2].addItem(new KarottenSeed(), 20);
 
     }
 
@@ -145,7 +145,7 @@ public class GameScreen implements Screen {
         cameraWelt.update();
 
         //Hitboxes
-        //hitBoxes.draw(shapeRendererMap,shapeRendererHUD,map,cameraWeltPosition);
+        hitBoxes.draw(shapeRendererMap,shapeRendererHUD,map,cameraWeltPosition);
 
 
         //Erkennt wenn Bildschirm TOUCHED
@@ -194,7 +194,7 @@ public class GameScreen implements Screen {
                     }
                 }
                 if(!swapped) {
-                    for(FeldSlot feldSlot : felder[0]) {
+                    for(FeldSlot feldSlot : feldAnfänger) {
                         feldRect.set(feldSlot.getCords().x,feldSlot.getCords().y,32,32);
                         if (draggedSlot != null && selectedItem != null && feldRect.contains(touchPosMap.x,touchPosMap.y) && feldSlot.getPflanze() == null) {
                             if (selectedItem instanceof KarottenSeed && !shop.getShopOpened()) {
@@ -218,7 +218,7 @@ public class GameScreen implements Screen {
         inventorySpriteBatch.end();
 
         playerSpriteBatch.begin();
-        for(FeldSlot feldSlot : felder[0]) {
+        for(FeldSlot feldSlot : feldAnfänger) {
             if(feldSlot.getPflanze() != null) {
                 feldSlot.getPflanze().draw(clock.getHour(), clock.getMinute(), playerSpriteBatch);
             }
@@ -238,7 +238,7 @@ public class GameScreen implements Screen {
         cameraHUD.update();
 
         if(!shop.getShopOpened()) {
-            for (FeldSlot feld : felder[0]) {
+            for (FeldSlot feld : feldAnfänger) {
                 feld.harvest(touchPosMap, inventory, dragging, player);
             }
         }

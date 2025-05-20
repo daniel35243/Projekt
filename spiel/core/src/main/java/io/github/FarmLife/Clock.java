@@ -24,7 +24,7 @@ public class Clock {
 
     public Clock(){
         stateTime = 0;
-        hour = 3;
+        hour = 4;
         minute = 30;
         dayCounter = 1;
         ausgabeClock = "";
