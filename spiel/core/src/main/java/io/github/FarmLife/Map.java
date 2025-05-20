@@ -61,6 +61,11 @@ public class Map {
     public void renderLast(){
         tiledMapRenderer.render(new int[]{9});
     }
+    public void renderLock(Player player){
+        if(player.getLevel() < 5) {
+            tiledMapRenderer.render(new int[]{10});
+        }
+    }
 
 
     public Vector2 mapBorder(Joystick joystick, Vector2 cameraWeltPosition){

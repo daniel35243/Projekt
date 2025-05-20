@@ -45,6 +45,12 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (2, NULL, NULL, 944, 688)");
         db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (3, NULL, NULL, 880, 624)");
         db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (4, NULL, NULL, 944, 624)");
+        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (11, NULL, NULL, 944, 624)");
+        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (12, NULL, NULL, 944, 624)");
+        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (13, NULL, NULL, 944, 624)");
+        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (14, NULL, NULL, 944, 624)");
+        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (15, NULL, NULL, 944, 624)");
+        db.execSQL("INSERT INTO Felder (feldID, item, Wachsstufe, feld_x, feld_y) VALUES (16, NULL, NULL, 944, 624)");
     }
 
     @Override

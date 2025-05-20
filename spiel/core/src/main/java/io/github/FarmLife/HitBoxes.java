@@ -20,6 +20,9 @@ public class HitBoxes {
         shapeRendererMap.rect(944,688,32,32);
         shapeRendererMap.rect(880,624,32,32);
         shapeRendererMap.rect(944,624,32,32);
+
+        //Fortgeschrittenenfeld
+        shapeRendererMap.rect(680,560,32,32);
         shapeRendererMap.end();
         //Player HITBOX
         shapeRendererHUD.begin(ShapeRenderer.ShapeType.Line);
