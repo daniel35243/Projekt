@@ -180,14 +180,16 @@ public class Shop {
         KarottenSeeds.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
+                karottenSamenImg.toFront();
+                weizenSamenImg.toFront();
             }
         });
 
         WeizenSeeds.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
+                karottenSamenImg.toFront();
+                weizenSamenImg.toFront();
             }
         });
 
@@ -252,14 +254,16 @@ public class Shop {
         Karotte.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
+                karotteImg.toFront();
+                weizenImg.toFront();
             }
         });
 
         Weizen.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
+                karotteImg.toFront();
+                weizenImg.toFront();
             }
         });
 
