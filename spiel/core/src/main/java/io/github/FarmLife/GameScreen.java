@@ -122,7 +122,7 @@ public class GameScreen implements Screen {
             feldAnfänger[i] = new FeldSlot(i+1,game);
         }
 
-        inventory[2].addItem(new KarottenSeed(), 20);
+//        inventory[2].addItem(new KarottenSeed(), 20);
 
     }
 

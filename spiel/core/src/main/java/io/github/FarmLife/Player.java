@@ -47,8 +47,8 @@ public class Player {
     public Player() {
         xpMultiplier = 1;
         level = 1;
-        xp = 365;
-        coins = 200;
+        xp = 0;
+        coins = 5;
 
         levelBarXP[0] = new Sprite(new Texture(Gdx.files.internal("LevelBarXPStart.png")));
         levelBarXP[1] = new Sprite(new Texture(Gdx.files.internal("LevelBarXPMitte.png")));

@@ -68,7 +68,7 @@ public class Shop {
         // Font Laden
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fontRegular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter fontParam = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        fontParam.size = 35;
+        fontParam.size = 33;
         buttonFont = generator.generateFont(fontParam);
 
         FreeTypeFontGenerator.FreeTypeFontParameter buttonParam = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -140,22 +140,22 @@ public class Shop {
         content.pad(10);
 
         // Buttons werden erstellt
-        TextButton shopButton = new TextButton("Laden", BigStyle);
-        TextButton sellerButton = new TextButton("Markt", BigStyle);
+        TextButton shopButton = new TextButton("Kaufen", BigStyle);
+        TextButton sellerButton = new TextButton("Verkaufen", BigStyle);
         TextButton exitButton = new TextButton("Schließen", Normalbutton);
 
 
         shopButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                showShopMenu("Laden");
+                showShopMenu("Kaufen");
             }
         });
 
         sellerButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                showSellerMenu("Markt");
+                showSellerMenu("Verkaufen");
             }
         });
 
@@ -167,8 +167,8 @@ public class Shop {
             }
         });
 
-        content.add(shopButton).size(350, 600).padRight(20f);
-        content.add(sellerButton).size(350, 600).padRight(20f);
+        content.add(shopButton).size(390, 600).padRight(20f);
+        content.add(sellerButton).size(390, 600).padRight(20f);
         content.add(exitButton).size(400, 210);
 
         mainMenuWindow.add(content);
@@ -193,11 +193,18 @@ public class Shop {
         if (weizenImg != null) weizenImg.remove();
 
         Table content = new Table();
-        TextButton Laden = new TextButton("Laden", TitleStyle);
+        TextButton Laden = new TextButton("Kaufen", TitleStyle);
         TextButton KarottenSeeds = new TextButton("\n\n\n\n\n\nKarotten Samen\n\n2$", BigStyle);
-        TextButton WeizenSeeds = new TextButton("\n\n\n\n\n\nWeizen Samen\n\n4$", BigStyle);
+        TextButton WeizenSeeds = new TextButton("\n\n\n\n\n\nWeizen\nSamen\n\n4$", BigStyle);
         TextButton back = new TextButton("Zurück", Normalbutton);
 
+        Laden.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                karottenSamenImg.toFront();
+                weizenSamenImg.toFront();
+            }
+        });
 
         KarottenSeeds.addListener(new ChangeListener() {
             @Override
@@ -281,7 +288,7 @@ public class Shop {
 
         weizenSamenImg = new Image(new Texture(Gdx.files.internal("weizen_samen.png")));
         weizenSamenImg.setSize(180, 180);
-        weizenSamenImg.setPosition(1300, 630);
+        weizenSamenImg.setPosition(1280, 630);
         uiStage.addActor(weizenSamenImg);
 
         karottenSamenImg.toFront();
@@ -308,9 +315,16 @@ public class Shop {
         Table content = new Table();
         TextButton Karotte = new TextButton("\n\n\n\n\n\nKarotte\n\n1$", BigStyle);
         TextButton Weizen = new TextButton("\n\n\n\n\n\nWeizen\n\n3$", BigStyle);
-        TextButton Markt = new TextButton("Markt", TitleStyle);
+        TextButton Markt = new TextButton("Verkaufen", TitleStyle);
         TextButton back = new TextButton("Zurück", Normalbutton);
 
+        Markt.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                weizenImg.toFront();
+                karotteImg.toFront();
+            }
+        });
         Karotte.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
