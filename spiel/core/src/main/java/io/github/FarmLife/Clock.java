@@ -24,7 +24,7 @@ public class Clock {
 
     public Clock(){
         stateTime = 0;
-        hour = 4;
+        hour = 0;
         minute = 30;
         dayCounter = 1;
         ausgabeClock = "";
@@ -111,5 +111,17 @@ public class Clock {
     }
     public int getMinute() {
         return minute;
+    }
+    public boolean isDay() {
+        return isDay;
+    }
+    public boolean isNight() {
+        return isNight;
+    }
+    public void setDay(){
+        isDay = true;
+        isNight = false;
+        hour = 4;
+        minute = 0;
     }
 }

@@ -36,6 +36,7 @@ public class FeldSlot {
     public FeldSlot(int id_feld, Main game) {
         this.game = game;
         FeldByCord feld = game.db.getFeldByCord(id_feld);
+        System.out.println(id_feld + ": " + feld.feld_x + " " + feld.feld_y);
         cords = new Vector2(feld.feld_x, feld.feld_y);
         feldRect.set(cords.x,cords.y,32,32);
     }

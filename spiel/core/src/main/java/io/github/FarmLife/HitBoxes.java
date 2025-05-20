@@ -10,11 +10,12 @@ public class HitBoxes {
     public void draw(ShapeRenderer shapeRendererMap, ShapeRenderer shapeRendererHUD, Map map, Vector2 cameraWeltPosition) {
         //Map Border
         shapeRendererMap.begin(ShapeRenderer.ShapeType.Line);
-        shapeRendererMap.setColor(Color.BLACK);
+        shapeRendererMap.setColor(Color.PINK);
         shapeRendererMap.polygon(map.getMapBorderPolygon().getTransformedVertices());
         for (PolygonMapObject object : map.getObjectBorderLayer().getByType(PolygonMapObject.class)) {
             shapeRendererMap.polygon(object.getPolygon().getTransformedVertices());
         }
+        shapeRendererMap.setColor(Color.BLACK);
         //Anfangsfeld
         shapeRendererMap.rect(880,688,32,32);
         shapeRendererMap.rect(944,688,32,32);
@@ -29,6 +30,10 @@ public class HitBoxes {
         shapeRendererMap.rect(736,592,32,32);
         shapeRendererMap.rect(672,592,32,32);
         shapeRendererMap.rect(608,592,32,32);
+
+        //Sleeperfeld
+        shapeRendererMap.rect(595,860,75,50);
+
         shapeRendererMap.end();
         //Player HITBOX
         shapeRendererHUD.begin(ShapeRenderer.ShapeType.Line);

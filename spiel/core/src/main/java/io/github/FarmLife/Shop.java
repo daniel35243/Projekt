@@ -1,9 +1,12 @@
 package io.github.FarmLife;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -19,6 +22,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
 
@@ -30,6 +34,7 @@ import Items.Karotte;
 public class Shop {
 
     private Stage uiStage;
+    private Stage sleepButtonStage;
     private Skin skin;
     private BitmapFont buttonFont;
     private TextButton.TextButtonStyle Normalbutton;
@@ -42,21 +47,18 @@ public class Shop {
     private boolean shopOpened;
     private Player player;
     private InventorySlot[] inventory;
-    private ArrayList<InventorySlot> inventorySlotArrayList = new ArrayList<>();
-    private int index;
-    private int nullIndex;
-    private boolean indexBoolean;
+    private TextButton sleepButton;
+    private Clock clock;
+    private InputMultiplexer multiplexer;
 
-    public Shop(){
-        index = 0;
-        nullIndex = 0;
-        indexBoolean = false;
-    }
+
+
     private void initWindowStyle() {
         shopOpened = false;
         BitmapFont windowFont = new BitmapFont();
         Texture windowTex = new Texture(Gdx.files.internal("window_bg.png"));
         Drawable windowBackground = new TextureRegionDrawable(new TextureRegion(windowTex));
+
 
 
         windowStyle = new Window.WindowStyle();
@@ -119,7 +121,17 @@ public class Shop {
 
     private Window mainMenuWindow, subMenuWindow;
 
-    public void render() {
+    public void render(Rectangle rec, Vector2 pos) {
+
+        if(rec.contains(pos.x, pos.y)){
+            sleepButton.setVisible(true);
+        }else{
+            sleepButton.setVisible(false);
+        }
+
+
+        sleepButtonStage.act(Gdx.graphics.getDeltaTime());
+        sleepButtonStage.draw();
         uiStage.act(Gdx.graphics.getDeltaTime());
         uiStage.draw();
     }
@@ -212,21 +224,19 @@ public class Shop {
                 karottenSamenImg.toFront();
                 weizenSamenImg.toFront();
                 if (player.getCoins() >= 2) {
-                    indexBoolean = false;
-                    inventorySlotArrayList.clear();
-                    for (InventorySlot invSlot : inventory) {
-                        inventorySlotArrayList.add(invSlot);
-                        if (invSlot.getItem() instanceof KarottenSeed) {
-                            index = inventorySlotArrayList.indexOf(invSlot);
-                            indexBoolean = true;
-                        } else if (!indexBoolean) {
-                            nullIndex = inventorySlotArrayList.indexOf(invSlot);
+                    boolean found = false;
+                    int nullSlot = -1;
+                    for(int i = 0; i < inventory.length; i++){
+                        if(inventory[i].getItem() instanceof KarottenSeed){
+                            inventory[i].addItem(new KarottenSeed(), 1);
+                            found = true;
+                        }else if(!inventory[i].getIsUsed() && nullSlot == -1){
+                            nullSlot = i;
                         }
+
                     }
-                    if (indexBoolean) {
-                        inventory[index].addItem(new KarottenSeed(), 1);
-                    } else {
-                        inventory[nullIndex].addItem(new KarottenSeed(), 1);
+                    if (!found && nullSlot != -1) {
+                        inventory[nullSlot].addItem(new KarottenSeed(), 1);
                     }
                     player.removeCoins(2);
                 }
@@ -239,21 +249,19 @@ public class Shop {
                 karottenSamenImg.toFront();
                 weizenSamenImg.toFront();
                 if (player.getCoins() >= 4) {
-                    indexBoolean = false;
-                    inventorySlotArrayList.clear();
-                    for (InventorySlot invSlot : inventory) {
-                        inventorySlotArrayList.add(invSlot);
-                        if (invSlot.getItem() instanceof WeizenSeed) {
-                            index = inventorySlotArrayList.indexOf(invSlot);
-                            indexBoolean = true;
-                        } else if (!indexBoolean) {
-                            nullIndex = inventorySlotArrayList.indexOf(invSlot);
+                    boolean found = false;
+                    int nullSlot = -1;
+                    for(int i = 0; i < inventory.length; i++){
+                        if(inventory[i].getItem() instanceof WeizenSeed){
+                            inventory[i].addItem(new WeizenSeed(), 1);
+                            found = true;
+                        }else if(!inventory[i].getIsUsed() && nullSlot == -1){
+                            nullSlot = i;
                         }
+
                     }
-                    if (indexBoolean) {
-                        inventory[index].addItem(new WeizenSeed(), 1);
-                    } else {
-                        inventory[nullIndex].addItem(new WeizenSeed(), 1);
+                    if (!found && nullSlot != -1) {
+                        inventory[nullSlot].addItem(new WeizenSeed(), 1);
                     }
                     player.removeCoins(4);
                 }
@@ -384,20 +392,35 @@ public class Shop {
         weizenImg.toFront();
     }
 
-    public void show() {
+    public void show(OrthographicCamera cam) {
+        multiplexer = new InputMultiplexer();
+        sleepButtonStage = new Stage(new ScreenViewport(cam));
 
         uiStage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(uiStage);
 
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         initFontStyle();
         initWindowStyle();
 
+        sleepButton = new TextButton("Schlafen", Normalbutton);
+        sleepButton.setSize(30,15);
+        sleepButton.setPosition(630,900);
+        sleepButton.getLabel().setFontScale(0.1f);
+        sleepButton.setVisible(false);
+        sleepButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if(clock.isNight()){
+                    clock.setDay();
+                }
+            }
+        });
+        sleepButtonStage.addActor(sleepButton);
+
         TextButton openMenu = new TextButton("Händler", Normalbutton);
         openMenu.getLabel().setSize(500, 300);
         openMenu.setScale(10f);
         openMenu.setPosition(1950, 700);
-        openMenu.setVisible(true);
         openMenu.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -406,7 +429,9 @@ public class Shop {
             }
         });
         uiStage.addActor(openMenu);
-
+        multiplexer.addProcessor(sleepButtonStage);
+        multiplexer.addProcessor(uiStage);
+        Gdx.input.setInputProcessor(multiplexer);
     }
 
     public void dispose() {
@@ -423,9 +448,10 @@ public class Shop {
         return shopOpened;
     }
 
-    public void setPlayerInventory(Player player, InventorySlot[] inventory){
+    public void setPlayerInventoryClock(Player player, InventorySlot[] inventory,Clock clock){
         this.player = player;
         this.inventory = inventory;
+        this.clock = clock;
     }
 
     public Player getPlayer(){
@@ -433,6 +459,9 @@ public class Shop {
     }
     public InventorySlot[] getInventory(){
         return inventory;
+    }
+    public Clock getClock(){
+        return clock;
     }
 
 }
