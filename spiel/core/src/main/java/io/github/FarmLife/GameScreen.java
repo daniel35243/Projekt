@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import Database.DatabaseLogik;
 import Database.InventorySlotDB;
 import Items.Item;
 import Items.Karotte;
@@ -65,6 +66,11 @@ public class GameScreen implements Screen {
     private Rectangle feldRect = new Rectangle();
     private Rectangle invSlotRect = new Rectangle();
     private Shop shop;
+    private DatabaseLogik databaseLogik;
+
+    public GameScreen(DatabaseLogik databaseLogik) {
+        this.databaseLogik = databaseLogik;
+    }
 
     @Override
     public void show() {
@@ -111,12 +117,14 @@ public class GameScreen implements Screen {
             counterInventorySlots++;
         }
 
-//        for(i = 0; i < inventory.length; i++) {
-//            InventorySlotDB inventar = ((Main) game).db.getInventorySlot(i);
-//        }
-
-
         Main game = (Main) Gdx.app.getApplicationListener();
+        for(int i = 0; i < inventory.length; i++) {
+            InventorySlotDB inventar = ((Main) game).db.getInventorySlot(i);
+            inventory[i].addItem(inventar.item, inventar.anzahl);
+        }
+
+
+
         for(int i = 0; i < felder[0].length; i++) {
             felder[0][i] = new FeldSlot(i+1,game);
         }
@@ -314,6 +322,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        DatabaseLogik.updateInventory(0, inventory);
         playerSpriteBatch.dispose();
         fpsFont.dispose();
         fps.dispose();

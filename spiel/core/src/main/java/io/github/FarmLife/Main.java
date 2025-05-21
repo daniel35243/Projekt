@@ -1,5 +1,7 @@
 package io.github.FarmLife;
 
+import static jdk.internal.misc.OSEnvironment.initialize;
+
 import com.badlogic.gdx.Game;
 
 import Database.DatabaseLogik;

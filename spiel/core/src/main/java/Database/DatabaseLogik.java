@@ -1,6 +1,8 @@
 package Database;
 
 
+import io.github.FarmLife.InventorySlot;
+
 public interface DatabaseLogik {
 
 
@@ -8,6 +10,8 @@ public interface DatabaseLogik {
     // Inventory
     void updateInventoryItem(int slot, String itemID, int anzahl);
     InventorySlotDB getInventorySlot(int slot);
+
+    void updateInventory(int i, InventorySlot[] inventar);
 
 
 

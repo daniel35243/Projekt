@@ -1,9 +1,12 @@
 package com.mygdx.game;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import io.github.FarmLife.InventorySlot;
 
 public class InventoryDbHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "Datenbank.db";
@@ -120,6 +123,13 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
         db.execSQL("UPDATE Felder SET item = ?, wachsstufe = ?, feld_x = ?, feld_y = ? WHERE FeldID = ?", new Object[]{feldID, item, wachsstufe, feld_x, feld_y});
     }
 
+    public void updateInventory(int i, InventorySlot[] inventar){
+        ContentValues values = new ContentValues(); // -> erstellt eine Map für Spalten Werte
+        values.put("slot", i);
+        values.put("item", "Karotte");
+        values.put("Anzahl", 1);
+        db.update("Inventory", values, "Slot = ?", new String[]{String.valueOf(i)}); // -> Update Daten in Tabelle HERO = Bedingung welche reihe
+    }
 
 
 

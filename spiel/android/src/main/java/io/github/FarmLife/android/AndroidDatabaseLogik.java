@@ -1,5 +1,6 @@
 package io.github.FarmLife.android;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
@@ -11,6 +12,7 @@ import Database.InventorySlotDB;
 import Database.SellerByItem;
 import Database.ShopByItem;
 import Database.DatabaseLogik;
+import io.github.FarmLife.InventorySlot;
 
 public class AndroidDatabaseLogik implements DatabaseLogik {
 
@@ -20,9 +22,15 @@ public class AndroidDatabaseLogik implements DatabaseLogik {
         db = new InventoryDbHelper(context);
     }
 
-
-
-
+    @Override
+    public void updateInventory(int i, InventorySlot[] inventar) {
+        // Beispiel: Nur Karotte speichern
+        ContentValues values = new ContentValues();
+        values.put("slot", i);
+        values.put("item", "Karotte");
+        values.put("Anzahl", 1);
+        db.getWritableDatabase().update("Inventory", values, "Slot = ?", new String[]{String.valueOf(i)});
+    }
 
     // Inventory
     @Override
@@ -44,7 +52,6 @@ public class AndroidDatabaseLogik implements DatabaseLogik {
 
         return result;
     }
-
 
 
 
