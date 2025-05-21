@@ -146,7 +146,7 @@ public class GameScreen implements Screen {
         cameraWelt.update();
 
         //Hitboxes
-        hitBoxes.draw(shapeRendererMap,shapeRendererHUD,map,cameraWeltPosition);
+        //hitBoxes.draw(shapeRendererMap,shapeRendererHUD,map,cameraWeltPosition);
 
 
         //Erkennt wenn Bildschirm TOUCHED
@@ -276,11 +276,13 @@ public class GameScreen implements Screen {
 
         inventorySpriteBatch.end();
 
-        shop.setPlayerInventoryClock(player,inventory,clock);
+
+        shop.setPlayerInventoryClock(player,inventory,clock,shapeRendererHUD);
         shop.render(new Rectangle(595,860,75,50),cameraWeltPosition);
         player = shop.getPlayer();
         inventory = shop.getInventory();
         clock = shop.getClock();
+
 
 
 

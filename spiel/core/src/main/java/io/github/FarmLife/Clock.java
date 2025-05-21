@@ -24,7 +24,7 @@ public class Clock {
 
     public Clock(){
         stateTime = 0;
-        hour = 0;
+        hour = 3;
         minute = 30;
         dayCounter = 1;
         ausgabeClock = "";
@@ -119,6 +119,10 @@ public class Clock {
         return isNight;
     }
     public void setDay(){
+        if(hour < 24 && hour >= 20){
+            dayCounter++;
+            System.out.println("TEST");
+        }
         isDay = true;
         isNight = false;
         hour = 4;

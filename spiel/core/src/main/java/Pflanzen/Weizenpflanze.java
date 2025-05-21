@@ -8,13 +8,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public class Weizenpflanze extends Pflanze{
-    private TextureRegion[][] pflanzenSpriteSheet = TextureRegion.split(new Texture(Gdx.files.internal("PixelMapPNGs/Outdoor decoration/Items.png")), 16, 16);
-    private Animation<TextureRegion>[] pflanzenAnimation = new Animation[4];
-    private Vector2 cords = new Vector2();
+    private final TextureRegion[][] pflanzenSpriteSheet = TextureRegion.split(new Texture(Gdx.files.internal("PixelMapPNGs/Outdoor decoration/Items.png")), 16, 16);
+    private final Animation<TextureRegion>[] pflanzenAnimation = new Animation[4];
+    private final Vector2 cords = new Vector2();
     private int plantHour;
     private int plantMinute;
     private int currentHour;
     private int stage = 0;
+    private final int growthTime = 4;
 
     public Weizenpflanze(float x, float y, int plantHour, int plantMinute){
         this.plantHour = plantHour;
@@ -32,7 +33,7 @@ public class Weizenpflanze extends Pflanze{
         if(hour < plantHour){
             currentHour += 24;
         }
-        if(currentHour > plantHour && minute >= plantMinute && stage < 3){
+        if((currentHour > plantHour && minute >= plantMinute && stage < 3) || (currentHour > plantHour + growthTime && stage < 3)){
             stage++;
             plantHour++;
             System.out.println(stage);

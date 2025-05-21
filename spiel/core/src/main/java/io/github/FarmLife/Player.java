@@ -2,6 +2,8 @@ package io.github.FarmLife;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -43,11 +45,11 @@ public class Player {
     private BitmapFont font;
     private FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("clockFont.ttf"));
     private FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-    int delta;
+    private float stateTimeSleep = 0;
     public Player() {
         xpMultiplier = 1;
-        level = 1;
-        xp = 0;
+        level = 4;
+        xp = 350;
         coins = 50000;
 
         levelBarXP[0] = new Sprite(new Texture(Gdx.files.internal("LevelBarXPStart.png")));
@@ -220,5 +222,31 @@ public class Player {
         }
 
 
+    }
+    public void drawSleep(ShapeRenderer shapeRendererHUD){
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRendererHUD.setColor(new Color(0, 0, 0, 1f));
+        shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        stateTimeSleep += Gdx.graphics.getDeltaTime();
+        for (float i = 0; i < 1; i += 0.01f) {
+            while (stateTimeSleep < 1) {
+                stateTimeSleep += Gdx.graphics.getDeltaTime();
+            }
+            stateTimeSleep = 0;
+            shapeRendererHUD.setColor(new Color(0, 0, 0, i));
+            shapeRendererHUD.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        }
+        for (float i = 1; i > 0; i -= 0.1f) {
+            while (stateTimeSleep < 1) {
+                stateTimeSleep += Gdx.graphics.getDeltaTime();
+            }
+            stateTimeSleep = 0;
+            shapeRendererHUD.setColor(new Color(0, 0, 0, i));
+            shapeRendererHUD.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        }
+        shapeRendererHUD.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 }

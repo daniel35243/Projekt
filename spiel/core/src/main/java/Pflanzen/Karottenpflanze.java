@@ -15,6 +15,7 @@ public class Karottenpflanze extends Pflanze{
     private int plantMinute;
     private int currentHour;
     private int stage = 0;
+    private int growthTime = 4;
 
     public Karottenpflanze(float x, float y, int plantHour, int plantMinute){
         this.plantHour = plantHour;
@@ -32,7 +33,7 @@ public class Karottenpflanze extends Pflanze{
         if(hour < plantHour){
             currentHour += 24;
         }
-        if(currentHour > plantHour && minute >= plantMinute && stage < 3){
+        if((currentHour > plantHour && minute >= plantMinute && stage < 3) || (currentHour > plantHour + growthTime && stage < 3)){
             stage++;
             plantHour++;
             System.out.println(stage);

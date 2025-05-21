@@ -2,9 +2,12 @@ package io.github.FarmLife;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -25,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import Items.KarottenSeed;
 import Items.WeizenSeed;
@@ -50,7 +54,9 @@ public class Shop {
     private TextButton sleepButton;
     private Clock clock;
     private InputMultiplexer multiplexer;
-
+    private ShapeRenderer shapeRenderer;
+    private float stateTime;
+    private boolean drawSleep;
 
 
     private void initWindowStyle() {
@@ -127,6 +133,9 @@ public class Shop {
             sleepButton.setVisible(true);
         }else{
             sleepButton.setVisible(false);
+        }
+        if(drawSleep){
+            player.drawSleep(shapeRenderer);
         }
 
 
@@ -342,6 +351,7 @@ public class Shop {
                     if(invSlot.getItem() instanceof Karotte){
                         invSlot.removeItem(1);
                         player.addCoins(1);
+                        player.addXp(new Random().nextInt(11) + 30);
                     }
                 }
             }
@@ -356,6 +366,7 @@ public class Shop {
                     if(invSlot.getItem() instanceof Weizen){
                         invSlot.removeItem(1);
                         player.addCoins(3);
+                        player.addXp(new Random().nextInt(26) + 50);
                     }
                 }
             }
@@ -410,8 +421,11 @@ public class Shop {
         sleepButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if(clock.isNight()){
+                if (clock.isNight()) {
                     clock.setDay();
+                    drawSleep = true;
+                }else{
+                    drawSleep = false;
                 }
             }
         });
@@ -448,10 +462,11 @@ public class Shop {
         return shopOpened;
     }
 
-    public void setPlayerInventoryClock(Player player, InventorySlot[] inventory,Clock clock){
+    public void setPlayerInventoryClock(Player player, InventorySlot[] inventory,Clock clock,ShapeRenderer shapeRenderer){
         this.player = player;
         this.inventory = inventory;
         this.clock = clock;
+        this.shapeRenderer = shapeRenderer;
     }
 
     public Player getPlayer(){
