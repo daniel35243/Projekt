@@ -48,6 +48,7 @@ public class Player {
     private float stateTimeSleep = 0;
     private float alphaSleep = 0;
     private boolean fadeUp = true;
+    private float sleepDelay = 0f;
     public Player() {
         xpMultiplier = 1;
         level = 4;
@@ -226,34 +227,37 @@ public class Player {
 
     }
     public void drawSleep(Shop shop, ShapeRenderer shapeRendererHUD){
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRendererHUD.setColor(new Color(0, 0, 0, 1f));
-        shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
-        stateTimeSleep += Gdx.graphics.getDeltaTime();
-        if(stateTimeSleep > 1f) {
-            stateTimeSleep = 0;
-            if(fadeUp){
-                alphaSleep += 0.1f;
-            }else{
-                alphaSleep -= 0.1f;
-            }
+        if(fadeUp){
+            alphaSleep += Gdx.graphics.getDeltaTime();
             if(alphaSleep >= 1f){
+                alphaSleep = 1f;
                 fadeUp = false;
+                sleepDelay = 1f;
+            }
+        }else{
+            if(sleepDelay > 0){
+                sleepDelay -= Gdx.graphics.getDeltaTime();
+            }else{
+                alphaSleep -= Gdx.graphics.getDeltaTime();
+                if(alphaSleep <= 0){
+                    alphaSleep = 0;
+                    fadeUp = true;
+                    shop.setDrawSleep(false);
+                }
+            }
         }
 
+
+        if(alphaSleep > 0f) {
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+            shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRendererHUD.setColor(new Color(0, 0, 0, 1f));
             shapeRendererHUD.setColor(new Color(0, 0, 0, alphaSleep));
             shapeRendererHUD.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-
-            stateTimeSleep = 0;
-            shapeRendererHUD.setColor(new Color(0, 0, 0, alphaSleep));
-            shapeRendererHUD.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-        shapeRendererHUD.end();
-        Gdx.gl.glDisable(GL20.GL_BLEND);
-        shop.setDrawSleep(false);
-    }
+            shapeRendererHUD.end();
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+        }
     }
 }
+
