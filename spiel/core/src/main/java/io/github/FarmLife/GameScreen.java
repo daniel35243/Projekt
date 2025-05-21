@@ -277,8 +277,11 @@ public class GameScreen implements Screen {
         inventorySpriteBatch.end();
 
 
-        shop.setPlayerInventoryClock(player,inventory,clock,shapeRendererHUD);
+        shop.setPlayerInventoryClock(player,inventory,clock);
         shop.render(new Rectangle(595,860,75,50),cameraWeltPosition);
+        if(shop.getDrawSleep()){
+            player.drawSleep(shop, shapeRendererHUD);
+        }
         player = shop.getPlayer();
         inventory = shop.getInventory();
         clock = shop.getClock();

@@ -121,7 +121,6 @@ public class Clock {
     public void setDay(){
         if(hour < 24 && hour >= 20){
             dayCounter++;
-            System.out.println("TEST");
         }
         isDay = true;
         isNight = false;

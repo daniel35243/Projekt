@@ -46,6 +46,8 @@ public class Player {
     private FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("clockFont.ttf"));
     private FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
     private float stateTimeSleep = 0;
+    private float alphaSleep = 0;
+    private boolean fadeUp = true;
     public Player() {
         xpMultiplier = 1;
         level = 4;
@@ -223,30 +225,35 @@ public class Player {
 
 
     }
-    public void drawSleep(ShapeRenderer shapeRendererHUD){
+    public void drawSleep(Shop shop, ShapeRenderer shapeRendererHUD){
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
         shapeRendererHUD.setColor(new Color(0, 0, 0, 1f));
         shapeRendererHUD.rect(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         stateTimeSleep += Gdx.graphics.getDeltaTime();
-        for (float i = 0; i < 1; i += 0.01f) {
-            while (stateTimeSleep < 1) {
-                stateTimeSleep += Gdx.graphics.getDeltaTime();
-            }
+        if(stateTimeSleep > 1f) {
             stateTimeSleep = 0;
-            shapeRendererHUD.setColor(new Color(0, 0, 0, i));
-            shapeRendererHUD.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        }
-        for (float i = 1; i > 0; i -= 0.1f) {
-            while (stateTimeSleep < 1) {
-                stateTimeSleep += Gdx.graphics.getDeltaTime();
+            if(fadeUp){
+                alphaSleep += 0.1f;
+            }else{
+                alphaSleep -= 0.1f;
             }
-            stateTimeSleep = 0;
-            shapeRendererHUD.setColor(new Color(0, 0, 0, i));
-            shapeRendererHUD.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            if(alphaSleep >= 1f){
+                fadeUp = false;
         }
+
+            shapeRendererHUD.setColor(new Color(0, 0, 0, alphaSleep));
+            shapeRendererHUD.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+
+            stateTimeSleep = 0;
+            shapeRendererHUD.setColor(new Color(0, 0, 0, alphaSleep));
+            shapeRendererHUD.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
         shapeRendererHUD.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
+        shop.setDrawSleep(false);
+    }
     }
 }

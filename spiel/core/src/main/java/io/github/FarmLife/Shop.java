@@ -134,9 +134,6 @@ public class Shop {
         }else{
             sleepButton.setVisible(false);
         }
-        if(drawSleep){
-            player.drawSleep(shapeRenderer);
-        }
 
 
         sleepButtonStage.act(Gdx.graphics.getDeltaTime());
@@ -462,11 +459,10 @@ public class Shop {
         return shopOpened;
     }
 
-    public void setPlayerInventoryClock(Player player, InventorySlot[] inventory,Clock clock,ShapeRenderer shapeRenderer){
+    public void setPlayerInventoryClock(Player player, InventorySlot[] inventory,Clock clock){
         this.player = player;
         this.inventory = inventory;
         this.clock = clock;
-        this.shapeRenderer = shapeRenderer;
     }
 
     public Player getPlayer(){
@@ -477,6 +473,13 @@ public class Shop {
     }
     public Clock getClock(){
         return clock;
+    }
+
+    public boolean getDrawSleep(){
+        return drawSleep;
+    }
+    public void setDrawSleep(boolean drawSleep){
+        this.drawSleep = drawSleep;
     }
 
 }
