@@ -2,13 +2,26 @@ package io.github.FarmLife;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 public class Player {
+    private float xpMultiplier;
+    private int level;
+    private float xp;
+    private int coins;
+    private Texture levelBarStructure = new Texture(Gdx.files.internal("LevelBarStructure.png"));
+    private Texture coinBarStructure = new Texture(Gdx.files.internal("CoinBarStructure.png"));
+    private Texture coinTexture = new Texture(Gdx.files.internal("Coin.png"));
+    private Sprite[] levelBarXP = new Sprite[3];
     private Texture playerSpriteSheet;
     private TextureRegion[][] playerFrames;
     private TextureRegion[] walkUp;
@@ -27,8 +40,29 @@ public class Player {
     private Animation<TextureRegion> stillLeftAnimation;
     private float stateTime;
     private boolean flipped;
-
+    private BitmapFont font;
+    private FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("clockFont.ttf"));
+    private FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+    int delta;
     public Player() {
+        xpMultiplier = 1;
+        level = 1;
+        xp = 0;
+        coins = 5;
+
+        levelBarXP[0] = new Sprite(new Texture(Gdx.files.internal("LevelBarXPStart.png")));
+        levelBarXP[1] = new Sprite(new Texture(Gdx.files.internal("LevelBarXPMitte.png")));
+        levelBarXP[2] = new Sprite(new Texture(Gdx.files.internal("LevelBarXPEnde.png")));
+
+
+
+        parameter.size = 40;
+        font = generator.generateFont(parameter);
+
+        levelBarXP[0].setPosition(190, Gdx.graphics.getHeight()-188);
+        levelBarXP[1].setPosition(190 + levelBarXP[0].getWidth(), Gdx.graphics.getHeight()-188);
+
+
         playerSpriteSheet = new Texture(Gdx.files.internal("PixelMapPNGs/Player/Player.png"));
         playerFrames = TextureRegion.split(playerSpriteSheet, 32, 32);
         walkUp = new TextureRegion[6];
@@ -51,6 +85,57 @@ public class Player {
         Down();
         flipped = false;
 
+    }
+    public void drawLevel(SpriteBatch spriteBatch){
+        if(xp > 365){
+            addLevel();
+            xp = 0;
+        }
+        levelBarXP[1].setSize(xp, 42);
+        levelBarXP[2].setPosition(190 + levelBarXP[0].getWidth() + levelBarXP[1].getWidth(), Gdx.graphics.getHeight() - 188);
+
+        spriteBatch.begin();
+        spriteBatch.draw(levelBarStructure, 5, Gdx.graphics.getHeight() - 220);
+        levelBarXP[0].draw(spriteBatch);
+        levelBarXP[1].draw(spriteBatch);
+        levelBarXP[2].draw(spriteBatch);
+        font.draw(spriteBatch, "LvL: " + level, 50, Gdx.graphics.getHeight() - 155);
+        spriteBatch.end();
+    }
+    public void drawCoins(SpriteBatch spriteBatch){
+        spriteBatch.begin();
+        spriteBatch.draw(coinBarStructure, 5, Gdx.graphics.getHeight() - 320);
+        spriteBatch.draw(coinTexture, 150, Gdx.graphics.getHeight() - 295);
+        font.draw(spriteBatch, Integer.toString(coins),100 - Integer.toString(coins).length() * 12,Gdx.graphics.getHeight() - 255);
+        spriteBatch.end();
+    }
+
+    public void addLevel(){
+        level++;
+        xpMultiplier *= 0.75f;
+    }
+    public int getLevel(){
+        return level;
+    }
+    public void addXp(float xp){
+        this.xp += xp * xpMultiplier;
+    }
+    public float getXp() {
+        return xp;
+    }
+    public void setXp(int xp){
+        this.xp = xp;
+    }
+    public void addCoins(int coins){
+        if(coins <= 9999) {
+            this.coins += coins;
+        }
+    }
+    public int getCoins() {
+        return coins;
+    }
+    public void removeCoins(int coins){
+        if(coins <= this.coins)this.coins -= coins;
     }
 
     public void Up() {

@@ -2,13 +2,13 @@ package io.github.FarmLife;
 
 import com.badlogic.gdx.Game;
 
-import Database.inventarLogik;
+import Database.DatabaseLogik;
 
 public class Main extends Game {
-    public final inventarLogik db;
+    public final DatabaseLogik db;
 
 
-    public Main(inventarLogik db) {
+    public Main(DatabaseLogik db) {
         this.db = db;
     }
 

@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import io.github.FarmLife.InventorySlot;
 
 public class Karotte extends Item{
-    private TextureRegion[][] itemSpriteSheet = TextureRegion.split(new Texture(Gdx.files.internal("PixelMapPNGs/Outdoor decoration/ItemsZoomed.png")), 105, 105);
+    private TextureRegion[][] itemSpriteSheet = TextureRegion.split(new Texture(Gdx.files.internal("PixelMapPNGs/Outdoor decoration/ItemsZoomed.png")), 96, 96);
     private int itemCounter = 0;
     private TextureRegion[] itemFrames = new TextureRegion[4];
     private Animation<TextureRegion> itemAnimation;
@@ -24,6 +24,8 @@ public class Karotte extends Item{
     public void addItemCounter(int anzahl){
         itemCounter += anzahl;
     }
+
+    public void setItemCounter(int anzahl){ itemCounter = anzahl;}
     @Override
     public int getItemCounter() {
         return itemCounter;
@@ -40,6 +42,6 @@ public class Karotte extends Item{
     public void drawClicked(SpriteBatch batch,  Vector2 touchPosition, BitmapFont font, InventorySlot invSlot){
         stateTime += Gdx.graphics.getDeltaTime();
         batch.draw(itemAnimation.getKeyFrame(stateTime, true), touchPosition.x, touchPosition.y);
-        font.draw(batch, Integer.toString(itemCounter), invSlot.getCords().x + 100, invSlot.getCords().y);
+        font.draw(batch, Integer.toString(itemCounter), invSlot.getCords().x + 115, invSlot.getCords().y + 50);
     }
 }

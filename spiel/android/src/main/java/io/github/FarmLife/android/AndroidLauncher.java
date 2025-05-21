@@ -13,10 +13,7 @@ public class AndroidLauncher extends AndroidApplication {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AndroidApplicationConfiguration configuration = new AndroidApplicationConfiguration();
-        configuration.useImmersiveMode = true; // Recommended, but not required.
-
-        AndroidInventoryService inventoryService = new AndroidInventoryService(this);
-
+        AndroidDatabaseLogik inventoryService = new AndroidDatabaseLogik(this);
         initialize(new Main(inventoryService), configuration);
     }
 }

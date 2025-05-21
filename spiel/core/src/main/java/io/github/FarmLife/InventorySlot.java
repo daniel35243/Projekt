@@ -60,12 +60,11 @@ public class InventorySlot {
         } else if(item.getClass() == this.item.getClass()){
             this.item.addItemCounter(anzahl);
         }
-
     }
 
 
 
-    public void addItem(String item, int anzahl){
+    public void addItemm(String item, int anzahl){
         switch (item) {
             case "Karotte":
                 this.item = new Karotte();
@@ -80,14 +79,20 @@ public class InventorySlot {
                 this.item = new KarottenSeed();
                 break;
             case "Leer":
+                this.item = null;
                 break;
         }
+        assert this.item != null;
         this.item.addItemCounter(anzahl);
         isUsed = true;
     }
+    public void setItem(Item item){
+        this.item = item;
+        isUsed = true;
+    }
 
-    public void removeItem(){
-        item.addItemCounter(-1);
+    public void removeItem(int anzahl){
+        item.addItemCounter(-anzahl);
         if(item.getItemCounter() <= 0) {
             item = null;
             isUsed = false;

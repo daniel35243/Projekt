@@ -1,5 +1,7 @@
 package Database;
 
+import Items.Item;
+
 public class InventorySlotDB {
     public int slot;
     public String item;
@@ -9,5 +11,13 @@ public class InventorySlotDB {
         this.slot = slot;
         this.item = item;
         this.anzahl = anzahl;
+    }
+
+    public String getItem() {
+        return item;
+    }
+
+    public int getAnzahl() {
+        return anzahl;
     }
 }

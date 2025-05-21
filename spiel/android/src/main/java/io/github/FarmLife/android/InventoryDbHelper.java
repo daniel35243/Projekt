@@ -20,20 +20,20 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // TABLE
         db.execSQL("CREATE TABLE Inventory (Slot INTEGER PRIMARY KEY, item TEXT, Anzahl INTEGER)");
-        db.execSQL("CREATE TABLE Game (ID INTEGER PRIMARY KEY, Coins INTEGER, Level INTEGER, XP INTEGER)");
+        db.execSQL("CREATE TABLE Game (ID INTEGER PRIMARY KEY, Coins INTEGER, Level INTEGER, XP INTEGER, Tag INTEGER, Uhr INTEGER)");
         db.execSQL("CREATE TABLE Shop (item TEXT PRIMARY KEY, Coins INTEGER)");
         db.execSQL("CREATE TABLE Seller (item TEXT PRIMARY KEY, Coins INTEGER)");
         db.execSQL("CREATE TABLE Felder (feldID INTEGER PRIMARY KEY, item TEXT, Wachsstufe INTEGER,feld_x INTEGER, feld_y INTEGER, feld_groesse INTEGER)");
         // Inventory
-        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (1, 'Leer', 0)");
-        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (2, 'Leer', 0)");
-        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (3, 'Karotte', 2)");
-        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (4, 'WeizenSeed', 12)");
+        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (1, 'KarottenSeed', 1)");
+        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (2, 'KarottenSeed', 1)");
+        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (3, 'KarottenSeed', 1)");
+        db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (4, 'KarottenSeed', 1)");
         db.execSQL("INSERT INTO Inventory (Slot, item, Anzahl) VALUES (5, 'KarottenSeed', 12)");
 
 
         //Game
-        db.execSQL("INSERT INTO Game (ID, Coins, Level, XP) VALUES (1, 5, 1, 0)");
+        db.execSQL("INSERT INTO Game (ID, Coins, Level, XP, Tag, Uhr) VALUES (1, 5, 1, 0, 1, 6)");
         // Shop
         db.execSQL("INSERT INTO Shop (item, Coins) VALUES ('Karotten Samen', 1)");
         db.execSQL("INSERT INTO Shop (item, Coins) VALUES ('Weizen Samen', 2)");
@@ -73,8 +73,8 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
     public Cursor getGameByID(int ID) {
         return db.rawQuery("SELECT * FROM Game WHERE ID = ?", new String[]{String.valueOf(ID)});
     }
-    public void updateGame(int coins, int level, int xp) {
-        db.execSQL("UPDATE Game SET Coins = ?, Level = ?, XP = ?", new Object[]{coins, level, xp});
+    public void updateGame(int coins, int level, int xp, int tag, int uhr) {
+        db.execSQL("UPDATE Game SET Coins = ?, Level = ?, XP = ?, Tag = ?, Uhr = ?", new Object[]{coins, level, xp});
     }
 
 

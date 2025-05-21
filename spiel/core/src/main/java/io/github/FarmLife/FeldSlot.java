@@ -30,6 +30,9 @@ public class FeldSlot {
     private int weizenIndex;
     private int nullIndex;
     private ArrayList<InventorySlot> inventoryArrayList = new ArrayList<>();
+    private boolean karottenIndexBoolean = false;
+    private boolean weizenIndexBoolean = false;
+
     public FeldSlot(int id_feld, Main game) {
         this.game = game;
         FeldByCord feld = game.db.getFeldByCord(id_feld);
@@ -45,20 +48,25 @@ public class FeldSlot {
 
 
 
-    public void harvest(Vector3 touchPosMap, InventorySlot[] inventory){
-        if(pflanze != null && pflanze.getStage() == 3 && feldRect.contains(touchPosMap.x,touchPosMap.y) && Gdx.input.isTouched()){
+    public void harvest(Vector3 touchPosMap, InventorySlot[] inventory,Boolean dragging,Player player){
+        inventoryArrayList.clear();
+        karottenIndexBoolean = false;
+        weizenIndexBoolean = false;
+        if(pflanze != null && pflanze.getStage() == 3 && feldRect.contains(touchPosMap.x,touchPosMap.y) && Gdx.input.isTouched() && !dragging){
             for(InventorySlot invSlot:inventory) {
                 inventoryArrayList.add(invSlot);
                 if(invSlot.getItem() != null) {
 
                     if (invSlot.getItem().getClass() == Karotte.class) {
                         karottenIndex = inventoryArrayList.indexOf(invSlot);
-                    } else {
+                        karottenIndexBoolean = true;
+                    } else if(!karottenIndexBoolean){
                         karottenIndex = 10;
                     }
                     if (invSlot.getItem().getClass() == Weizen.class) {
                         weizenIndex = inventoryArrayList.indexOf(invSlot);
-                    } else {
+                        weizenIndexBoolean = true;
+                    } else if(!weizenIndexBoolean){
                         weizenIndex = 10;
                     }
                 } else {
@@ -71,7 +79,8 @@ public class FeldSlot {
                     }else{
                         inventory[nullIndex].addItem(new Karotte(), random.nextInt(4) + 2);
                     }
-                }else if(pflanze.getClass() == Weizenpflanze.class) {
+                }
+                if(pflanze.getClass() == Weizenpflanze.class) {
                     if (weizenIndex != 10) {
                         inventory[weizenIndex].addItem(new Weizen(), random.nextInt(4) + 2);
                     }else{
@@ -79,6 +88,7 @@ public class FeldSlot {
                     }
                 }
             this.setPflanze(null);
+            player.addXp(random.nextInt(11) + 30);
         }
 
     }
