@@ -6,7 +6,7 @@ public interface DatabaseLogik {
 
 
     // Inventory
-    void updateInventoryItem(int slot, String itemID, int anzahl);
+    InventorySlotDB updateInventoryItem(int slot, String itemID, int anzahl);
     InventorySlotDB getInventorySlot(int slot);
 
 

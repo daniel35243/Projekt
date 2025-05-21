@@ -26,8 +26,9 @@ public class AndroidDatabaseLogik implements DatabaseLogik {
 
     // Inventory
     @Override
-    public void updateInventoryItem(int slot, String itemID, int anzahl) {
+    public InventorySlotDB updateInventoryItem(int slot, String itemID, int anzahl) {
         db.updateInventoryItem(slot, itemID, anzahl);
+        return null;
     }
 
     @Override

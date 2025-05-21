@@ -102,6 +102,8 @@ public class InventorySlot {
     public Item getItem(){
         return item;
     }
+
+    public int getAnzahl() { return item.getItemCounter(); }
     public boolean getIsUsed(){
         return isUsed;
     }
