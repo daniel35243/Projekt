@@ -36,19 +36,25 @@ public class Map {
     private Vector2 newXPosition = new Vector2();
     private Vector2 newYPosition = new Vector2();
 
+
+    //Konstruktor der Map
     public Map(){
-        map = new TmxMapLoader().load("map.tmx");
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
+        map = new TmxMapLoader().load("map.tmx");  //Map wird als TiledMap geladen
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(map);   //Map wird in einen Renderer hinzugefügt
 
-        mapBorderObject = map.getLayers().get("Map - Border").getObjects();
-        mapBorder = (PolygonMapObject) mapBorderObject.get(0);
-        startLayers = new int[]{0,1,2,3,4,5,6,7};
-        objectBorderLayer = map.getLayers().get("Objekte - Border").getObjects();
-        advancedFeldBorderLayer = map.getLayers().get("AdvancedFeld - Border").getObjects();
-        advancedFeldBorder = (PolygonMapObject) advancedFeldBorderLayer.get(0);
-        isCollidingX = false;
-        isCollidingY = false;
+        mapBorderObject = map.getLayers().get("Map - Border").getObjects();      //Zieht den MapBorder,
+        objectBorderLayer = map.getLayers().get("Objekte - Border").getObjects();         //Objekete, AdvancedFeld
+        advancedFeldBorderLayer = map.getLayers().get("AdvancedFeld - Border").getObjects();  //Layer aus der Map
 
+
+        mapBorder = (PolygonMapObject) mapBorderObject.get(0);     //Aus dem MapBorder  und advancedFeldBorder
+        advancedFeldBorder = (PolygonMapObject) advancedFeldBorderLayer.get(0); //Layer wird ein PolygonMapObject erstellt
+
+        startLayers = new int[]{0,1,2,3,4,5,6,7};       //Integer Array mit den indexen die zuerst geladen werden
+
+
+        isCollidingX = false; //Booleans für spätere
+        isCollidingY = false; //Verwendung der Borders
     }
 
 
@@ -72,7 +78,7 @@ public class Map {
 
 
     public Vector2 mapBorder(Joystick joystick, Vector2 cameraWeltPosition, Player player){
-        //BERECHNET ZUKÜNFTIGE POSITION
+        //Berechnet zukünftige Position
         newPosition.set(cameraWeltPosition.x ,  cameraWeltPosition.y);
         newPosition.x += joystick.getCameraWeltPosition().x * 40f * Gdx.graphics.getDeltaTime();
         newPosition.y += joystick.getCameraWeltPosition().y * 40f * Gdx.graphics.getDeltaTime();
@@ -80,13 +86,13 @@ public class Map {
         newYPosition.set(cameraWeltPosition.x, newPosition.y);
 
 
-        advancedFeldBorderPolygon = advancedFeldBorder.getPolygon();
+        advancedFeldBorderPolygon = advancedFeldBorder.getPolygon();  //Polygons aus den Layers erstellen
         mapBorderPolygon = mapBorder.getPolygon();
 
         isCollidingX = false;
         isCollidingY = false;
 
-        //GUCKT IN LISTE MIT OBJEKTEN
+        //Schaut in Liste mit Objekten
         for(PolygonMapObject object : objectBorderLayer.getByType(PolygonMapObject.class)) {
             Polygon objectBorder = object.getPolygon();
 
@@ -98,11 +104,13 @@ public class Map {
             }
         }
 
-        //PRÜFT OB JEMAND GEGEN OBJEKTE IN DER LISTE LÄUFT ODER DIE MAP BORDER VERLÄSST
-        if (!isCollidingX && mapBorderPolygon.contains(newXPosition.x, newXPosition.y) && ((player.getLevel() < 5 && !advancedFeldBorderPolygon.contains(newXPosition.x, newXPosition.y)) || player.getLevel() >= 5)) {
+        //Prüft ob der Spieler gegen Objekte in der Liste läuft oder die Map Border verlässt
+        if (!isCollidingX && mapBorderPolygon.contains(newXPosition.x, newXPosition.y) && (player.getLevel() >= 5 ||
+            !advancedFeldBorderPolygon.contains(newXPosition.x, newXPosition.y))) {
             cameraWeltPosition.x = newXPosition.x;
         }
-        if (!isCollidingY && mapBorderPolygon.contains(newYPosition.x, newYPosition.y) && ((player.getLevel() < 5 && !advancedFeldBorderPolygon.contains(newYPosition.x, newYPosition.y)) || player.getLevel() >= 5)) {
+        if (!isCollidingY && mapBorderPolygon.contains(newYPosition.x, newYPosition.y) && (player.getLevel() >= 5 ||
+            !advancedFeldBorderPolygon.contains(newYPosition.x, newYPosition.y))) {
             cameraWeltPosition.y = newYPosition.y ;
         }
         return cameraWeltPosition;

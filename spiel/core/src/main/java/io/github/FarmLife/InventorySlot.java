@@ -32,6 +32,7 @@ public class InventorySlot {
     public Vector2 getCords(){
         return cords;
     }
+
     public void setInventorySlotClickedTrue(InventorySlot[] inventory) {
         int counterFalse = 0;
         for (InventorySlot invSlot : inventory) {
@@ -63,28 +64,6 @@ public class InventorySlot {
 
     }
 
-
-
-    public void addItem(String item, int anzahl){
-        switch (item) {
-            case "Karotte":
-                this.item = new Karotte();
-                break;
-            case "Weizen":
-                this.item = new Weizen();
-                break;
-            case "WeizenSeed":
-                this.item = new WeizenSeed();
-                break;
-            case "KarottenSeed":
-                this.item = new KarottenSeed();
-                break;
-            case "Leer":
-                break;
-        }
-        this.item.addItemCounter(anzahl);
-        isUsed = true;
-    }
     public void setItem(Item item){
         this.item = item;
         isUsed = true;

@@ -111,10 +111,6 @@ public class GameScreen implements Screen {
             counterInventorySlots++;
         }
 
-//        for(i = 0; i < inventory.length; i++) {
-//            InventorySlotDB inventar = ((Main) game).db.getInventorySlot(i);
-//        }
-
 
         Main game = (Main) Gdx.app.getApplicationListener();
         for(int i = 0; i < felder[0].length; i++) {
@@ -168,30 +164,29 @@ public class GameScreen implements Screen {
                 dragging = true;
                 invSlotTouched.setInventorySlotClickedTrue(inventory);
             }
-            if(dragging && !Gdx.input.isTouched()){
-                boolean swapped = false;
-                for(InventorySlot invSlotHotSwap : inventory) {
-                    invSlotRect.set(invSlotHotSwap.getCords().x,invSlotHotSwap.getCords().y,170,170);
+            if(dragging && !Gdx.input.isTouched()){    //Check wenn los gelassen wird
+                boolean swapped = false;                //Zurück setzen von Swapped
+                for(InventorySlot invSlotHotSwap : inventory) {         //Schleife durch Inventory durch geht
+                    invSlotRect.set(invSlotHotSwap.getCords().x,invSlotHotSwap.getCords().y,170,170);  //Hitbox erstellen
                     if(invSlotRect.contains(touchPosHUD.x,touchPosHUD.y) && invSlotHotSwap != draggedSlot) {
-
+                        //Wenn man in einen anderen Slot zieht
                         Item draggedSlotItem = draggedSlot.getItem();
                         int draggedSlotCounter = draggedSlot.getItem().getItemCounter();
 
-                        if (invSlotHotSwap.getIsUsed()) {
+                        if (invSlotHotSwap.getIsUsed()) {   //Wenn Slot befüllt ist tauschen
                             Item invSlotHotSwapItem = invSlotHotSwap.getItem();
                             int invSlotHotSwapCounter = invSlotHotSwap.getItem().getItemCounter();
 
                             draggedSlot.setItem(invSlotHotSwapItem);
                             draggedSlot.getItem().setItemCounter(invSlotHotSwapCounter);
 
-                        } else {
+                        } else {   //Sonst ursprünglichen Slot nicht befüllen
                             draggedSlot.removeItem(draggedSlotCounter);
                         }
                         invSlotHotSwap.setItem(draggedSlotItem);
-                        invSlotHotSwap.getItem().setItemCounter(draggedSlotCounter);
-                        System.out.println(invSlotHotSwap.getItem() + " " + invSlotHotSwap.getItem().getItemCounter());
-                        swapped = true;
-                        break;
+                        invSlotHotSwap.getItem().setItemCounter(draggedSlotCounter);    //Slot befüllen
+                        swapped = true;  //Boolean setzen
+                        break;    //Schleife beenden
                     }
                 }
                 if(!swapped) {
@@ -215,7 +210,7 @@ public class GameScreen implements Screen {
 
                 selectedItem = null;
                 dragging = false;
-                if(draggedSlot != null) draggedSlot.setInventorySlotClickedFalse();
+                if(draggedSlot != null){draggedSlot.setInventorySlotClickedFalse();}
                 draggedSlot = null;
                 break;
             }

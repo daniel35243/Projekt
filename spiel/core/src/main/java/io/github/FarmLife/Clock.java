@@ -24,8 +24,8 @@ public class Clock {
 
     public Clock(){
         stateTime = 0;
-        hour = 0;
-        minute = 30;
+        hour = 12;
+        minute = 0;
         dayCounter = 1;
         ausgabeClock = "";
         daytimeEmoji = "☀️";
@@ -57,7 +57,7 @@ public class Clock {
             daytimeEmoji = "☀️";
             isDay = true;
             isNight = false;
-        }else if(hour >= 20 || hour < 4) {
+        }else {
             daytimeEmoji = "🌙";
             isDay = false;
             isNight = true;
@@ -112,12 +112,7 @@ public class Clock {
     public int getMinute() {
         return minute;
     }
-    public boolean isDay() {
-        return isDay;
-    }
-    public boolean isNight() {
-        return isNight;
-    }
+
     public void setDay(){
         if(hour < 24 && hour >= 20){
             dayCounter++;

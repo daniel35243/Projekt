@@ -125,12 +125,6 @@ public class Player {
     public void addXp(float xp){
         this.xp += xp * xpMultiplier;
     }
-    public float getXp() {
-        return xp;
-    }
-    public void setXp(int xp){
-        this.xp = xp;
-    }
     public void addCoins(int coins){
         if(coins <= 9999) {
             this.coins += coins;
@@ -208,6 +202,7 @@ public class Player {
                 }
                 break;
         }
+
         if (direction == 'l') {
             for (int i = 0; i < 6; i++) {
                 walkLeft[i].flip(true, false);
@@ -246,13 +241,10 @@ public class Player {
                 }
             }
         }
-
-
         if(alphaSleep > 0f) {
             Gdx.gl.glEnable(GL20.GL_BLEND);
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
             shapeRendererHUD.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRendererHUD.setColor(new Color(0, 0, 0, 1f));
             shapeRendererHUD.setColor(new Color(0, 0, 0, alphaSleep));
             shapeRendererHUD.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             shapeRendererHUD.end();
