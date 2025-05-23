@@ -7,11 +7,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import Database.ShopByItem;
-
 public class StartScreen implements Screen {
 
-    private Game game;
+    private final Game game;
     private SpriteBatch batch;
     private Texture logo;
     private float stateTime = 0f;
@@ -24,9 +22,6 @@ public class StartScreen implements Screen {
     public void show() {
         batch = new SpriteBatch();
         logo = new Texture("FarmLifeLogo.png");
-        ShopByItem shop = ((Main) game).db.getShopByItem("Karotten Samen");
-        Gdx.app.log("Shop", "Item: " + shop.item + "  = " + shop.coins);
-
     }
 
     @Override
@@ -35,11 +30,11 @@ public class StartScreen implements Screen {
 
         float alpha;
         if (stateTime < 1f) {
-            alpha = stateTime / 1f;
+            alpha = stateTime;
         } else if (stateTime < 3f) {
             alpha = 1f;
         } else if (stateTime < 4f) {
-            alpha = 1f - ((stateTime - 3f) / 1f);
+            alpha = 1f - ((stateTime - 3f));
         } else {
             game.setScreen(new MainMenuScreen(game));
             return;
@@ -50,13 +45,10 @@ public class StartScreen implements Screen {
 
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
-
         float logoWidth = logo.getWidth();
         float logoHeight = logo.getHeight();
 
-
         float scale = Math.min(screenWidth / logoWidth, screenHeight / logoHeight);
-
         float scaledWidth = logoWidth * scale;
         float scaledHeight = logoHeight * scale;
 
@@ -80,5 +72,6 @@ public class StartScreen implements Screen {
         game.dispose();
         batch.dispose();
         logo.dispose();
+
     }
 }

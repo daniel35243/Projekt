@@ -3,8 +3,6 @@ package io.github.FarmLife.android;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.mygdx.game.InventoryDbHelper;
-
 import Database.FeldByCord;
 import Database.GameByID;
 import Database.InventorySlotDB;
@@ -14,22 +12,17 @@ import Database.DatabaseLogik;
 
 public class AndroidDatabaseLogik implements DatabaseLogik {
 
-    private final InventoryDbHelper db;
+    private final io.github.FarmLife.android.DatabaseHelper db;
 
     public AndroidDatabaseLogik(Context context) {
-        db = new InventoryDbHelper(context);
+        db = new io.github.FarmLife.android.DatabaseHelper(context);
     }
-
-
-
-
 
     // Inventory
     @Override
     public void updateInventoryItem(int slot, String itemID, int anzahl) {
         db.updateInventoryItem(slot, itemID, anzahl);
     }
-
     @Override
     public InventorySlotDB getInventorySlot(int slot) {
         Cursor cursor = db.getInventorySlot(slot);
@@ -45,15 +38,11 @@ public class AndroidDatabaseLogik implements DatabaseLogik {
         return result;
     }
 
-
-
-
     // Game
     @Override
     public void updateGame(int coins, int level, int xp) {
         db.updateGame(coins, level, xp);
     }
-
     @Override
     public GameByID getGame(int ID) {
         Cursor cursor = db.getGameByID(ID);
@@ -75,13 +64,11 @@ public class AndroidDatabaseLogik implements DatabaseLogik {
         return null;
     }
 
-
     // Shop
     @Override
     public void insertShop(String itemID, int coins) {
         db.insertShop(itemID, coins);
     }
-
     @Override
     public ShopByItem getShopByItem (String item) {
         Cursor cursor = db.getShopByItem(item);
@@ -95,10 +82,6 @@ public class AndroidDatabaseLogik implements DatabaseLogik {
 
         return result;
     }
-
-
-
-
 
     // Seller
     @Override
@@ -118,10 +101,6 @@ public class AndroidDatabaseLogik implements DatabaseLogik {
 
         return result;
     }
-
-
-
-
 
     //Feld
     @Override

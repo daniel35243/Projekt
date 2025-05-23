@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -44,7 +45,6 @@ public class Shop {
     private TextButton.TextButtonStyle Normalbutton;
     private TextButton.TextButtonStyle BigStyle;
     private TextButton.TextButtonStyle TitleStyle;
-
     private Window.WindowStyle windowStyle;
     private Image karotteImg, weizenImg;
     private Image karottenSamenImg, weizenSamenImg;
@@ -58,14 +58,11 @@ public class Shop {
     private float stateTime;
     private boolean drawSleep;
 
-
     private void initWindowStyle() {
         shopOpened = false;
         BitmapFont windowFont = new BitmapFont();
         Texture windowTex = new Texture(Gdx.files.internal("window_bg.png"));
         Drawable windowBackground = new TextureRegionDrawable(new TextureRegion(windowTex));
-
-
 
         windowStyle = new Window.WindowStyle();
         windowStyle.titleFont = windowFont;
@@ -84,9 +81,6 @@ public class Shop {
         BitmapFont titleFont = generator.generateFont(buttonParam);
         generator.dispose();
 
-
-
-
         // Normal Button Laden
         Texture buttonUpTex = new Texture(Gdx.files.internal("ButtonUp.png"));
         Texture buttonDownTex = new Texture(Gdx.files.internal("ButtonDown.png"));
@@ -97,7 +91,6 @@ public class Shop {
         Normalbutton.font = buttonFont;
         Normalbutton.up = buttonUp;
         Normalbutton.down = buttonDown;
-
 
         // Big Button Laden
         buttonUpTex = new Texture(Gdx.files.internal("BigButtonUp.png"));
@@ -110,20 +103,17 @@ public class Shop {
         BigStyle.up = buttonUpx;
         BigStyle.down = buttonDownx;
 
-
         // Titel Button Laden
         buttonUpTex = new Texture(Gdx.files.internal("Topbutton.png"));
         buttonDownTex = new Texture(Gdx.files.internal("Topbutton.png"));
         Drawable buttonUpxx = new TextureRegionDrawable(buttonUpTex);
         Drawable buttonDownxx = new TextureRegionDrawable(buttonDownTex);
 
-
         TitleStyle = new TextButton.TextButtonStyle();
         TitleStyle.font = titleFont;
         TitleStyle.up = buttonUpxx;
         TitleStyle.down = buttonDownxx;
     }
-
 
     private Window mainMenuWindow, subMenuWindow;
 
@@ -134,7 +124,6 @@ public class Shop {
         }else{
             sleepButton.setVisible(false);
         }
-
 
         sleepButtonStage.act(Gdx.graphics.getDeltaTime());
         sleepButtonStage.draw();
@@ -162,18 +151,17 @@ public class Shop {
         TextButton sellerButton = new TextButton("Verkaufen", BigStyle);
         TextButton exitButton = new TextButton("Schließen", Normalbutton);
 
-
         shopButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                showShopMenu("Kaufen");
+                showShopMenu("");
             }
         });
 
         sellerButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                showSellerMenu("Verkaufen");
+                showSellerMenu("");
             }
         });
 
@@ -205,7 +193,6 @@ public class Shop {
         subMenuWindow.setSize(Gdx.graphics.getWidth() * 0.7f, Gdx.graphics.getHeight() * 0.7f);
         subMenuWindow.setPosition((Gdx.graphics.getWidth() - subMenuWindow.getWidth()) / 2f,
             (Gdx.graphics.getHeight() - subMenuWindow.getHeight()) / 2f + 100f);
-
 
         if (karotteImg != null) karotteImg.remove();
         if (weizenImg != null) weizenImg.remove();
@@ -239,7 +226,6 @@ public class Shop {
                         }else if(!inventory[i].getIsUsed() && nullSlot == -1){
                             nullSlot = i;
                         }
-
                     }
                     if (!found && nullSlot != -1) {
                         inventory[nullSlot].addItem(new KarottenSeed(), 1);
@@ -264,7 +250,6 @@ public class Shop {
                         }else if(!inventory[i].getIsUsed() && nullSlot == -1){
                             nullSlot = i;
                         }
-
                     }
                     if (!found && nullSlot != -1) {
                         inventory[nullSlot].addItem(new WeizenSeed(), 1);
@@ -291,7 +276,6 @@ public class Shop {
         content.add(WeizenSeeds).size(400, 500).padRight(40f);
         content.add(back).size(400, 210).row();
 
-
         subMenuWindow.add(content);
         uiStage.addActor(subMenuWindow);
 
@@ -299,11 +283,13 @@ public class Shop {
         karottenSamenImg.setSize(180, 180);
         karottenSamenImg.setPosition(850, 630);
         uiStage.addActor(karottenSamenImg);
+        karottenSamenImg.setTouchable(Touchable.disabled);
 
         weizenSamenImg = new Image(new Texture(Gdx.files.internal("weizen_samen.png")));
         weizenSamenImg.setSize(180, 180);
         weizenSamenImg.setPosition(1280, 630);
         uiStage.addActor(weizenSamenImg);
+        weizenSamenImg.setTouchable(Touchable.disabled);
 
         karottenSamenImg.toFront();
         weizenSamenImg.toFront();
@@ -390,11 +376,13 @@ public class Shop {
         karotteImg.setSize(180, 180);
         karotteImg.setPosition(850, 630);
         uiStage.addActor(karotteImg);
+        karotteImg.setTouchable(Touchable.disabled);
 
         weizenImg = new Image(new Texture(Gdx.files.internal("weizen.png")));
         weizenImg.setSize(180, 180);
         weizenImg.setPosition(1300, 630);
         uiStage.addActor(weizenImg);
+        weizenImg.setTouchable(Touchable.disabled);
 
         karotteImg.toFront();
         weizenImg.toFront();
@@ -452,7 +440,11 @@ public class Shop {
         if (mainMenuWindow != null) mainMenuWindow.remove();
         if (subMenuWindow != null) subMenuWindow.remove();
         if (skin != null) skin.dispose();
-
+        if (karotteImg != null) karotteImg.remove();
+        if (weizenImg != null) weizenImg.remove();
+        if (karottenSamenImg != null) karottenSamenImg.remove();
+        if (weizenSamenImg != null) weizenSamenImg.remove();
+        if (sleepButtonStage != null) sleepButtonStage.dispose();
     }
 
     public boolean getShopOpened() {

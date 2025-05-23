@@ -23,7 +23,6 @@ import Database.FeldByCord;
 import Database.InventorySlotDB;
 
 public class MainMenuScreen implements Screen {
-
     private Game game;
     private Stage stage;
     private boolean displayButton = true;
@@ -35,8 +34,6 @@ public class MainMenuScreen implements Screen {
     private Player player;
     private Joystick joystick;
     private Skin skin;
-
-
 
     public MainMenuScreen(Game game) {
         this.game = game;
@@ -57,10 +54,8 @@ public class MainMenuScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-
         // Eigene Fonts laden
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fontRegular.ttf"));
-
 
         FreeTypeFontGenerator.FreeTypeFontParameter titleParam = new FreeTypeFontGenerator.FreeTypeFontParameter();
         titleParam.size = 75;
@@ -72,27 +67,28 @@ public class MainMenuScreen implements Screen {
 
         generator.dispose();
 
+        // Skin wird geladen
         skin = new Skin(Gdx.files.internal("uiskin.json"));
 
-        // Eigene Button-Grafiken laden
+        // Normaler Button wird geladen
         Texture buttonUpTex = new Texture(Gdx.files.internal("ButtonUp.png"));
         Texture buttonDownTex = new Texture(Gdx.files.internal("ButtonDown.png"));
         Drawable buttonUp = new TextureRegionDrawable(buttonUpTex);
         Drawable buttonDown = new TextureRegionDrawable(buttonDownTex);
 
-        // Custom ButtonStyle mit eigener Font + Grafiken
+        // Normaler Button Style mit Font
         TextButton.TextButtonStyle Normalbutton = new TextButton.TextButtonStyle();
         Normalbutton.font = buttonFont;
         Normalbutton.up = buttonUp;
         Normalbutton.down = buttonDown;
 
-        // Eigene Button-Grafiken laden
+        // Überschrift Button wird geladen
         buttonUpTex = new Texture(Gdx.files.internal("Topbutton.png"));
         buttonDownTex = new Texture(Gdx.files.internal("Topbutton.png"));
         Drawable buttonUpx = new TextureRegionDrawable(buttonUpTex);
         Drawable buttonDownx = new TextureRegionDrawable(buttonDownTex);
 
-        // Custom ButtonStyle mit eigener Font + Grafiken
+        // Überschrift Button Style mit Font
         TextButton.TextButtonStyle TitleStyle = new TextButton.TextButtonStyle();
         TitleStyle.font = titleFont;
         TitleStyle.up = buttonUpx;
@@ -103,12 +99,8 @@ public class MainMenuScreen implements Screen {
         table.center();
         stage.addActor(table);
 
-        // Titel mit eigener Font
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = titleFont;
-        Label title = new Label("Hauptmenü", labelStyle);
 
-        // Buttons mit Style
+        // Buttons werden erstellt
         TextButton startButton = new TextButton("Spiel Starten", Normalbutton);
         TextButton exitButton = new TextButton("Spiel Beenden", Normalbutton);
         TextButton TitleButton = new TextButton("Hauptmenü", TitleStyle);
@@ -130,7 +122,6 @@ public class MainMenuScreen implements Screen {
                 }
             }
         });
-
 
         table.add(TitleButton).size(1400, 180).padBottom(70).row();
         table.add(startButton).size(840, 230).padBottom(30).row();
@@ -179,6 +170,9 @@ public class MainMenuScreen implements Screen {
         stage.dispose();
         skin.dispose();
         map.dispose();
-
+        playerSpriteBatch.dispose();
+        shapeRendererMap.dispose();
+        game.dispose();
+        game.getScreen().dispose();
     }
 }

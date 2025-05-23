@@ -3,25 +3,19 @@ package Database;
 
 public interface DatabaseLogik {
 
-
-
     // Inventory
     void updateInventoryItem(int slot, String itemID, int anzahl);
     InventorySlotDB getInventorySlot(int slot);
 
-
-
     // Game
     void updateGame(int coins, int level, int xp);
     GameByID getGame(int ID);
-
 
     GameByID getGameByID(int ID);
 
     // Shop
     void insertShop(String itemID, int coins);
     ShopByItem getShopByItem (String Item);
-
 
     // Seller
     void insertSeller(int itemID, int coins);
