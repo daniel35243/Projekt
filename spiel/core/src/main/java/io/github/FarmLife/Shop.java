@@ -36,7 +36,7 @@ import Items.Weizen;
 import Items.Karotte;
 
 public class Shop {
-
+    private TextureRegion[][] texture = TextureRegion.split(new Texture(Gdx.files.internal("PixelMapPNGs/Outdoor decoration/ItemsZoomed.png")),96,96);
     private Stage uiStage;
     private Stage sleepButtonStage;
     private Skin skin;
@@ -269,12 +269,12 @@ public class Shop {
         subMenuWindow.add(content);
         uiStage.addActor(subMenuWindow);
 
-        karottenSamenImg = new Image(new Texture(Gdx.files.internal("karotten_samen.png")));
+        karottenSamenImg = new Image(texture[0][4]);
         karottenSamenImg.setSize(180, 180);
         karottenSamenImg.setPosition(850, 630);
         uiStage.addActor(karottenSamenImg);
 
-        weizenSamenImg = new Image(new Texture(Gdx.files.internal("weizen_samen.png")));
+        weizenSamenImg = new Image(texture[0][6]);
         weizenSamenImg.setSize(180, 180);
         weizenSamenImg.setPosition(1280, 630);
         uiStage.addActor(weizenSamenImg);
@@ -360,12 +360,12 @@ public class Shop {
         subMenuWindow.add(content);
         uiStage.addActor(subMenuWindow);
 
-        karotteImg = new Image(new Texture(Gdx.files.internal("karotte.png")));
+        karotteImg = new Image(texture[3][4]);
         karotteImg.setSize(180, 180);
         karotteImg.setPosition(850, 630);
         uiStage.addActor(karotteImg);
 
-        weizenImg = new Image(new Texture(Gdx.files.internal("weizen.png")));
+        weizenImg = new Image(texture[3][6]);
         weizenImg.setSize(180, 180);
         weizenImg.setPosition(1300, 630);
         uiStage.addActor(weizenImg);
