@@ -49,28 +49,19 @@ public class GameScreen implements Screen {
     private SpriteBatch fps;
     private Player player;
     private SpriteBatch playerSpriteBatch;
-    private Viewport hudViewport;
-    private int framecounter;
-    private Vector2 zwischenspeicherCameraWeltPosition;
     private ShapeRenderer shapeRendererMap;
-    private InventorySlot[] inventory = new InventorySlot[5];
     private SpriteBatch inventorySpriteBatch;
     private HitBoxes hitBoxes = new HitBoxes();
-    private Item selectedItem = null;
-    private InventorySlot draggedSlot = null;
-    private boolean dragging = false;
-    private int numberAnimation = 0;
-    private FeldSlot[][] felder = new FeldSlot[2][];
+    private final FeldSlot[][] felder = new FeldSlot[2][];
     private Clock clock = new Clock();
     private Rectangle feldRect = new Rectangle();
-    private Rectangle invSlotRect = new Rectangle();
     private Shop shop;
+    private Inventory inventory;
 
     @Override
     public void show() {
         felder[0] = new FeldSlot[4];
         felder[1] = new FeldSlot[6];
-
 
 
         player = new Player();
@@ -89,7 +80,6 @@ public class GameScreen implements Screen {
         cameraHUD = new OrthographicCamera(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         cameraHUD.position.set(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2,0);
         cameraHUD.update();
-        hudViewport = new ScreenViewport(cameraHUD);
 
         cameraWeltPosition = new Vector2(800,800);
         cameraWelt = new OrthographicCamera();
@@ -100,20 +90,9 @@ public class GameScreen implements Screen {
 
         fpsFont = new BitmapFont();
         fps = new SpriteBatch();
+        inventory = new Inventory(fpsFont);
 
 
-        framecounter = 0;
-        zwischenspeicherCameraWeltPosition = new Vector2();
-
-        int counterInventorySlots = 0;
-        for(int j = 200; j <= 1000; j += 200) {
-            inventory[counterInventorySlots] = new InventorySlot(Gdx.graphics.getWidth() - j);
-            counterInventorySlots++;
-        }
-
-//        for(i = 0; i < inventory.length; i++) {
-//            InventorySlotDB inventar = ((Main) game).db.getInventorySlot(i);
-//        }
 
 
         Main game = (Main) Gdx.app.getApplicationListener();
@@ -157,71 +136,6 @@ public class GameScreen implements Screen {
         cameraWelt.unproject(touchPosMap);
 
 
-        inventorySpriteBatch.begin();
-        //Inventory
-        for (InventorySlot invSlotTouched:inventory) {
-            Rectangle slotRect = new Rectangle(invSlotTouched.getCords().x,invSlotTouched.getCords().y, 170,170);
-
-            if(Gdx.input.isTouched() && slotRect.contains(touchPosHUD.x,touchPosHUD.y) && invSlotTouched.getIsUsed() && !dragging) {
-                selectedItem = invSlotTouched.getItem();
-                draggedSlot = invSlotTouched;
-                dragging = true;
-                invSlotTouched.setInventorySlotClickedTrue(inventory);
-            }
-            if(dragging && !Gdx.input.isTouched()){
-                boolean swapped = false;
-                for(InventorySlot invSlotHotSwap : inventory) {
-                    invSlotRect.set(invSlotHotSwap.getCords().x,invSlotHotSwap.getCords().y,170,170);
-                    if(invSlotRect.contains(touchPosHUD.x,touchPosHUD.y) && invSlotHotSwap != draggedSlot) {
-
-                        Item draggedSlotItem = draggedSlot.getItem();
-                        int draggedSlotCounter = draggedSlot.getItem().getItemCounter();
-
-                        if (invSlotHotSwap.getIsUsed()) {
-                            Item invSlotHotSwapItem = invSlotHotSwap.getItem();
-                            int invSlotHotSwapCounter = invSlotHotSwap.getItem().getItemCounter();
-
-                            draggedSlot.setItem(invSlotHotSwapItem);
-                            draggedSlot.getItem().setItemCounter(invSlotHotSwapCounter);
-
-                        } else {
-                            draggedSlot.removeItem(draggedSlotCounter);
-                        }
-                        invSlotHotSwap.setItem(draggedSlotItem);
-                        invSlotHotSwap.getItem().setItemCounter(draggedSlotCounter);
-                        System.out.println(invSlotHotSwap.getItem() + " " + invSlotHotSwap.getItem().getItemCounter());
-                        swapped = true;
-                        break;
-                    }
-                }
-                if(!swapped) {
-                    for(int feldSlotCounter = 0; feldSlotCounter < felder.length; feldSlotCounter++) {
-                    for(FeldSlot feldSlot : felder[feldSlotCounter]) {
-                        if((feldSlotCounter == felder.length -1 && player.getLevel() >= 5)|| feldSlotCounter < felder.length -1){
-                        feldRect.set(feldSlot.getCords().x, feldSlot.getCords().y, 32, 32);
-                        if (draggedSlot != null && selectedItem != null && feldRect.contains(touchPosMap.x, touchPosMap.y) && feldSlot.getPflanze() == null) {
-                            if (selectedItem instanceof KarottenSeed && !shop.getShopOpened()) {
-                                feldSlot.setPflanze(new Karottenpflanze(feldSlot.getCords().x + 8, feldSlot.getCords().y + 8, clock.getHour(), clock.getMinute()));
-                                draggedSlot.removeItem(1);
-                            } else if (selectedItem instanceof WeizenSeed && !shop.getShopOpened()) {
-                                feldSlot.setPflanze(new Weizenpflanze(feldSlot.getCords().x + 8, feldSlot.getCords().y + 8, clock.getHour(), clock.getMinute()));
-                                draggedSlot.removeItem(1);
-                            }
-                        }
-                        }
-                    }
-                    }
-                }
-
-                selectedItem = null;
-                dragging = false;
-                if(draggedSlot != null) draggedSlot.setInventorySlotClickedFalse();
-                draggedSlot = null;
-                break;
-            }
-        }
-        inventorySpriteBatch.end();
-
         playerSpriteBatch.begin();
         for (FeldSlot[] feldSlots : felder) {
             for (FeldSlot feldSlot : feldSlots) {
@@ -242,37 +156,22 @@ public class GameScreen implements Screen {
         player.drawCoins(inventorySpriteBatch);
 
         //Joystick
-        joystick.moveJoystick(touchPosHUD, new Vector2(Gdx.graphics.getWidth() / 5 * 4, Gdx.graphics.getHeight() / 5 * 4),dragging,shop.getShopOpened());
+        joystick.moveJoystick(touchPosHUD, new Vector2(Gdx.graphics.getWidth() / 5 * 4, Gdx.graphics.getHeight() / 5 * 4),inventory.getDragging(),shop.getShopOpened());
         cameraHUD.update();
 
         if(!shop.getShopOpened()) {
             for(FeldSlot[] feldSlots : felder) {
                 for (FeldSlot feld : feldSlots) {
-                    feld.harvest(touchPosMap, inventory, dragging, player);
+                    feld.harvest(touchPosMap, inventory, inventory.getDragging(), player);
                 }
             }
         }
 
         inventorySpriteBatch.begin();
-        for(InventorySlot invSlot:inventory) {
-            if(invSlot == draggedSlot && dragging) {
-                numberAnimation = 1;
-            }else{
-                numberAnimation = 0;
-            }
-
-            invSlot.drawSlot(inventorySpriteBatch,numberAnimation);
-
-            if(invSlot.getIsUsed() && invSlot != draggedSlot) {
-                invSlot.getItem().drawInSlot(inventorySpriteBatch,new Vector2(invSlot.getCords().x+25,invSlot.getCords().y+30),fpsFont);
-            }
-        }
         //UHR
         clock.draw(inventorySpriteBatch);
 
-        if(dragging && selectedItem != null && draggedSlot != null){
-            selectedItem.drawClicked(inventorySpriteBatch, touchPosHUD, fpsFont, draggedSlot);
-        }
+        inventory.render( touchPosHUD,felder,feldRect,shop,player,touchPosMap,clock,inventorySpriteBatch);
 
         inventorySpriteBatch.end();
 
@@ -283,9 +182,8 @@ public class GameScreen implements Screen {
             player.drawSleep(shop, shapeRendererHUD);
         }
         player = shop.getPlayer();
-        inventory = shop.getInventory();
         clock = shop.getClock();
-
+        inventory = shop.getInventory();
 
 
 
@@ -334,7 +232,6 @@ public class GameScreen implements Screen {
         shapeRendererMap.dispose();
         map.dispose();
         shop.dispose();
-
     }
 
 

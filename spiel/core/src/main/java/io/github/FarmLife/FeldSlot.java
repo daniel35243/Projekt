@@ -49,45 +49,12 @@ public class FeldSlot {
 
 
 
-    public void harvest(Vector3 touchPosMap, InventorySlot[] inventory,Boolean dragging,Player player){
+    public void harvest(Vector3 touchPosMap, Inventory inventory,Boolean dragging,Player player){
         inventoryArrayList.clear();
         karottenIndexBoolean = false;
         weizenIndexBoolean = false;
         if(pflanze != null && pflanze.getStage() == 3 && feldRect.contains(touchPosMap.x,touchPosMap.y) && Gdx.input.isTouched() && !dragging){
-            for(InventorySlot invSlot:inventory) {
-                inventoryArrayList.add(invSlot);
-                if(invSlot.getItem() != null) {
-
-                    if (invSlot.getItem().getClass() == Karotte.class) {
-                        karottenIndex = inventoryArrayList.indexOf(invSlot);
-                        karottenIndexBoolean = true;
-                    } else if(!karottenIndexBoolean){
-                        karottenIndex = 10;
-                    }
-                    if (invSlot.getItem().getClass() == Weizen.class) {
-                        weizenIndex = inventoryArrayList.indexOf(invSlot);
-                        weizenIndexBoolean = true;
-                    } else if(!weizenIndexBoolean){
-                        weizenIndex = 10;
-                    }
-                } else {
-                    nullIndex = inventoryArrayList.indexOf(invSlot);
-                }
-            }
-                if(pflanze.getClass() == Karottenpflanze.class){
-                    if(karottenIndex != 10) {
-                        inventory[karottenIndex].addItem(new Karotte(), random.nextInt(4) + 2);
-                    }else{
-                        inventory[nullIndex].addItem(new Karotte(), random.nextInt(4) + 2);
-                    }
-                }
-                if(pflanze.getClass() == Weizenpflanze.class) {
-                    if (weizenIndex != 10) {
-                        inventory[weizenIndex].addItem(new Weizen(), random.nextInt(4) + 2);
-                    }else{
-                        inventory[nullIndex].addItem(new Weizen(), random.nextInt(4) + 2);
-                    }
-                }
+            inventory.addItem(pflanze.getFinalProduct(),random.nextInt(3)+3);
             this.setPflanze(null);
             player.addXp(random.nextInt(11) + 30);
         }

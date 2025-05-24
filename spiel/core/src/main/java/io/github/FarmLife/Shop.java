@@ -50,7 +50,7 @@ public class Shop {
     private Image karottenSamenImg, weizenSamenImg;
     private boolean shopOpened;
     private Player player;
-    private InventorySlot[] inventory;
+    private Inventory inventory;
     private TextButton sleepButton;
     private Clock clock;
     private InputMultiplexer multiplexer;
@@ -141,7 +141,7 @@ public class Shop {
         uiStage.act(Gdx.graphics.getDeltaTime());
         uiStage.draw();
     }
-    private void showMainMenu(InventorySlot[] inventory, Player player) {
+    private void showMainMenu() {
         if (mainMenuWindow != null) mainMenuWindow.remove();
 
         if (skin == null) {
@@ -230,20 +230,7 @@ public class Shop {
                 karottenSamenImg.toFront();
                 weizenSamenImg.toFront();
                 if (player.getCoins() >= 2) {
-                    boolean found = false;
-                    int nullSlot = -1;
-                    for(int i = 0; i < inventory.length; i++){
-                        if(inventory[i].getItem() instanceof KarottenSeed){
-                            inventory[i].addItem(new KarottenSeed(), 1);
-                            found = true;
-                        }else if(!inventory[i].getIsUsed() && nullSlot == -1){
-                            nullSlot = i;
-                        }
-
-                    }
-                    if (!found && nullSlot != -1) {
-                        inventory[nullSlot].addItem(new KarottenSeed(), 1);
-                    }
+                    inventory.addItem(new KarottenSeed(),1);
                     player.removeCoins(2);
                 }
             }
@@ -255,20 +242,7 @@ public class Shop {
                 karottenSamenImg.toFront();
                 weizenSamenImg.toFront();
                 if (player.getCoins() >= 4) {
-                    boolean found = false;
-                    int nullSlot = -1;
-                    for(int i = 0; i < inventory.length; i++){
-                        if(inventory[i].getItem() instanceof WeizenSeed){
-                            inventory[i].addItem(new WeizenSeed(), 1);
-                            found = true;
-                        }else if(!inventory[i].getIsUsed() && nullSlot == -1){
-                            nullSlot = i;
-                        }
-
-                    }
-                    if (!found && nullSlot != -1) {
-                        inventory[nullSlot].addItem(new WeizenSeed(), 1);
-                    }
+                    inventory.addItem(new WeizenSeed(),1);
                     player.removeCoins(4);
                 }
             }
@@ -344,7 +318,7 @@ public class Shop {
             public void changed(ChangeEvent event, Actor actor) {
                 karotteImg.toFront();
                 weizenImg.toFront();
-                for(InventorySlot invSlot : inventory){
+                for(InventorySlot invSlot : inventory.getInventory()){
                     if(invSlot.getItem() instanceof Karotte){
                         invSlot.removeItem(1);
                         player.addCoins(1);
@@ -359,7 +333,7 @@ public class Shop {
             public void changed(ChangeEvent event, Actor actor) {
                 karotteImg.toFront();
                 weizenImg.toFront();
-                for(InventorySlot invSlot : inventory){
+                for(InventorySlot invSlot : inventory.getInventory()){
                     if(invSlot.getItem() instanceof Weizen){
                         invSlot.removeItem(1);
                         player.addCoins(3);
@@ -435,7 +409,7 @@ public class Shop {
         openMenu.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                showMainMenu(inventory, player);
+                showMainMenu();
                 shopOpened = true;
             }
         });
@@ -459,7 +433,7 @@ public class Shop {
         return shopOpened;
     }
 
-    public void setPlayerInventoryClock(Player player, InventorySlot[] inventory,Clock clock){
+    public void setPlayerInventoryClock(Player player, Inventory inventory,Clock clock){
         this.player = player;
         this.inventory = inventory;
         this.clock = clock;
@@ -468,7 +442,7 @@ public class Shop {
     public Player getPlayer(){
         return player;
     }
-    public InventorySlot[] getInventory(){
+    public Inventory getInventory(){
         return inventory;
     }
     public Clock getClock(){
