@@ -35,7 +35,7 @@ public class MainMenuScreen implements Screen {
     private Player player;
     private Joystick joystick;
     private Skin skin;
-
+    private Image background;
 
 
     public MainMenuScreen(Game game) {
@@ -44,6 +44,12 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void show() {
+        stage = new Stage(new ScreenViewport());
+        background = new Image(new Texture(Gdx.files.internal("MainMenuBackgroundPicture.png")));
+        background.setFillParent(true);
+        stage.addActor(background);
+
+
         joystick = new Joystick(new Vector2(Gdx.graphics.getWidth()/5*4,Gdx.graphics.getHeight()/5*4));
         player = new Player();
         playerSpriteBatch = new SpriteBatch();
@@ -54,7 +60,7 @@ public class MainMenuScreen implements Screen {
         cameraWelt.update();
         cameraWelt.zoom = 0.6f;
         startGame = false;
-        stage = new Stage(new ScreenViewport());
+
         Gdx.input.setInputProcessor(stage);
 
 
