@@ -57,7 +57,9 @@ public class GameScreen implements Screen {
     private Rectangle feldRect = new Rectangle();
     private Shop shop;
     private Inventory inventory;
-
+    public GameScreen(Map map){
+        this.map = map;
+    }
     @Override
     public void show() {
         felder[0] = new FeldSlot[4];
@@ -73,7 +75,6 @@ public class GameScreen implements Screen {
 
         touchPosHUD = new Vector2(0, 0);
 
-        map = new Map();
 
         joystick = new Joystick(new Vector2(Gdx.graphics.getWidth()/5*4,Gdx.graphics.getHeight()/5*4));
 

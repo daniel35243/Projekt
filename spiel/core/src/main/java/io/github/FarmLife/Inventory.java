@@ -12,6 +12,7 @@ import org.w3c.dom.css.Rect;
 
 import Items.Item;
 import Items.KarottenSeed;
+import Items.Seed;
 import Items.WeizenSeed;
 import Pflanzen.Karottenpflanze;
 import Pflanzen.Weizenpflanze;
@@ -24,8 +25,6 @@ public class Inventory {
     private InventorySlot[] inventory;
     private Rectangle invSlotRect;
     int counterInventorySlots;
-    private FreeTypeFontGenerator generator;
-    private FreeTypeFontGenerator.FreeTypeFontParameter parameter;
     private BitmapFont font;
     boolean found;
     int nullSlot;
@@ -118,11 +117,10 @@ public class Inventory {
                             if((feldSlotCounter == felder.length -1 && player.getLevel() >= 5)|| feldSlotCounter < felder.length -1){
                                 feldRect.set(feldSlot.getCords().x, feldSlot.getCords().y, 32, 32);
                                 if (draggedSlot != null && selectedItem != null && feldRect.contains(touchPosMap.x, touchPosMap.y) && feldSlot.getPflanze() == null) {
-                                    if (selectedItem instanceof KarottenSeed && !shop.getShopOpened()) {
-                                        feldSlot.setPflanze(new Karottenpflanze(feldSlot.getCords().x + 8, feldSlot.getCords().y + 8, clock.getHour(), clock.getMinute()));
-                                        draggedSlot.removeItem(1);
-                                    } else if (selectedItem instanceof WeizenSeed && !shop.getShopOpened()) {
-                                        feldSlot.setPflanze(new Weizenpflanze(feldSlot.getCords().x + 8, feldSlot.getCords().y + 8, clock.getHour(), clock.getMinute()));
+                                    if (selectedItem instanceof Seed && !shop.getShopOpened()) {
+                                        selectedItem.getPflanze().setStats(feldSlot.getCords().x + 8, feldSlot.getCords().y + 8, clock.getHour(), clock.getMinute());
+                                        System.out.println(selectedItem.getPflanze().getFinalProduct());
+                                        feldSlot.setPflanze(selectedItem.getPflanze());
                                         draggedSlot.removeItem(1);
                                     }
                                 }

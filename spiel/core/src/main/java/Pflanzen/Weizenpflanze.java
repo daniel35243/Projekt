@@ -15,7 +15,9 @@ public class Weizenpflanze extends Pflanze{
     public Weizenpflanze(float x, float y, int plantHour, int plantMinute){
         super(new Weizen(),plantHour,plantMinute, new Vector2(x,y),4);
     }
-
+    public Weizenpflanze(){
+        super(new Weizen());
+    }
     @Override
     protected void loadAnimation() {
         TextureRegion[][] pflanzenSpriteSheet = TextureRegion.split(new Texture(Gdx.files.internal("PixelMapPNGs/Outdoor decoration/Items.png")), 16, 16);

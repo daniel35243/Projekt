@@ -13,8 +13,8 @@ public abstract class Pflanze {
 
     protected Animation<TextureRegion>[] pflanzenAnimation;
     private Vector2 cords;
-    private int plantHour;
-    private int plantMinute;
+    private int plantHour = 25;
+    private int plantMinute = 61;
     private int currentHour;
     private int stage = 0;
     private Item finalProduct;
@@ -28,21 +28,36 @@ public abstract class Pflanze {
         pflanzenAnimation = new Animation[4];
         loadAnimation();
     }
+    public Pflanze(Item finalProduct){
+        this.finalProduct = finalProduct;
+    }
     protected abstract void loadAnimation();
-    public void draw(int hour, int minute, SpriteBatch batch){
-        currentHour = hour;
-        if(hour < plantHour){
-            currentHour += 24;
+    public void draw(int hour, int minute, SpriteBatch batch) {
+        if (finalProduct != null && plantHour != 25 && plantMinute != 61) {
+            currentHour = hour;
+            if (hour < plantHour) {
+                currentHour += 24;
+            }
+            if ((currentHour > plantHour && minute >= plantMinute && stage < 3) || (currentHour > plantHour + growthTime && stage < 3)) {
+                stage++;
+                plantHour++;
+                System.out.println(stage);
+            }
+            batch.draw(pflanzenAnimation[stage].getKeyFrame(0, true), cords.x, cords.y);
         }
-        if((currentHour > plantHour && minute >= plantMinute && stage < 3) || (currentHour > plantHour + growthTime && stage < 3)){
-            stage++;
-            plantHour++;
-            System.out.println(stage);
-        }
-        batch.draw(pflanzenAnimation[stage].getKeyFrame(0,true),cords.x,cords.y);
     }
     public int getStage(){
         return stage;
     }
     public Item getFinalProduct(){return finalProduct;}
+
+    public void setStats(float x, float y,int plantHour,int plantMinute){
+        this.cords = new Vector2(x,y);
+        this.plantHour = plantHour;
+        this.plantMinute = plantMinute;
+        if (this.pflanzenAnimation == null) {
+            pflanzenAnimation = new Animation[4];
+        }
+        loadAnimation();
+    }
 }

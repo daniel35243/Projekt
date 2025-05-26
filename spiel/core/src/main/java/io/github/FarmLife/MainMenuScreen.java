@@ -162,9 +162,10 @@ public class MainMenuScreen implements Screen {
         cameraWelt.position.set(800,800, 0);
 
         if (startGame) {
+            stage.getRoot().setVisible(false);
             cameraWelt.zoom = Math.max(0.15f, cameraWelt.zoom - delta * 1.2f);
             if (cameraWelt.zoom <= 0.15f) {
-                game.setScreen(new GameScreen());
+                game.setScreen(new GameScreen(map));
             }
         }
         cameraWelt.update();

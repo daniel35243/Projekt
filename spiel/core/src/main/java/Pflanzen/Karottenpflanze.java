@@ -16,6 +16,10 @@ public class Karottenpflanze extends Pflanze{
         super(new Karotte(),plantHour,plantMinute, new Vector2(x,y),4);
     }
 
+    public Karottenpflanze(){
+        super(new Karotte());
+    }
+
     @Override
     protected void loadAnimation() {
             TextureRegion[][] pflanzenSpriteSheet = TextureRegion.split(new Texture(Gdx.files.internal("PixelMapPNGs/Outdoor decoration/Items.png")), 16, 16);
